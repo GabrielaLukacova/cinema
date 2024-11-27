@@ -1,6 +1,8 @@
 <?php 
-require_once("../../includes/connection.php"); 
-include '../includes/admin_navbar.php';
+require_once "../../includes/connection.php"; 
+require_once "../components/admin_navbar.php"; 
+
+
 
 // cinemaID from URL
 $cinemaID = $_GET['cinemaID'] ?? null;
@@ -60,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="../includes/admin_style.css?v=1.2">
+    <link rel="stylesheet" href="../admin_style/admin_style.css?v=1.2">
 
 </head>
 <body>

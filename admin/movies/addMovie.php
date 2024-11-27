@@ -1,5 +1,6 @@
-<?php
-require_once("../../includes/connection.php");
+<?php 
+require_once "../../includes/connection.php"; 
+
 
 if (isset($_POST['submit'])) {
     $title = $_POST['title'];

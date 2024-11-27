@@ -9,8 +9,7 @@ DROP TABLE IF EXISTS Movie;
 DROP TABLE IF EXISTS User;
 DROP TABLE IF EXISTS OpeningHours;
 DROP TABLE IF EXISTS Cinema;
-DROP TABLE IF EXISTS CinemaPostalCode;
-DROP TABLE IF EXISTS UserPostalCode;
+DROP TABLE IF EXISTS PostalCode;
 
 
 
@@ -111,8 +110,10 @@ CREATE TABLE News (
 );
 
 
-INSERT INTO PostalCode (postalCode, city) 
-VALUES ('6700', 'Esbjerg');
+INSERT INTO PostalCode (postalCode, city) VALUES 
+('6700', 'Esbjerg'),
+('6740', 'Esbjerg'),
+('6760', 'Esbjerg');
 
 INSERT INTO Cinema (name, phoneNumber, email, street, postalCode, description) VALUES
 ('Dream Screen', '1234567890', 'contact@dreamscreen.com', 'Citygade 55', '6700', 'description of the cinema');
@@ -142,10 +143,7 @@ VALUES
     ('Ticket Promotion: Buy One Get One Free', 'Promotion', 'Buy one movie ticket for "Action Heroes" and get another free! Limited-time offer only for this weekend.', 1);
 
 
-INSERT INTO PostalCode (postalCode, city) VALUES 
-('6700', 'Esbjerg'),
-('6740', 'Esbjerg'),
-('6760', 'Esbjerg');
+
 
 INSERT INTO User (firstName, lastName, email, phoneNumber, password, street, postalCode) 
 VALUES

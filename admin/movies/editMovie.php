@@ -1,6 +1,6 @@
 <?php 
-require_once("../../includes/connection.php"); 
-include '../components/admin_navbar.php'; 
+require_once "../../includes/connection.php"; 
+require_once "../components/admin_navbar.php"; 
 ?>
 
 <?php 

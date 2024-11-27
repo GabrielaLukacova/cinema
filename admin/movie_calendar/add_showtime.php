@@ -1,6 +1,7 @@
-<?php
-require_once("../../includes/connection.php");
-include '../includes/admin_navbar.php'; 
+<?php 
+require_once "../../includes/connection.php"; 
+require_once "../components/admin_navbar.php"; 
+
 
 
 // Handle form submission for adding new showtime

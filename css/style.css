@@ -311,101 +311,6 @@ input {
 
 
 
-/*---------------------MOVIE OF THE WEEK - HERO-------------------------*/
-
-.movie_single_hero {
-  background-size: cover;
-  background-position: center;
-  height: 900px; /* Adjust this to change the height of the image */
-  width: 100%;
-  display: flex;
-  position: relative;
-  overflow: hidden;
-  z-index: 0;
-}
-
-.home-hero {
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 1) 100%);
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  padding: 40px; /* Adjust padding as needed */
-  color: white;
-  z-index: 1;
-}
-
-.home-hero .tag-name {
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 10px;
-}
-
-.home-hero .genre {
-  font-size: 20px;
-  margin-bottom: 15px;
-}
-
-.home-hero .description {
-  margin-bottom: 20px;
-  line-height: 1.5;
-}
-
-
-
-
-
-
-/* Hero Section */
-.home-hero {
-  background-size: cover;
-  background-position: center;
-  height: 8000px;
-  width: 100%; /* Full width */
-  max-width: 100vw; /* Ensures the hero section doesn't exceed viewport width */
-  position: relative;
-  overflow: hidden; /* Prevents overflow if the content exceeds */
-}
-
-
-.movie_single_overlay {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    background: linear-gradient(to top, #262525 0%, rgba(38, 37, 37, 0) 100%); /* Use hex code for the solid color */
-    color: white;
-    text-align: center;
-    max-width: 100vw;
-    height: 300px;
-  }
-
-
-  .movie_single_overlay  h3{
-    text-align: left;
-    padding-left: 12%;
-
-    color: white;
-    font-size: 2em;
-
-
-
-  }
-  .movie_single_genre {
-    color: #CB4540;
-    font-size: 1.3em;
-    text-align: left;
-    padding-left: 12%;
-    padding-top: 175px;
-  }
-
-.movie_single_info_container {
-  display: flex;
-  justify-content: space-between;
-  /* margin: 20px auto; */
-  padding: 0 12%; /* Adjust horizontal padding */
-  max-width: 100vw; /* Ensures container doesn't exceed viewport width */
-  box-sizing: border-box; /* Includes padding in width calculation */
-}
 
 
 
@@ -877,6 +782,87 @@ input {
 
 
 
+
+
+
+/*---------------------MOVIE OF THE WEEK - HERO-------------------------*/
+
+/* Hero Section */
+.movie_single_hero {
+  background-size: cover;
+  background-position: center;
+  height: 900px; /* Adjust this to change the height of the image */
+  width: 100%;
+  display: flex;
+  position: relative;
+  overflow: hidden;
+  z-index: 0;
+}
+
+/* Overlay Section */
+.movie_single_overlay {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background: linear-gradient(to top, #262525 0%, rgba(38, 37, 37, 0) 100%); /* Use hex code for the solid color */
+  color: white;
+  text-align: center;
+  max-width: 100vw;
+  height: 300px;
+  background-color: #4CAF50;
+}
+
+/* Title and Genre Styles */
+.movie_single_overlay h3,
+.movie_single_genre {
+  color: white;
+  text-align: left;
+  padding-left: 12%;
+}
+
+/* Movie Info and Description */
+.movie_single_genre {
+  color: #CB4540;
+  font-size: 1.3em;
+  padding-top: 175px;
+}
+
+.movie_single_info_container {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 12%; /* Adjust horizontal padding */
+  max-width: 100vw; /* Ensures container doesn't exceed viewport width */
+  box-sizing: border-box; /* Includes padding in width calculation */
+}
+
+
+/* .home-hero {
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 1) 100%);
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 40px; 
+  z-index: 1;
+}
+
+.home-hero .tag-name {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.home-hero .genre {
+  font-size: 20px;
+  margin-bottom: 15px;
+}
+
+.home-hero .description {
+  margin-bottom: 20px;
+  line-height: 1.5;
+} */
+
+
 /*---------------------MOVIE CALENDAR SINGLE-------------------------*/
 
 /* Main container for each date and showtime row in movie_single.php */
@@ -1105,4 +1091,131 @@ input {
   font-size: 1.2rem;
   font-weight: bold;
   margin-top: 5px;
+}
+
+
+
+
+
+
+/*------------------------------USER PROFILE PAGE-----------------------------*/
+/*------------------------------USER PROFILE PAGE-----------------------------*/
+/*------------------------------USER PROFILE PAGE-----------------------------*/
+
+
+/* User Account Specific Styles */
+.user-account-container {
+  font-family: Arial, sans-serif;
+  background-color: #1c1c1c;
+  color: #fff;
+}
+
+/* Header */
+
+.user-account-link.active {
+  color: #CB4540;
+}
+
+.user-account-link.active::after {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: #CB4540;
+}
+
+/* Profile Section */
+.user-account-profile {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.user-account-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: #ccc;
+}
+
+.user-account-name {
+  margin-top: 10px;
+  font-size: 1.2rem;
+}
+
+/* Main Section */
+.user-account-main {
+  display: flex;
+  margin: 0 12%;
+  gap: 20px;
+}
+
+/* Sidebar */
+.user-account-sidebar {
+  flex: 1;
+  background: #2b2b2b;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.user-account-sidebar-link {
+  color: #fff;
+  text-decoration: none;
+  padding: 10px;
+  border: none;
+  text-align: left;
+  background: transparent;
+  font-size: 1rem;
+}
+
+.user-account-sidebar-link.active {
+  color: #CB4540;
+}
+
+/* Content Section */
+.user-account-content {
+  flex: 2;
+  background: #2b2b2b;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.user-account-personal-data {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.user-account-data-row {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #555;
+  padding-bottom: 5px;
+}
+
+.user-account-data-label {
+  font-weight: bold;
+  color: #CB4540;
+}
+
+.user-account-data-value {
+  color: #fff;
+}
+
+.user-account-edit-btn {
+  margin-top: 20px;
+  padding: 10px 20px;
+  border: none;
+  background: #CB4540;
+  color: #fff;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background 0.3s ease;
+}
+
+.user-account-edit-btn:hover {
+  background: #a53733;
 }

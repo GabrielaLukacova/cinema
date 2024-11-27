@@ -1,6 +1,6 @@
 <?php 
-require_once("../../includes/connection.php"); 
-include '../includes/admin_navbar.php'; 
+require_once "../../includes/connection.php"; 
+require_once "../components/admin_navbar.php"; 
 ?>
 
 
@@ -12,19 +12,23 @@ include '../includes/admin_navbar.php';
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="../includes/admin_style.css?v=1.2">
+    <link rel="stylesheet" href="../admin_style/admin_style.css?v=1.2">
 
 
     <?php
 // Fetching cinema details and opening hours from the database
 $query = $db->prepare("
-    SELECT c.*, cp.city, oh.dayOfWeek, oh.openingTime, oh.closingTime
+    SELECT 
+        c.*, 
+        pc.city, 
+        oh.dayOfWeek, 
+        oh.openingTime, 
+        oh.closingTime
     FROM Cinema c
-    LEFT JOIN CinemaPostalCode cp ON c.postalCode = cp.postalCode
+    LEFT JOIN postalCode pc ON c.postalCode = pc.postalCode
     LEFT JOIN OpeningHours oh ON c.cinemaID = oh.cinemaID
     WHERE c.cinemaID = 1
-    ORDER BY
-        FIELD(oh.dayOfWeek, 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday')
+    ORDER BY FIELD(oh.dayOfWeek, 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday')
 ");
 $query->execute();
 

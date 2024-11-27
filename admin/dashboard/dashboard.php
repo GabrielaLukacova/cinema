@@ -1,4 +1,6 @@
-<?php include '../components/admin_navbar.php'?>
+<?php 
+require_once "../components/admin_navbar.php"; 
+?>
 
 
 <!DOCTYPE html>

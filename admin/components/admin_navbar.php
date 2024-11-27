@@ -38,7 +38,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="news.php" class="nav-link <?php echo $currentPage == 'news.php' ? 'active' : ''; ?>">
+                        <a href="../news/news.php" class="nav-link <?php echo $currentPage == 'news.php' ? 'active' : ''; ?>">
                             <span class="material-icons">article</span> News
                         </a>
                     </li>
