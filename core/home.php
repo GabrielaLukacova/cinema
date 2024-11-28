@@ -290,7 +290,7 @@ $openingHours = $query->fetchAll(PDO::FETCH_ASSOC);
                     <span class="material-icons location-icon">place</span>
                     <span><?php echo htmlspecialchars($cinema['street']); ?>, <?php echo htmlspecialchars($cinema['postalCode']); ?> <?php echo htmlspecialchars($cinema['city']); ?></span>
                 </div>
-                <p>After entering Broen, head to the main atrium. Take the escalator to the second floor, walk past the food court, and you'll find our cinema entrance.</p>
+                <p>After entering Shopping center Broen, head to the main atrium. Take the escalator to the second floor, walk past the food court, and you'll find our cinema entrance.</p>
             </div>
         </div>
     </section>

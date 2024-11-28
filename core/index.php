@@ -1,7 +1,7 @@
 <?php
 require_once "../includes/connection.php";
 require_once "../navbar_footer/cinema_navbar.php";
-require_once("loginPDO/session.php");
+// require_once("loginPDO/session.php");
 
 
 

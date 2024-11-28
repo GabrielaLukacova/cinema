@@ -43,6 +43,7 @@ CREATE TABLE User (
     firstName VARCHAR(80) NOT NULL,
     lastName VARCHAR(80) NOT NULL,
     email VARCHAR(100) NOT NULL,
+    userPicture VARCHAR(255),
     phoneNumber VARCHAR(11),
     password VARCHAR(100) NOT NULL,
     street VARCHAR(100),
