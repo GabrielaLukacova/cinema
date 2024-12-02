@@ -1,6 +1,13 @@
 <?php 
 require_once "../../includes/connection.php"; 
 require_once "../components/admin_navbar.php"; 
+require_once "classes/Movie.php";
+
+$movieHandler = new Movie($db);
+
+// Fetch all movies
+$movies = $movieHandler->getAllMovies();
+
 ?>
 
 <!DOCTYPE html>
@@ -12,19 +19,12 @@ require_once "../components/admin_navbar.php";
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="../admin_style/admin_style.css?v=1.2">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-<?php
-// Fetch movies from the database
-$query = $db->prepare("SELECT * FROM Movie");
-$query->execute();
-$getMovies = $query->fetchAll();
-?>
-
 <div class="container my-7">
-    <!-- Button to Scroll to Form -->
     <div class="container my-4 text-end">
-        <a href="#addMovieForm" class="btn btn-success btn-lg">+ New Movie</a>
+        <a href="#addMovieForm" class="btn btn-success btn-lg">+ New movie</a>
     </div>
 
     <h2 class="text-center mb-5">🎬 Manage Movies</h2>
@@ -53,28 +53,22 @@ $getMovies = $query->fetchAll();
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($getMovies as $movie): ?>
-                    <tr class="movie-card">
-                        <td><?php echo htmlspecialchars($movie['movieID'] ?? ''); ?></td>
-                        <td><?php echo htmlspecialchars($movie['title'] ?? ''); ?></td>
-                        <td><?php echo htmlspecialchars($movie['genre'] ?? ''); ?></td>
-                        <td><?php echo htmlspecialchars($movie['runtime'] ?? ''); ?> min</td>
+                <?php foreach ($movies as $movie): ?>
+                    <tr>
+                        <td><?= htmlspecialchars($movie['movieID']); ?></td>
+                        <td><?= htmlspecialchars($movie['title']); ?></td>
+                        <td><?= htmlspecialchars($movie['genre']); ?></td>
+                        <td><?= htmlspecialchars($movie['runtime']); ?> min</td>
+                        <td><?= htmlspecialchars($movie['language']); ?></td>
+                        <td><?= htmlspecialchars($movie['ageRating']); ?></td>
+                        <td><?= htmlspecialchars($movie['description']); ?></td>
                         <td>
-                            <?php
-                            $flagPath = $movie['language'] === 'English' ? 'english.png' : 'danish.png';
-                            ?>
-                            <img src="../../includes/media/flags/<?php echo htmlspecialchars($flagPath); ?>" alt="Language Flag" width="30">
-                            <?php echo htmlspecialchars($movie['language'] ?? ''); ?>
+                            <img src="../../includes/media/movies/<?= htmlspecialchars($movie['imagePath']); ?>" alt="Movie Image" class="img-fluid" style="max-width: 100px;">
                         </td>
-                        <td><?php echo htmlspecialchars($movie['ageRating'] ?? ''); ?></td>
-                        <td><?php echo htmlspecialchars($movie['description'] ?? ''); ?></td>
+                        <td><?= htmlspecialchars($movie['movieTag']); ?></td>
                         <td>
-                            <img src="../../includes/media/movies/<?php echo htmlspecialchars($movie['imagePath'] ?? ''); ?>" alt="Movie Image" class="img-thumbnail" width="100">
-                        </td>
-                        <td><?php echo htmlspecialchars($movie['movieTag'] ?? ''); ?></td>
-                        <td>
-                            <a href="editMovie.php?movieID=<?php echo $movie['movieID']; ?>" class="btn btn-warning btn-sm">Edit</a>
-                            <a href="deleteMovie.php?movieID=<?php echo $movie['movieID']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Delete this movie?')">Delete</a>
+                            <a href="edit_movie.php?movieID=<?= $movie['movieID']; ?>" class="btn btn-warning btn-sm">Edit</a>
+                            <a href="delete_movie.php?movieID=<?= $movie['movieID']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Delete this movie?')">Delete</a>
                         </td>
                     </tr>
                 <?php endforeach; ?>
@@ -83,7 +77,7 @@ $getMovies = $query->fetchAll();
     </div>
 
     <h3 class="mt-5">Add New Movie</h3>
-    <form id="addMovieForm" method="post" action="addMovie.php" enctype="multipart/form-data" class="p-4 shadow rounded bg-white">
+    <form id="addMovieForm" method="post" action="add_movie.php" enctype="multipart/form-data" class="p-4 shadow rounded bg-white">
         <div class="form-group">
             <label for="title">Title</label>
             <input type="text" id="title" name="title" class="form-control" required>
@@ -117,13 +111,15 @@ $getMovies = $query->fetchAll();
         </div>
         <div class="form-group">
             <label for="movieTag">Tag</label>
-            <select id="movieTag" name="movieTag" class="form-control" required>
+            <select id="movieTag" name="movieTag" class="form-control">
                 <option value="None">None</option>
-                <option value="Hot New Movie">Hot new movie</option>
-                <option value="Movie of the Week">Movie of the week</option>
+                <option value="Hot New Movie">Hot New Movie</option>
+                <option value="Movie of the Week">Movie of the Week</option>
             </select>
         </div>
-        <button type="submit" name="submit" class="btn btn-success btn-block">+ Add Movie</button>
+        <button type="submit" name="submit" class="btn btn-success btn-block">
+            + Add Movie
+        </button>
     </form>
 </div>
 
