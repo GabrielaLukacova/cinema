@@ -453,7 +453,8 @@ input {
 
 .opening-hours-container {
   position: relative;
-  height: 100vh;
+  /* height: 100vh; */
+  height: 500px;
   display: flex;
   align-items: center;
 }
