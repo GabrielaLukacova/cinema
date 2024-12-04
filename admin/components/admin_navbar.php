@@ -28,7 +28,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="..movies//view/movies.php" class="nav-link <?php echo $currentPage == 'movies.php' ? 'active' : ''; ?>">
+                        <a href="../movies/movie_list.php" class="nav-link <?php echo $currentPage == 'movies.php' ? 'active' : ''; ?>">
                             <span class="material-icons">movie</span> Movies
                         </a>
                     </li>

@@ -190,9 +190,9 @@ try {
                         Cinema.description, 
                         Cinema.street, 
                         Cinema.postalCode, 
-                        CinemaPostalCode.city 
+                        PostalCode.city 
                        FROM Cinema 
-                       INNER JOIN CinemaPostalCode ON Cinema.postalCode = CinemaPostalCode.postalCode 
+                       INNER JOIN PostalCode ON Cinema.postalCode = PostalCode.postalCode 
                        LIMIT 1");
 $query->execute();
 $cinema = $query->fetch(PDO::FETCH_ASSOC);
@@ -240,29 +240,31 @@ $openingHours = $query->fetchAll(PDO::FETCH_ASSOC);
 
 
 <section>
-<div class="opening-hours-container">
-    <div class="opening-hours"></div> 
+  <div class="opening-hours-container">
+    <div class="opening-hours"></div>
     <div class="opening-hours-text">
-        <h2>Opening Hours</h2>
-        <?php if (!empty($openingHours)): ?>
-            <?php foreach ($openingHours as $hour): ?>
-                <div class="day">
-                    <span><?php echo htmlspecialchars($hour['dayOfWeek']); ?></span>
-                    <span>
-                        <?php 
-                            echo htmlspecialchars(date("H:i", strtotime($hour['openingTime']))) . 
-                            ' - ' . 
-                            htmlspecialchars(date("H:i", strtotime($hour['closingTime']))); 
-                        ?>
-                    </span>
-                </div>
-            <?php endforeach; ?>
-        <?php else: ?>
-            <p>No opening hours available.</p>
-        <?php endif; ?>
+      <h2>Opening Hours</h2>
+      <?php if (!empty($openingHours)): ?>
+        <?php foreach ($openingHours as $hour): ?>
+          <div class="day">
+            <span><?php echo htmlspecialchars($hour['dayOfWeek']); ?></span>
+            <span>
+              <?php 
+                echo htmlspecialchars(date("H:i", strtotime($hour['openingTime']))) . 
+                ' - ' . 
+                htmlspecialchars(date("H:i", strtotime($hour['closingTime']))); 
+              ?>
+            </span>
+          </div>
+        <?php endforeach; ?>
+      <?php else: ?>
+        <p>No opening hours available.</p>
+      <?php endif; ?>
     </div>
-</div>
+  </div>
 </section>
+
+
 
 
 

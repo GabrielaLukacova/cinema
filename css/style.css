@@ -451,55 +451,6 @@ input {
 
 
 
-.opening-hours-container {
-  position: relative;
-  /* height: 100vh; */
-  height: 500px;
-  display: flex;
-  align-items: center;
-}
-
-.opening-hours {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: url('../includes/media/other/camera.png');
-  background-size: cover;
-  background-position: center;
-  z-index: 0; 
-  padding: 60px 13%;
-}
-
-.opening-hours-text {
-  position: relative;
-  z-index: 1;
-  width: 33%; 
-  margin-left: auto; 
-  color: #36302F;
-  line-height: 1.6;
-}
-
-.opening-hours-text h2 {
-  text-decoration-color: #36302F;
-}
-
-.day {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid #36302F;
-  padding-bottom: 5px;
-}
-.day:last-child {
-  border-bottom: none;
-}
-.day span:first-child {
-  font-weight: bold;
-}
-
-
 
 
 
@@ -561,6 +512,66 @@ input {
 
 
 
+
+
+
+.opening-hours-container {
+  position: relative;
+  padding: 60px 13%; /* Padding for the entire section */
+  display: flex;
+  align-items: center;
+}
+
+.opening-hours {
+  position: absolute;
+  top: 0;
+  left: 13%; /* Match the left padding of the container */
+  width: 74%; /* 100% - 2 * 13% padding */
+  height: auto; /* Let the image height adjust dynamically based on width */
+  background-image: url('../includes/media/other/camera.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 0; /* Place behind text */
+}
+
+.opening-hours-text {
+  position: relative;
+  z-index: 1; /* Place above background image */
+  margin-left: auto;
+  width: calc(33% + 10px); /* Align to the right and end 30px before the background image */
+  line-height: 1.6;
+  padding-top: 60px;
+  padding-right: 100px;
+}
+
+.opening-hours-text h2 {
+  text-decoration: underline;
+  text-decoration-color: #36302F;
+  margin-bottom: 20px;
+}
+
+.day {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #36302F;
+  padding-bottom: 5px;
+  margin-bottom: 10px;
+}
+
+.day:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.day span:first-child {
+  font-weight: bold;
+}
+
+
+
+
 /*------------------------------ALL MOVIES PAGE-----------------------------*/
 /*------------------------------ALL MOVIES PAGE-----------------------------*/
 /*------------------------------ALL MOVIES PAGE-----------------------------*/
@@ -599,11 +610,14 @@ input {
 
 /*--------------------MOVIE LIST---------------------*/
 
+
+
+
 /* Container for movie cards */
 .movies-container {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 40px;
+  gap: 30px;
   max-width: 1200px;
   width: 100%;
   padding: 100px 12%;
@@ -634,56 +648,60 @@ input {
   position: absolute;
   bottom: 0;
   width: 100%;
-  height: 20%; /* Starts at 50% height of the container */
-  background: rgba(0, 0, 0, 0.5); 
+  height: 20%; /* Initially 20% of the card height */
+  background: rgba(0, 0, 0, 0.5);
   color: #fff;
-  /* margin: 10px; */
-  text-align: left;
+  padding: 10px; /* Minimal padding for initial view */
+  text-align: center;
   transition: height 0.4s ease, background-color 0.4s ease;
   display: flex;
   flex-direction: column;
-  /* justify-content: space-between; */
+  justify-content: center; /* Center title vertically */
+  align-items: center;
+  gap: 0; /* No gap initially */
 }
 
-/* Expand overlay to 100% height on hover */
+/* Expand overlay to show all content on hover */
 .movie-card:hover .movie-overlay {
-  height: 120%;
+  height: 100%;
   background: rgba(0, 0, 0, 0.8);
+  padding: 15px; /* Additional padding when expanded */
+  justify-content: flex-start; /* Align content to the top */
+  gap: 4px; /* Set gap between lines */
 }
 
 /* Title styling */
 .movie-title {
   font-size: 18px;
   font-weight: bold;
-  margin-bottom: 5px;
+  margin: 0; /* Remove margins */
   text-align: center;
 }
 
-/* Movie information below title */
+/* Movie information below title (visible only on hover) */
 .movie-info {
   font-size: 14px;
-  margin-bottom: 5px;
+  margin: 0; /* Remove margins */
   display: flex;
   flex-direction: column;
+  gap: 4px; /* Consistent 4px gap between lines */
 }
 
-/* Description section */
+/* Description section (visible only on hover) */
 .movie-description {
   font-size: 12px;
-  line-height: 1.1;
-  /* height: 3em; Limit description height to 2 lines */
+  line-height: 1.2;
   overflow: hidden;
   text-overflow: ellipsis;
-  margin-bottom: 5px;
+  margin: 0; /* Remove margins */
 }
 
-/* See more button */
+/* See more button (visible only on hover) */
 .see-more {
+  align-self: center;
   border: 1px solid #cb4540;
   padding: 5px 10px;
   font-size: 12px;
-  text-align: center;
-  display: inline-block;
   background: transparent;
   color: #fff;
   transition: background-color 0.3s ease;
@@ -698,6 +716,8 @@ input {
 .movie-card {
   cursor: pointer;
 }
+
+
 
 
 
@@ -1040,7 +1060,8 @@ input {
 .news-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 20px;
+  gap: 50px;
+  padding: 100px 13%;
 }
 
 /* Individual news card styling */
@@ -1053,6 +1074,7 @@ input {
   overflow: hidden;
   position: relative;
   transition: transform 0.3s ease; /* Optional for smoothness */
+
 }
 
 /* Ensure the image container handles the hover effect */
