@@ -1,6 +1,7 @@
 <?php
 require_once "../includes/connection.php";
 require_once "../navbar_footer/cinema_navbar.php";
+require_once "../admin/movies/classes/movie.php"; 
 ?>
 
 
@@ -52,6 +53,56 @@ $movieOfTheWeek = $query->fetch(PDO::FETCH_ASSOC);
 
 
 
+
+<!-- 
+            8 HOT NEW MOVIES 
+            8 HOT NEW MOVIES 
+            8 HOT NEW MOVIES  -->
+
+<?php
+$movieHandler = new Movie($db);
+
+try {
+    // Fetch 8 movies tagged as "Hot New Movie"
+    $movies = $movieHandler->getMoviesByTag("Hot New Movie", 8);
+} catch (Exception $e) {
+    $movies = []; // empty array if fetching fails
+    error_log("Error fetching movies: " . $e->getMessage());
+}
+
+?>
+
+<section class="hot-new-movies-section">
+    <h2>Hot New Movies</h2>
+    <div class="hot-new-movies-container">
+        <div class="hot-new-movies-scroll">
+            <?php foreach ($movies as $movie) : ?>
+                <a href="movie_single.php?movieID=<?php echo htmlspecialchars($movie['movieID']); ?>" class="hot-new-movie-card">
+                    <div class="movie-background" style="background-image: url('../includes/media/movies/<?php echo htmlspecialchars($movie['imagePath']); ?>');">
+                        <div class="movie-overlay">
+                            <div class="movie-title">
+                                <h4><?php echo htmlspecialchars($movie['title']); ?></h4>
+                            </div>
+                            <div class="movie-info">
+                                <p><?php echo htmlspecialchars($movie['genre']); ?></p>
+                                <p><?php echo htmlspecialchars($movie['runtime']); ?> min</p>
+                                <p><?php echo htmlspecialchars($movie['ageRating']); ?></p>
+                            </div>
+                            <div class="movie-description">
+                                <p><?php echo htmlspecialchars(substr($movie['description'], 0, 70)) . '...'; ?></p>
+                            </div>
+                            <button class="see-more">See More</button>
+                        </div>
+                    </div>
+                </a>
+            <?php endforeach; ?>
+        </div>
+        <!-- Tab Scroller -->
+        <div class="tab-scroller">
+            <div class="tab-scroll-bar"></div>
+        </div>
+    </div>
+</section>
 
 
 

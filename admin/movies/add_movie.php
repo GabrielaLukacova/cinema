@@ -2,7 +2,7 @@
 include '../../includes/connection.php';
 include 'classes/Movie.php';
 
-$movie = new Movie($db);
+$movieHandler = new Movie($db);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
@@ -36,118 +36,54 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'genre' => $_POST['genre'],
             'runtime' => $_POST['runtime'],
             'language' => $_POST['language'],
-            'languageFlagPath' => $_POST['languageFlagPath'] ?? null,
             'ageRating' => $_POST['ageRating'] ?? null,
             'description' => $_POST['description'] ?? null,
             'imagePath' => $imagePath,
-            'movieTag' => $_POST['movieTag'] ?? null,
+            'movieTag' => $_POST['movieTag'] ?? 'None',
         ];
 
+        // Check the selected tag for limits
+        $movieTag = $data['movieTag'];
+
+        if ($movieTag === 'Hot New Movie') {
+            $hotNewCount = $movieHandler->countMoviesByTag('Hot New Movie');
+
+            if ($hotNewCount >= 8) {
+                $firstMovie = $movieHandler->getFirstMovieByTag('Hot New Movie');
+                echo "<script>
+                    if (confirm('The limit of 8 movies for Hot New Movie is reached. Do you want to replace \"{$firstMovie['title']}\"?')) {
+                        window.location.href = 'replace_movie.php?movieID={$firstMovie['movieID']}&newTag=Hot New Movie';
+                    } else {
+                        window.history.back();
+                    }
+                </script>";
+                exit;
+            }
+        } elseif ($movieTag === 'Movie of the Week') {
+            $movieOfWeekCount = $movieHandler->countMoviesByTag('Movie of the Week');
+
+            if ($movieOfWeekCount >= 1) {
+                $firstMovie = $movieHandler->getFirstMovieByTag('Movie of the Week');
+                echo "<script>
+                    if (confirm('The Movie of the Week tag is already assigned to \"{$firstMovie['title']}\". Do you want to replace it?')) {
+                        window.location.href = 'replace_movie.php?movieID={$firstMovie['movieID']}&newTag=Movie of the Week';
+                    } else {
+                        window.history.back();
+                    }
+                </script>";
+                exit;
+            }
+        }
+
         // Add movie to the database
-        if ($movie->addMovie($data)) {
+        if ($movieHandler->addMovie($data)) {
             header("Location: movie_list.php?success=Movie added successfully!");
             exit();
         } else {
-            $error = "Failed to add movie.";
+            throw new Exception("Failed to add movie.");
         }
     } catch (Exception $e) {
         $error = $e->getMessage();
+        echo "<p style='color: red;'>Error: {$error}</p>";
     }
 }
-
-
-
-
-require_once "classes/Movie.php";
-
-// Initialize Movie handler
-$movieHandler = new Movie($db);
-
-$movieTag = $_POST['movieTag'];
-
-if ($movieTag === "Hot New Movie") {
-    $hotNewCount = $movieHandler->countMoviesByTag("Hot New Movie");
-
-    if ($hotNewCount >= 8) {
-        $firstMovie = $movieHandler->getFirstMovieByTag("Hot New Movie");
-        echo "<script>
-            if (confirm('The limit of 8 movies for Hot New Movie is reached. Do you want to replace \"{$firstMovie['title']}\"?')) {
-                window.location.href = 'replace_movie.php?movieID={$firstMovie['movieID']}&newTag=Hot New Movie';
-            }
-        </script>";
-        exit;
-    }
-} elseif ($movieTag === "Movie of the Week") {
-    $movieOfWeekCount = $movieHandler->countMoviesByTag("Movie of the Week");
-
-    if ($movieOfWeekCount >= 1) {
-        $firstMovie = $movieHandler->getFirstMovieByTag("Movie of the Week");
-        echo "<script>
-            if (confirm('The Movie of the Week tag is already assigned to \"{$firstMovie['title']}\". Do you want to replace it?')) {
-                window.location.href = 'replace_movie.php?movieID={$firstMovie['movieID']}&newTag=Movie of the Week';
-            }
-        </script>";
-        exit;
-    }
-}
-
-// Proceed to add movie if no limits are exceeded
-$movieHandler->addMovie($_POST);
-header("Location: manage_movies.php?status=Movie added successfully.");
-
-?>
-
-<div class="container mt-5">
-    <h1 class="mb-4">Add New Movie</h1>
-    <?php if (isset($error)) : ?>
-        <div class="alert alert-danger">
-            <?= htmlspecialchars($error); ?>
-        </div>
-    <?php endif; ?>
-    <form method="POST" action="" enctype="multipart/form-data">
-        <div class="mb-3">
-            <label for="title" class="form-label">Title</label>
-            <input type="text" class="form-control" id="title" name="title" required>
-        </div>
-        <div class="mb-3">
-            <label for="genre" class="form-label">Genre</label>
-            <input type="text" class="form-control" id="genre" name="genre" required>
-        </div>
-        <div class="mb-3">
-            <label for="runtime" class="form-label">Runtime (min)</label>
-            <input type="number" class="form-control" id="runtime" name="runtime" required>
-        </div>
-        <div class="mb-3">
-            <label for="language" class="form-label">Language</label>
-            <select id="language" name="language" class="form-control" required>
-                <option value="English">English</option>
-                <option value="Danish">Danish</option>
-            </select>
-        </div>
-        <div class="mb-3">
-            <label for="languageFlagPath" class="form-label">Language Flag Path</label>
-            <input type="text" class="form-control" id="languageFlagPath" name="languageFlagPath">
-        </div>
-        <div class="mb-3">
-            <label for="ageRating" class="form-label">Age Rating</label>
-            <input type="text" class="form-control" id="ageRating" name="ageRating">
-        </div>
-        <div class="mb-3">
-            <label for="description" class="form-label">Description</label>
-            <textarea class="form-control" id="description" name="description"></textarea>
-        </div>
-        <div class="mb-3">
-            <label for="movieImage" class="form-label">Movie Image</label>
-            <input type="file" name="movieImage" id="movieImage" class="form-control-file" accept="image/*" required>
-        </div>
-        <div class="mb-3">
-            <label for="movieTag" class="form-label">Movie Tag</label>
-            <select id="movieTag" name="movieTag" class="form-control">
-                <option value="None">None</option>
-                <option value="Hot New Movie">Hot New Movie</option>
-                <option value="Movie of the Week">Movie of the Week</option>
-            </select>
-        </div>
-        <button type="submit" class="btn btn-primary">Add Movie</button>
-    </form>
-</div>

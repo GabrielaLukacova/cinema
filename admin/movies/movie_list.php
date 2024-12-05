@@ -9,8 +9,8 @@ $movieHandler = new Movie($db);
 // Fetch all movies
 $movies = $movieHandler->getAllMovies();
 
-$hotNewCount = 0;
-$movieOfWeekCount = 0;
+$hotNewCount = $movieHandler->countMoviesByTag('Hot New Movie');
+$movieOfWeekCount = $movieHandler->countMoviesByTag('Movie of the Week');
 ?>
 
 <!DOCTYPE html>
@@ -142,7 +142,6 @@ $movieOfWeekCount = 0;
             <label for="movieTag" class="form-label">Tag</label>
             <select id="movieTag" name="movieTag" class="form-control">
                 <option value="None">None</option>
-                
                 <option value="Hot New Movie" <?= $hotNewCount >= 8 ? 'disabled' : ''; ?>>Hot New Movie</option>
                 <option value="Movie of the Week" <?= $movieOfWeekCount >= 1 ? 'disabled' : ''; ?>>Movie of the Week</option>
             </select>

@@ -612,7 +612,6 @@ input {
 
 
 
-
 /* Container for movie cards */
 .movies-container {
   display: grid;
@@ -667,7 +666,7 @@ input {
   background: rgba(0, 0, 0, 0.8);
   padding: 15px; /* Additional padding when expanded */
   justify-content: flex-start; /* Align content to the top */
-  gap: 4px; /* Set gap between lines */
+  gap: 2px; /* Reduced gap between lines */
 }
 
 /* Title styling */
@@ -684,7 +683,7 @@ input {
   margin: 0; /* Remove margins */
   display: flex;
   flex-direction: column;
-  gap: 4px; /* Consistent 4px gap between lines */
+  gap: 2px; /* Reduced gap for tighter spacing */
 }
 
 /* Description section (visible only on hover) */
@@ -715,6 +714,152 @@ input {
 
 .movie-card {
   cursor: pointer;
+}
+
+
+
+
+
+/*------------------------------8 HOT NEW MOVIES-----------------------------*/
+
+/* Section container */
+.hot-new-movies-section {
+  /* padding: 100px 13%; */
+  position: relative;
+  overflow: hidden;
+}
+
+/* Movies container (horizontal scroll) */
+.hot-new-movies-container {
+  position: relative;
+  overflow: hidden;
+  padding: 100px 0% 100px 13%;
+}
+
+/* Scrolling area for movies */
+.hot-new-movies-scroll {
+  display: flex;
+  gap: 30px;
+  transition: transform 0.4s ease-in-out;
+  overflow: hidden;
+}
+
+/* Individual movie card */
+.hot-new-movie-card {
+  flex: 0 0 18%; 
+  max-width: 220px; 
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  text-decoration: none;
+  color: inherit;
+  height: 300px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Background image */
+.movie-background {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+/* Overlay */
+.movie-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 93%;
+  height: 18%; 
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  transition: height 0.4s ease, background 0.4s ease;
+}
+
+/* Overlay on hover */
+.hot-new-movie-card:hover .movie-overlay {
+  height: 100%;
+  background: rgba(0, 0, 0, 0.9);
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 10px;
+}
+
+/* Title in center */
+.movie-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0 auto;
+  text-align: center;
+  line-height: 1.2;
+  flex: none;
+}
+
+/* Additional movie information */
+.movie-info {
+  font-size: 14px;
+  margin: 5px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: left;
+  line-height: 1.5;
+}
+
+/* Movie description */
+.movie-description {
+  font-size: 12px;
+  line-height: 1.4;
+  text-align: left;
+  margin-top: 5px;
+  flex: none;
+}
+
+/* Button styling */
+.see-more {
+  align-self: center;
+  margin-top: auto;
+  border: 1px solid #cb4540;
+  padding: 5px 10px;
+  font-size: 12px;
+  color: #fff;
+  background: transparent;
+  transition: all 0.3s ease;
+}
+
+.see-more:hover {
+  background-color: #cb4540;
+  border: none;
+  color: #f8f8f8;
+}
+
+/* Tab scroller styling */
+.tab-scroller {
+  margin-top: 15px;
+  height: 10px;
+  width: 100%;
+  background: #e0e0e0;
+  border-radius: 50px;
+  position: relative;
+  overflow: hidden;
+
+}
+
+.tab-scroll-bar {
+  height: 10px;
+  width: 50%; 
+  background: #cb4540;
+  border-radius: 50px;
+  transition: width 0.4s ease;
+  
 }
 
 

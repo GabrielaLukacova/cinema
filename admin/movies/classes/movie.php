@@ -30,6 +30,19 @@ class Movie {
         }
     }
 
+    public function getMoviesByTag(string $tag, int $limit = 8): array {
+        try {
+            $query = "SELECT * FROM " . self::TABLE_NAME . " WHERE movieTag = :tag LIMIT :limit";
+            $stmt = $this->db->prepare($query);
+            $stmt->bindValue(':tag', $tag, PDO::PARAM_STR);
+            $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            throw new Exception("Error fetching movies by tag: " . $e->getMessage());
+        }
+    }
+
     public function addMovie($data) {
         try {
             $query = "INSERT INTO " . self::TABLE_NAME . " (title, genre, runtime, language, ageRating, description, imagePath, movieTag)
