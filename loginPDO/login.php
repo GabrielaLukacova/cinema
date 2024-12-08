@@ -1,7 +1,7 @@
 <?php 
 session_start();
 require_once("functions.php");
-require_once("../../includes/connection.php");
+require_once("../includes/connection.php");
 
 $message = ""; 
 
@@ -25,7 +25,7 @@ if (isset($_POST['submit'])) {
                 $_SESSION['email'] = $found_user['email'];
 
                 
-                header("Location: ../home.php");
+                header("Location: ../user_profile/user_profile.php");
                 exit();
             } else {
                 $message = "Invalid password.";

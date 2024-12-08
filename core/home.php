@@ -60,23 +60,65 @@ $movieOfTheWeek = $query->fetch(PDO::FETCH_ASSOC);
             8 HOT NEW MOVIES  -->
 
 <?php
+
+
+
+
 $movieHandler = new Movie($db);
 
 try {
-    // Fetch 8 movies tagged as "Hot New Movie"
+    // Fetch all movies tagged as "Hot New Movie"
     $movies = $movieHandler->getMoviesByTag("Hot New Movie", 8);
 } catch (Exception $e) {
-    $movies = []; // empty array if fetching fails
+    $movies = []; // Fallback to an empty array if fetching fails
     error_log("Error fetching movies: " . $e->getMessage());
 }
 
+// Pagination logic
+$moviesPerSection = 5; // Show 5 and a half movies at a time
+$totalMovies = count($movies);
+$totalSections = ceil($totalMovies / $moviesPerSection);
+
+// Get the current section from the query string
+$currentSection = isset($_GET['section']) ? (int)$_GET['section'] : 1;
+$currentSection = max(1, min($currentSection, $totalSections)); // Clamp value between 1 and $totalSections
+
+// Determine the slice of movies to show
+$startIndex = ($currentSection - 1) * $moviesPerSection;
+$moviesToShow = array_slice($movies, $startIndex, $moviesPerSection);
+
+
+
+
+//logic to calculate movie sections and their visual representation on the scroller
+$movieHandler = new Movie($db);
+
+try {
+    $movies = $movieHandler->getMoviesByTag("Hot New Movie");
+} catch (Exception $e) {
+    $movies = []; // Fallback to an empty array
+    error_log("Error fetching movies: " . $e->getMessage());
+}
+
+$moviesPerScroll = 5; // 5.5 movies are visible (5 fully visible, 1 partially)
+$totalMovies = count($movies);
+$totalSections = ceil($totalMovies / $moviesPerScroll);
+
+$currentSection = isset($_GET['section']) ? (int)$_GET['section'] : 1;
+$currentSection = max(1, min($currentSection, $totalSections));
+
+$startIndex = ($currentSection - 1) * $moviesPerScroll;
+$moviesToShow = array_slice($movies, $startIndex, $moviesPerScroll + 1); // Show an extra for the partial movie
 ?>
+
+
+
 
 <section class="hot-new-movies-section">
     <h2>Hot New Movies</h2>
     <div class="hot-new-movies-container">
         <div class="hot-new-movies-scroll">
-            <?php foreach ($movies as $movie) : ?>
+            <?php foreach ($moviesToShow as $movie): ?>
                 <a href="movie_single.php?movieID=<?php echo htmlspecialchars($movie['movieID']); ?>" class="hot-new-movie-card">
                     <div class="movie-background" style="background-image: url('../includes/media/movies/<?php echo htmlspecialchars($movie['imagePath']); ?>');">
                         <div class="movie-overlay">
@@ -97,12 +139,20 @@ try {
                 </a>
             <?php endforeach; ?>
         </div>
-        <!-- Tab Scroller -->
-        <div class="tab-scroller">
-            <div class="tab-scroll-bar"></div>
-        </div>
+    </div>
+
+    <!-- Scrolling bar -->
+    <div class="movie-scroller">
+        <?php for ($i = 1; $i <= $totalSections; $i++): ?>
+            <a href="?section=<?php echo $i; ?>" 
+               class="movie-scroll-bar<?php echo $i === $currentSection ? ' active' : ''; ?>"
+               style="width: <?php echo (1 / $totalSections) * 100; ?>%;"></a>
+        <?php endfor; ?>
     </div>
 </section>
+
+
+
 
 
 

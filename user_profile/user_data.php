@@ -1,61 +1,89 @@
-<section class="user-account-content">
-    <h2>Personal Data</h2>
-    <div class="user-account-personal-data">
-        <div class="user-account-data-row">
-            <span class="user-account-data-label">Name:</span>
-            <span class="user-account-data-value"><?= htmlspecialchars($user->firstName); ?></span>
-        </div>
-        <div class="user-account-data-row">
-            <span class="user-account-data-label">Surname:</span>
-            <span class="user-account-data-value"><?= htmlspecialchars($user->lastName); ?></span>
-        </div>
-        <div class="user-account-data-row">
-            <span class="user-account-data-label">Phone Number:</span>
-            <span class="user-account-data-value"><?= htmlspecialchars($user->phoneNumber); ?></span>
-        </div>
-        <div class="user-account-data-row">
-            <span class="user-account-data-label">Email:</span>
-            <span class="user-account-data-value"><?= htmlspecialchars($user->email); ?></span>
-        </div>
-        <div class="user-account-data-row">
-            <span class="user-account-data-label">Address:</span>
-            <span class="user-account-data-value"><?= htmlspecialchars($user->street); ?></span>
-        </div>
-        <div class="user-account-data-row">
-            <span class="user-account-data-label">City:</span>
-            <span class="user-account-data-value"><?= htmlspecialchars($user->city); ?></span>
-        </div>
-        <button class="user-account-edit-btn" onclick="openEditModal()">Edit</button>
-    </div>
-</section>
+<?php
+require_once 'classes/user.php';
 
-<!-- Edit Modal -->
-<div id="editModal" class="modal">
-    <div class="modal-content">
-        <form action="./update_user_data.php" method="post">
-            <h3>Edit Personal Data</h3>
-            <label for="firstName">First Name:</label>
-            <input type="text" name="firstName" value="<?= htmlspecialchars($user->firstName); ?>" required>
-            <label for="lastName">Last Name:</label>
-            <input type="text" name="lastName" value="<?= htmlspecialchars($user->lastName); ?>" required>
-            <label for="phoneNumber">Phone Number:</label>
-            <input type="text" name="phoneNumber" value="<?= htmlspecialchars($user->phoneNumber); ?>">
-            <label for="email">Email:</label>
-            <input type="email" name="email" value="<?= htmlspecialchars($user->email); ?>" required>
-            <label for="street">Address:</label>
-            <input type="text" name="street" value="<?= htmlspecialchars($user->street); ?>">
-            <label for="city">City:</label>
-            <input type="text" name="city" value="<?= htmlspecialchars($user->city); ?>" disabled>
-            <button type="submit">Save</button>
-            <button type="button" onclick="closeEditModal()">Close</button>
-        </form>
+session_start();
+if (!isset($_SESSION['userID'])) {
+    header('Location: login.php');
+    exit;
+}
+
+$userID = $_SESSION['userID'];
+$user = new User();
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $data = [
+        'firstName' => htmlspecialchars($_POST['firstName']),
+        'lastName' => htmlspecialchars($_POST['lastName']),
+        'phoneNumber' => htmlspecialchars($_POST['phoneNumber']),
+        'street' => htmlspecialchars($_POST['street']),
+        'postalCode' => htmlspecialchars($_POST['postalCode'])
+    ];
+
+    $user->updateUserProfile($userID, $data);
+
+    // Handle image upload securely
+    if (!empty($_FILES['userPicture']['name'])) {
+        $uploadDir = '../uploads/user_images/';
+        $fileName = basename($_FILES['userPicture']['name']);
+        $filePath = $uploadDir . $fileName;
+        $fileType = mime_content_type($_FILES['userPicture']['tmp_name']);
+
+        if (in_array($fileType, ['image/jpeg', 'image/png'])) {
+            if (move_uploaded_file($_FILES['userPicture']['tmp_name'], $filePath)) {
+                $user->updateUserPicture($userID, $filePath);
+            } else {
+                die('Failed to upload file.');
+            }
+        } else {
+            die('Invalid file type. Only JPEG and PNG are allowed.');
+        }
+    }
+
+    header('Location: user_profile.php');
+    exit;
+}
+
+$userData = $user->getUserProfile($userID);
+
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/style.css">
+    <title>Edit User Data</title>
+</head>
+<body>
+    <div class="user-account-container">
+        <div class="user-account-sidebar">
+            <a href="#" class="user-account-sidebar-link">My Tickets</a>
+            <a href="user_profile.php" class="user-account-sidebar-link">Personal Data</a>
+            <a href="logout.php" class="user-account-sidebar-link">Log Out</a>
+        </div>
+        <div class="user-account-main">
+            <form action="user_data.php" method="post" enctype="multipart/form-data" class="user-account-personal-data">
+                <label>First Name:</label>
+                <input type="text" name="firstName" value="<?= htmlspecialchars($userData['firstName']); ?>" required>
+
+                <label>Last Name:</label>
+                <input type="text" name="lastName" value="<?= htmlspecialchars($userData['lastName']); ?>" required>
+
+                <label>Phone Number:</label>
+                <input type="text" name="phoneNumber" value="<?= htmlspecialchars($userData['phoneNumber']); ?>" required>
+
+                <label>Street:</label>
+                <input type="text" name="street" value="<?= htmlspecialchars($userData['street']); ?>" required>
+
+                <label>Postal Code:</label>
+                <input type="text" name="postalCode" value="<?= htmlspecialchars($userData['postalCode']); ?>" required>
+
+                <label>Profile Picture:</label>
+                <input type="file" name="userPicture" accept="image/jpeg, image/png">
+
+                <button type="submit" class="user-account-edit-btn">Save Changes</button>
+            </form>
+        </div>
     </div>
-</div>
-<script>
-function openEditModal() {
-    document.getElementById('editModal').style.display = 'block';
-}
-function closeEditModal() {
-    document.getElementById('editModal').style.display = 'none';
-}
-</script>
+</body>
+</html>

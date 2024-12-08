@@ -611,8 +611,7 @@ input {
 /*--------------------MOVIE LIST---------------------*/
 
 
-
-/* Container for movie cards */
+/* 
 .movies-container {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
@@ -622,7 +621,6 @@ input {
   padding: 100px 12%;
 }
 
-/* Individual movie card */
 .movie-card {
   position: relative;
   overflow: hidden;
@@ -642,60 +640,56 @@ input {
   background-position: center;
 }
 
-/* Overlay containing the title, info, and button */
 .movie-overlay {
   position: absolute;
   bottom: 0;
   width: 100%;
-  height: 20%; /* Initially 20% of the card height */
+  height: 20%; 
   background: rgba(0, 0, 0, 0.5);
   color: #fff;
-  padding: 10px; /* Minimal padding for initial view */
+  padding: 10px; 
   text-align: center;
   transition: height 0.4s ease, background-color 0.4s ease;
   display: flex;
   flex-direction: column;
-  justify-content: center; /* Center title vertically */
+  justify-content: center; 
   align-items: center;
-  gap: 0; /* No gap initially */
+  gap: 0; 
 }
 
-/* Expand overlay to show all content on hover */
 .movie-card:hover .movie-overlay {
   height: 100%;
   background: rgba(0, 0, 0, 0.8);
-  padding: 15px; /* Additional padding when expanded */
-  justify-content: flex-start; /* Align content to the top */
-  gap: 2px; /* Reduced gap between lines */
+  padding: 15px; 
+  justify-content: flex-start;
+  gap: 2px; 
 }
 
-/* Title styling */
 .movie-title {
   font-size: 18px;
   font-weight: bold;
-  margin: 0; /* Remove margins */
+  margin: 0; 
   text-align: center;
 }
 
-/* Movie information below title (visible only on hover) */
 .movie-info {
   font-size: 14px;
-  margin: 0; /* Remove margins */
+  margin: 0; 
   display: flex;
   flex-direction: column;
-  gap: 2px; /* Reduced gap for tighter spacing */
+  gap: 2px; 
 }
 
-/* Description section (visible only on hover) */
+
 .movie-description {
   font-size: 12px;
   line-height: 1.2;
   overflow: hidden;
   text-overflow: ellipsis;
-  margin: 0; /* Remove margins */
+  margin: 0; 
 }
 
-/* See more button (visible only on hover) */
+
 .see-more {
   align-self: center;
   border: 1px solid #cb4540;
@@ -715,51 +709,48 @@ input {
 .movie-card {
   cursor: pointer;
 }
-
+ */
 
 
 
 
 /*------------------------------8 HOT NEW MOVIES-----------------------------*/
 
-/* Section container */
+/* Overall Section Styling */
 .hot-new-movies-section {
-  /* padding: 100px 13%; */
+  padding: 100px 13% 100px 13%;
+  background-color: #121212; /* Dark background */
   position: relative;
   overflow: hidden;
 }
 
-/* Movies container (horizontal scroll) */
+/* Movies Container */
 .hot-new-movies-container {
-  position: relative;
   overflow: hidden;
-  padding: 100px 0% 100px 13%;
+  width: 100%;
 }
 
-/* Scrolling area for movies */
+/* Horizontal Scroll Container */
 .hot-new-movies-scroll {
   display: flex;
-  gap: 30px;
+  gap: 20px;
+  padding-right: 0; /* Infinite effect: no right padding initially */
   transition: transform 0.4s ease-in-out;
-  overflow: hidden;
 }
 
-/* Individual movie card */
+/* Individual Movie Card */
 .hot-new-movie-card {
-  flex: 0 0 18%; 
-  max-width: 220px; 
-  position: relative;
-  overflow: hidden;
+  flex: 0 0 18%; /* 18% per movie ensures 5.5 visible movies */
+  max-width: 220px;
   border-radius: 8px;
+  overflow: hidden;
   text-decoration: none;
-  color: inherit;
+  position: relative;
   height: 300px;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
+  color: white;
 }
 
-/* Background image */
+/* Background Image */
 .movie-background {
   width: 100%;
   height: 100%;
@@ -773,18 +764,25 @@ input {
   position: absolute;
   bottom: 0;
   left: 0;
-  width: 93%;
-  height: 18%; 
-  background: rgba(0, 0, 0, 0.6);
+  width: 100%;
+  height: 30%; /* Initial height: only title visible */
+  background: rgba(0, 0, 0, 0.8);
+  transition: height 0.4s ease, background 0.4s ease;
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
-  transition: height 0.4s ease, background 0.4s ease;
+  overflow: hidden;
 }
 
-/* Overlay on hover */
+/* Additional Info Hidden Initially */
+.movie-info,
+.movie-description,
+.see-more {
+  display: none;
+}
+
+/* Hover Behavior */
 .hot-new-movie-card:hover .movie-overlay {
   height: 100%;
   background: rgba(0, 0, 0, 0.9);
@@ -793,80 +791,40 @@ input {
   padding: 10px;
 }
 
-/* Title in center */
+.hot-new-movie-card:hover .movie-info,
+.hot-new-movie-card:hover .movie-description,
+.hot-new-movie-card:hover .see-more {
+  display: block;
+}
+
+/* Title Styling */
 .movie-title {
   font-size: 18px;
   font-weight: bold;
-  margin: 0 auto;
-  text-align: center;
-  line-height: 1.2;
-  flex: none;
 }
 
-/* Additional movie information */
-.movie-info {
-  font-size: 14px;
-  margin: 5px 0;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  text-align: left;
-  line-height: 1.5;
-}
-
-/* Movie description */
-.movie-description {
-  font-size: 12px;
-  line-height: 1.4;
-  text-align: left;
-  margin-top: 5px;
-  flex: none;
-}
-
-/* Button styling */
-.see-more {
-  align-self: center;
-  margin-top: auto;
-  border: 1px solid #cb4540;
-  padding: 5px 10px;
-  font-size: 12px;
-  color: #fff;
-  background: transparent;
-  transition: all 0.3s ease;
-}
-
-.see-more:hover {
-  background-color: #cb4540;
-  border: none;
-  color: #f8f8f8;
-}
-
-/* Tab scroller styling */
-.tab-scroller {
+/* Scroller Styling */
+.movie-scroller {
   margin-top: 15px;
-  height: 10px;
   width: 100%;
+  height: 10px;
   background: #e0e0e0;
   border-radius: 50px;
+  display: flex;
   position: relative;
-  overflow: hidden;
-
 }
 
-.tab-scroll-bar {
+.movie-scroll-bar {
   height: 10px;
-  width: 50%; 
-  background: #cb4540;
+  background: #cb4540; /* Red for active section */
   border-radius: 50px;
-  transition: width 0.4s ease;
-  
+  transition: background-color 0.3s ease;
+  margin: 0 2px;
 }
 
-
-
-
-
-
+.movie-scroll-bar.active {
+  background: #ff0000;
+}
 
 
 
@@ -1258,6 +1216,10 @@ input {
 }
 
 
+/*------------------------------NEWS SINGLE PAGE-----------------------------*/
+/*------------------------------NEWS SINGLE PAGE-----------------------------*/
+/*------------------------------NEWS SINGLE PAGE-----------------------------*/
+
 
 
 
@@ -1266,50 +1228,16 @@ input {
 /*------------------------------USER PROFILE PAGE-----------------------------*/
 /*------------------------------USER PROFILE PAGE-----------------------------*/
 
-/* .user-accoun{
-  display: flex;
 
-} */
-/* General Layout */
+
 .user-account-container {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: #181818;
-  color: #fff;
   min-height: 100vh;
-  padding: 20px;
-  font-family: Arial, sans-serif;
-  display: flex;
-
+  background-color: #181818;
 }
 
-/* Profile Section */
-.user-account-profile {
-  text-align: center;
-  margin-bottom: 20px;
-
-}
-
-.user-account-avatar {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  object-fit: cover;
-  background-color: #ccc;
-  margin-bottom: 10px;
-}
-
-.user-account-name {
-  font-size: 1.2rem;
-  margin-top: 10px;
-}
-
-/* Sidebar */
 .user-account-sidebar {
-  flex: 1;
-  max-width: 200px;
-  margin-right: 20px;
+  width: 20%;
   background: #2b2b2b;
   padding: 20px;
   display: flex;
@@ -1318,11 +1246,9 @@ input {
 }
 
 .user-account-sidebar-link {
-  display: block;
   color: #bbb;
   text-decoration: none;
   padding: 10px 15px;
-  background: transparent;
   border-radius: 4px;
   font-size: 1rem;
   transition: background-color 0.3s, color 0.3s;
@@ -1338,15 +1264,30 @@ input {
   color: #fff;
 }
 
-/* Main Content */
 .user-account-main {
-  flex: 3;
-  background-color: #2a2a2a;
+  flex: 1;
   padding: 20px;
+  background-color: #2a2a2a;
   border-radius: 8px;
 }
 
-/* Personal Data Panel */
+.user-account-profile {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.user-account-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: #ccc;
+  margin-bottom: 10px;
+}
+
+.user-account-name {
+  font-size: 1.2rem;
+}
+
 .user-account-personal-data {
   display: flex;
   flex-direction: column;
@@ -1357,7 +1298,6 @@ input {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 10px;
-  margin-bottom: 20px;
 }
 
 .user-info-grid div {
@@ -1369,79 +1309,20 @@ input {
 .user-info-grid strong {
   display: block;
   font-weight: bold;
-  margin-bottom: 5px;
 }
 
-/* Edit Button */
 .user-account-edit-btn {
   margin-top: 20px;
   padding: 10px 20px;
-  border: none;
   background: #CB4540;
   color: white;
-  cursor: pointer;
   border-radius: 5px;
   font-size: 1rem;
+  cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
 .user-account-edit-btn:hover {
   background: #a53733;
-}
-
-/* Tickets Panel */
-.tickets-panel {
-  text-align: center;
-  padding: 20px;
-}
-
-.tickets-panel h3 {
-  margin-bottom: 10px;
-}
-
-.tickets-panel p {
-  font-size: 1.1em;
-}
-
-/* Form Styles */
-.edit-form {
-  background-color: #f4f4f4;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  max-width: 500px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.edit-form h3 {
-  text-align: center;
-}
-
-.edit-form label {
-  font-weight: bold;
-}
-
-.edit-form input {
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  width: 100%;
-}
-
-/* Buttons */
-.btn-primary {
-  background-color: #CB4540;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 1rem;
-}
-
-.btn-primary:hover {
-  background-color: #a73b36;
 }
 

@@ -2,39 +2,73 @@
 require_once '../includes/connection.php';
 require_once 'user.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $firstName = htmlspecialchars($_POST['firstName']);
-    $lastName = htmlspecialchars($_POST['lastName']);
-    $phoneNumber = htmlspecialchars($_POST['phoneNumber']);
-    $email = htmlspecialchars($_POST['email']);
-    $street = htmlspecialchars($_POST['street']);
-    $postalCode = htmlspecialchars($_POST['postalCode']);
 
+$userID = 1; // Replace with session or login system to get the actual user ID
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $query = $db->prepare("
         UPDATE User 
         SET 
-            firstName = :firstName, 
+            firstName = :firstName,
             lastName = :lastName,
-            phoneNumber = :phoneNumber,
             email = :email,
+            phoneNumber = :phoneNumber,
             street = :street,
             postalCode = :postalCode
         WHERE userID = :userID
     ");
     $query->execute([
-        ':firstName' => $firstName,
-        ':lastName' => $lastName,
-        ':phoneNumber' => $phoneNumber,
-        ':email' => $email,
-        ':street' => $street,
-        ':postalCode' => $postalCode,
-        ':userID' => $_POST['userID']
+        ':firstName' => $_POST['firstName'],
+        ':lastName' => $_POST['lastName'],
+        ':email' => $_POST['email'],
+        ':phoneNumber' => $_POST['phoneNumber'],
+        ':street' => $_POST['street'],
+        ':postalCode' => $_POST['postalCode'],
+        ':userID' => $userID
     ]);
 
-    header("Location: profile.php");
+    header("Location: user_profile.php");
     exit;
+}
+
+$query = $db->prepare("SELECT * FROM User WHERE userID = :userID");
+$query->execute([':userID' => $userID]);
+$userData = $query->fetch(PDO::FETCH_ASSOC);
+
+if (!$userData) {
+    die("User not found.");
 }
 ?>
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/style.css">
+    <title>Edit Profile</title>
+</head>
 
-test
+    <form action="edit_profile.php" method="POST" class="edit-profile-form">
+        <h2>Edit Profile</h2>
+        <label for="firstName">First Name:</label>
+        <input type="text" name="firstName" value="<?= htmlspecialchars($userData['firstName']); ?>" required>
+
+        <label for="lastName">Last Name:</label>
+        <input type="text" name="lastName" value="<?= htmlspecialchars($userData['lastName']); ?>" required>
+
+        <label for="email">Email:</label>
+        <input type="email" name="email" value="<?= htmlspecialchars($userData['email']); ?>" required>
+
+        <label for="phoneNumber">Phone Number:</label>
+        <input type="text" name="phoneNumber" value="<?= htmlspecialchars($userData['phoneNumber']); ?>">
+
+        <label for="street">Street:</label>
+        <input type="text" name="street" value="<?= htmlspecialchars($userData['street']); ?>">
+
+        <label for="postalCode">Postal Code:</label>
+        <input type="text" name="postalCode" value="<?= htmlspecialchars($userData['postalCode']); ?>">
+
+        <button type="submit" class="btn-primary">Save Changes</button>
+        <a href="user_profile.php" class="btn-secondary">Cancel</a>
+    </form>

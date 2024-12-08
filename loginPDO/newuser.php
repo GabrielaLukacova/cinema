@@ -1,5 +1,5 @@
 <?php
-require_once("../../includes/connection.php");
+require_once("../includes/connection.php");
 $message = "";
 
 // form variables
@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
         try {
-            $insertPostalQuery = "INSERT IGNORE INTO UserPostalCode (postalCode, city) VALUES (:postalCode, :city)";
+            $insertPostalQuery = "INSERT IGNORE INTO PostalCode (postalCode, city) VALUES (:postalCode, :city)";
             $stmtPostal = $db->prepare($insertPostalQuery);
             $stmtPostal->bindParam(':postalCode', $postalCode, PDO::PARAM_STR);
             $stmtPostal->bindParam(':city', $city, PDO::PARAM_STR);

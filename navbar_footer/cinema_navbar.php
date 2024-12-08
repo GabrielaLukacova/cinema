@@ -1,3 +1,7 @@
+<?php
+require_once("../loginPDO/session.php");
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,7 +20,15 @@
         <ul class="nav-links">
             <li><a href="../movies/all_movies.php">Movies</a></li>
             <li><a href="../news/all_news.php">News</a></li>
-            <li><a href="../user_profile/profile.php">My profile</a></li>
+            <li>
+            <?php if (logged_in()): ?>
+                <!-- If logged in, show the profile page -->
+                <a href="../user_profile/user_profile.php">My profile</a>
+            <?php else: ?>
+                <!-- If not logged in, redirect to login -->
+                <a href="../loginPDO/login.php">Login</a>
+            <?php endif; ?>
+        </li>
         </ul>
     </nav>';
 
