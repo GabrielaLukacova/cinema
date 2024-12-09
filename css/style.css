@@ -630,6 +630,7 @@ input {
   cursor: pointer;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
   transition: transform 0.3s ease;
+
 }
 
 .movie-card:hover {
@@ -710,114 +711,79 @@ input {
 
 /*------------------------------8 HOT NEW MOVIES-----------------------------*/
 
-/* Overall Section Styling */
-.hot-new-movies-section {
-  padding: 100px 13% 100px 13%;
-  background-color: #121212; /* Dark background */
+.hot-movies{
+padding:100px 13%;
+}
+.hot-movies-container {
+  display: flex; 
+  overflow-x: auto; 
+  overflow-x: auto; 
+  gap: 35px;
+  /* padding: 20px 0px 20px 13%;  */
+  scroll-behavior: smooth; 
+  padding: 40px 0;
+}
+
+.hot-movies-container::-webkit-scrollbar {
+  height: 12px; 
+  border-radius: 5px;
+}
+
+.hot-movies-container::-webkit-scrollbar-thumb {
+  background: rgba(231, 76, 60, 0.8); 
+  border-radius: 5px;
+}
+
+.hot-movies-container::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.78); 
+}
+
+.hot-movies .movie-scroller .movie-scroll-bar
+{
+  border-radius: 5px;
+}
+
+.hot-movie-card {
   position: relative;
   overflow: hidden;
-}
-
-/* Movies Container */
-.hot-new-movies-container {
-  overflow: hidden;
-  width: 100%;
-}
-
-/* Horizontal Scroll Container */
-.hot-new-movies-scroll {
-  display: flex;
-  gap: 20px;
-  padding-right: 0; /* Infinite effect: no right padding initially */
-  transition: transform 0.4s ease-in-out;
-}
-
-/* Individual Movie Card */
-.hot-new-movie-card {
-  flex: 0 0 18%; /* 18% per movie ensures 5.5 visible movies */
-  max-width: 220px;
-  border-radius: 8px;
-  overflow: hidden;
-  text-decoration: none;
-  position: relative;
-  height: 300px;
-  color: white;
-}
-
-/* Background Image */
-.movie-background {
-  width: 100%;
-  height: 100%;
+  border-radius: 10px;
   background-size: cover;
   background-position: center;
-  position: relative;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+  flex: 0 0 calc(20% - 15px); 
+  max-width: 300px;
+  height: 400px;
 }
 
-/* Overlay */
-.movie-overlay {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 30%; /* Initial height: only title visible */
-  background: rgba(0, 0, 0, 0.8);
-  transition: height 0.4s ease, background 0.4s ease;
+.hot-movie-card:hover {
+  transform: scale(1.05);
+}
+
+.hot-movie-card:hover .movie-overlay {
+  height: 100%; 
+  padding-top: 15px; 
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: start;
   align-items: center;
-  text-align: center;
-  overflow: hidden;
 }
 
-/* Additional Info Hidden Initially */
-.movie-info,
-.movie-description,
-.see-more {
-  display: none;
+
+.hot-movie-card:hover .movie-title {
+  margin-bottom: 10px;
+  padding-top: 0; 
 }
 
-/* Hover Behavior */
-.hot-new-movie-card:hover .movie-overlay {
-  height: 100%;
-  background: rgba(0, 0, 0, 0.9);
-  justify-content: flex-start;
-  align-items: flex-start;
-  padding: 10px;
-}
-
-.hot-new-movie-card:hover .movie-info,
-.hot-new-movie-card:hover .movie-description,
-.hot-new-movie-card:hover .see-more {
+.hot-movie-card:hover .movie-info {
   display: block;
+  font-size: 14px;
+  line-height: 1.5;
 }
 
-/* Title Styling */
-.movie-title {
-  font-size: 18px;
-  font-weight: bold;
-}
-
-/* Scroller Styling */
-.movie-scroller {
-  margin-top: 15px;
-  width: 100%;
-  height: 10px;
-  background: #e0e0e0;
-  border-radius: 50px;
-  display: flex;
-  position: relative;
-}
-
-.movie-scroll-bar {
-  height: 10px;
-  background: #cb4540; /* Red for active section */
-  border-radius: 50px;
-  transition: background-color 0.3s ease;
-  margin: 0 2px;
-}
-
-.movie-scroll-bar.active {
-  background: #ff0000;
+.hot-movie-card:hover .see-more {
+  display: block;
 }
 
 

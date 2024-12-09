@@ -59,23 +59,19 @@ $movieOfTheWeek = $query->fetch(PDO::FETCH_ASSOC);
             8 HOT NEW MOVIES 
             8 HOT NEW MOVIES  -->
 
-<?php
-
-
-
-
+            <?php
 $movieHandler = new Movie($db);
 
 try {
     // Fetch all movies tagged as "Hot New Movie"
-    $movies = $movieHandler->getMoviesByTag("Hot New Movie", 8);
+    $movies = $movieHandler->getMoviesByTag("Hot New Movie");
 } catch (Exception $e) {
     $movies = []; // Fallback to an empty array if fetching fails
     error_log("Error fetching movies: " . $e->getMessage());
 }
 
 // Pagination logic
-$moviesPerSection = 5; // Show 5 and a half movies at a time
+$moviesPerSection = 5; // Show exactly 5 movies at a time
 $totalMovies = count($movies);
 $totalSections = ceil($totalMovies / $moviesPerSection);
 
@@ -86,70 +82,70 @@ $currentSection = max(1, min($currentSection, $totalSections)); // Clamp value b
 // Determine the slice of movies to show
 $startIndex = ($currentSection - 1) * $moviesPerSection;
 $moviesToShow = array_slice($movies, $startIndex, $moviesPerSection);
-
-
-
-
-//logic to calculate movie sections and their visual representation on the scroller
-$movieHandler = new Movie($db);
-
-try {
-    $movies = $movieHandler->getMoviesByTag("Hot New Movie");
-} catch (Exception $e) {
-    $movies = []; // Fallback to an empty array
-    error_log("Error fetching movies: " . $e->getMessage());
-}
-
-$moviesPerScroll = 5; // 5.5 movies are visible (5 fully visible, 1 partially)
-$totalMovies = count($movies);
-$totalSections = ceil($totalMovies / $moviesPerScroll);
-
-$currentSection = isset($_GET['section']) ? (int)$_GET['section'] : 1;
-$currentSection = max(1, min($currentSection, $totalSections));
-
-$startIndex = ($currentSection - 1) * $moviesPerScroll;
-$moviesToShow = array_slice($movies, $startIndex, $moviesPerScroll + 1); // Show an extra for the partial movie
 ?>
 
 
 
-
-<section class="hot-new-movies-section">
+<section class="hot-movies">
     <h2>Hot New Movies</h2>
-    <div class="hot-new-movies-container">
-        <div class="hot-new-movies-scroll">
-            <?php foreach ($moviesToShow as $movie): ?>
-                <a href="movie_single.php?movieID=<?php echo htmlspecialchars($movie['movieID']); ?>" class="hot-new-movie-card">
-                    <div class="movie-background" style="background-image: url('../includes/media/movies/<?php echo htmlspecialchars($movie['imagePath']); ?>');">
-                        <div class="movie-overlay">
-                            <div class="movie-title">
-                                <h4><?php echo htmlspecialchars($movie['title']); ?></h4>
-                            </div>
-                            <div class="movie-info">
-                                <p><?php echo htmlspecialchars($movie['genre']); ?></p>
-                                <p><?php echo htmlspecialchars($movie['runtime']); ?> min</p>
-                                <p><?php echo htmlspecialchars($movie['ageRating']); ?></p>
-                            </div>
-                            <div class="movie-description">
-                                <p><?php echo htmlspecialchars(substr($movie['description'], 0, 70)) . '...'; ?></p>
-                            </div>
-                            <button class="see-more">See More</button>
-                        </div>
-                    </div>
-                </a>
-            <?php endforeach; ?>
-        </div>
-    </div>
+ 
+<div class="hot-movies-container">
+    <?php if (!empty($movies)): ?>
+        <?php foreach ($movies as $movie): ?>
+            <a href="../movies/movie_single.php?movieID=<?= htmlspecialchars($movie['movieID'], ENT_QUOTES, 'UTF-8'); ?>" 
+               class="hot-movie-card" 
+               style="background-image: url('../includes/media/movies/<?= htmlspecialchars($movie['imagePath'], ENT_QUOTES, 'UTF-8'); ?>');">
+                <div class="movie-overlay">
+                    <div class="movie-title"><?= htmlspecialchars($movie['title'], ENT_QUOTES, 'UTF-8'); ?></div>
+                    <div class="movie-info">
+                        <p><?= htmlspecialchars($movie['genre'], ENT_QUOTES, 'UTF-8'); ?></p>
+                        <p><?= htmlspecialchars($movie['runtime'], ENT_QUOTES, 'UTF-8'); ?> min</p>
+                        <p><?= htmlspecialchars($movie['ageRating'], ENT_QUOTES, 'UTF-8'); ?>+</p>
+                        <p>
+                        <?php 
+                                // Define base path for the flag image using language
+                                $flagBasePath = "../includes/media/flags/" . strtolower($movie['language']) . "_flag";
+                                $flagPath = null;
 
-    <!-- Scrolling bar -->
-    <div class="movie-scroller">
-        <?php for ($i = 1; $i <= $totalSections; $i++): ?>
-            <a href="?section=<?php echo $i; ?>" 
-               class="movie-scroll-bar<?php echo $i === $currentSection ? ' active' : ''; ?>"
-               style="width: <?php echo (1 / $totalSections) * 100; ?>%;"></a>
-        <?php endfor; ?>
-    </div>
+                                //both .jpg and .png formats
+                                if (file_exists($flagBasePath . ".jpg")) {
+                                    $flagPath = $flagBasePath . ".jpg";
+                                } elseif (file_exists($flagBasePath . ".png")) {
+                                    $flagPath = $flagBasePath . ".png";
+                                }
+
+                                // Display the flag image if found
+                                if ($flagPath): ?>
+                                    <img src="<?php echo htmlspecialchars($flagPath); ?>" alt="<?php echo htmlspecialchars($movie['language']); ?> Flag" width="20" height="15">
+                            <?php endif; ?>
+                        </p>
+                        <p><?= htmlspecialchars(substr($movie['description'], 0, 90), ENT_QUOTES, 'UTF-8'); ?>...</p>
+                        <button class="see-more">See More</button>
+                    </div>
+                </div>
+            </a>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <p>No movies available at the moment. Please check back later.</p>
+    <?php endif; ?>
+</div>
+
+
+<!-- Horizontal scroll bar below movies -->
+<div class="movie-scroller">
+    <?php for ($i = 1; $i <= $totalSections; $i++): ?>
+        <a href="?section=<?= $i; ?>" 
+           class="movie-scroll-bar <?= $i === $currentSection ? 'active' : ''; ?>"></a>
+    <?php endfor; ?>
+</div>
 </section>
+
+
+
+
+
+
+
 
 
 
