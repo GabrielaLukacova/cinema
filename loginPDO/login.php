@@ -1,50 +1,46 @@
 <?php 
-session_start();
+
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 require_once("functions.php");
 require_once("../includes/connection.php");
 
 $message = ""; 
 
-// Check form submission
 if (isset($_POST['submit'])) {
     $email = trim($_POST['email']);
     $password = trim($_POST['pass']);
 
     try {
-        // Query to find the user by email
         $query = "SELECT userID, email, password FROM User WHERE email = :email LIMIT 1";
         $stmt = $db->prepare($query);
         $stmt->bindParam(':email', $email, PDO::PARAM_STR);
         $stmt->execute();
         $found_user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-
         if ($found_user) {
             if (password_verify($password, $found_user['password'])) {
                 $_SESSION['user_id'] = $found_user['userID'];
                 $_SESSION['email'] = $found_user['email'];
-
-                
                 header("Location: ../user_profile/user_profile.php");
                 exit();
             } else {
                 $message = "Invalid password.";
             }
         } else {
-            
             $message = "No user found with that email.";
         }
     } catch (PDOException $e) {
-        
         die("Database query failed: " . $e->getMessage());
     }
 }
 
-// message if there's any error
 if (!empty($message)) {
     echo "<div class='alert alert-danger'>" . htmlspecialchars($message) . "</div>";
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">

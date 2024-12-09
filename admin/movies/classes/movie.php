@@ -9,12 +9,17 @@ class Movie {
 
     public function getAllMovies() {
         try {
-            $query = "SELECT * FROM " . self::TABLE_NAME;
+            $query = "SELECT movieID, title, genre, runtime, language, ageRating, description, imagePath FROM " . self::TABLE_NAME;
             $stmt = $this->db->prepare($query);
             $stmt->execute();
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            if (!$result) {
+                throw new Exception('No movies found in the database.');
+            }
+            return $result;
         } catch (PDOException $e) {
-            throw new Exception("Error fetching movies: " . $e->getMessage());
+            echo "Error fetching movies: " . $e->getMessage();
+            return [];
         }
     }
 
@@ -42,6 +47,7 @@ class Movie {
             throw new Exception("Error fetching movies by tag: " . $e->getMessage());
         }
     }
+
 
     public function addMovie($data) {
         try {

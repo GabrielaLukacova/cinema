@@ -1,5 +1,5 @@
 <?php
-require_once '../includes/connection.php';
+require_once '../../includes/connection.php';
 
 class User {
     private $db;
@@ -39,16 +39,34 @@ class User {
             'userID' => $userID
         ]);
     }
-
     public function updateUserPicture($userID, $imagePath) {
-        $stmt = $this->db->prepare('
-            UPDATE User SET
-                userPicture = :userPicture
-            WHERE userID = :userID
-        ');
-        $stmt->execute([
-            'userPicture' => htmlspecialchars($imagePath),
-            'userID' => $userID
-        ]);
+        try {
+            // Ensure $this->db is valid
+            if (!$this->db) {
+                throw new Exception("Database connection is not initialized.");
+            }
+    
+            // Prepare the statement
+            $stmt = $this->db->prepare('
+                UPDATE User 
+                SET userPicture = :userPicture
+                WHERE userID = :userID
+            ');
+    
+            // Execute the query with bound parameters
+            $stmt->execute([
+                'userPicture' => htmlspecialchars($imagePath, ENT_QUOTES, 'UTF-8'),
+                'userID' => $userID
+            ]);
+        } catch (PDOException $e) {
+            // Log or display the error
+            error_log("Database Error: " . $e->getMessage());
+            die("Failed to update user picture: " . $e->getMessage());
+        } catch (Exception $e) {
+            // Handle general exceptions
+            error_log("General Error: " . $e->getMessage());
+            die("An unexpected error occurred: " . $e->getMessage());
+        }
     }
+    
 }
