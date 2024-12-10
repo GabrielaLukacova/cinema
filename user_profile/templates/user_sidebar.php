@@ -14,7 +14,7 @@
 
 
 <?php
-require_once '../classes/user.php';
+require_once 'classes/user.php';
 ?>
 
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">

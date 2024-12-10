@@ -1,5 +1,5 @@
 <?php
-require_once("../loginPDO/session.php");
+require_once(__DIR__ . "/../loginPDO/session.php");
 ?>
 
 <!DOCTYPE html>
@@ -18,7 +18,7 @@ require_once("../loginPDO/session.php");
             <a href="../core/home.php"><img src="../includes/media/logo/dream-screen-red.png" alt="Dream Screen Logo"></a>
         </div>
         <ul class="nav-links">
-            <li><a href="../movies/all_movies.php">Movies</a></li>
+            <li><a href="../movies/views/all_movies.php">Movies</a></li>
             <li><a href="../news/all_news.php">News</a></li>
             <li>
             <?php if (logged_in()): ?>
@@ -30,6 +30,6 @@ require_once("../loginPDO/session.php");
             <?php endif; ?>
         </li>
         </ul>
-    </nav>';
+    </nav>
 
 

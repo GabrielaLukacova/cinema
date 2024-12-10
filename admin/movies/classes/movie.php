@@ -25,11 +25,15 @@ class Movie {
 
     public function getMovieByID($movieID) {
         try {
-            $query = "SELECT * FROM " . self::TABLE_NAME . " WHERE movieID = :movieID";
+            $query = "SELECT movieID, title, genre, runtime, language, ageRating, description, imagePath FROM " . self::TABLE_NAME . " WHERE movieID = :movieID";
             $stmt = $this->db->prepare($query);
             $stmt->bindValue(':movieID', $movieID, PDO::PARAM_INT);
             $stmt->execute();
-            return $stmt->fetch(PDO::FETCH_ASSOC);
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            if ($result) {
+                return array_map(fn($val) => htmlspecialchars($val, ENT_QUOTES, 'UTF-8'), $result);
+            }
+            return null;
         } catch (PDOException $e) {
             throw new Exception("Error fetching movie by ID: " . $e->getMessage());
         }
@@ -163,6 +167,7 @@ class Movie {
             throw new Exception("Error fetching first movie by tag: " . $e->getMessage());
         }
     }
+
 
 
 

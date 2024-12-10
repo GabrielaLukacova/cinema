@@ -1,7 +1,7 @@
 <?php
-require_once "../includes/connection.php";
-require_once "../navbar_footer/cinema_navbar.php";
-require_once "../admin/movies/classes/movie.php";
+require_once "../../includes/connection.php";
+require_once "../../navbar_footer/cinema_navbar.php";
+require_once "../../admin/movies/classes/movie.php";
 
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
@@ -22,7 +22,7 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All Movies</title>
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../../css/style.css">
     <style>
 .movies-container {
     display: grid;
@@ -123,7 +123,7 @@ try {
 </head>
 <body>
 <div class="hero">
-    <img src="../includes/media/other/all_movies_hero.jpg" alt="All Movies Hero Image">
+    <img src="../../includes/media/other/all_movies_hero.jpg" alt="All Movies Hero Image">
     <h1>Dream Screen Now Playing</h1>
 </div>
 
@@ -132,7 +132,7 @@ try {
         <?php foreach ($movies as $movie): ?>
             <a href="movie_single.php?movieID=<?= htmlspecialchars($movie['movieID'], ENT_QUOTES, 'UTF-8'); ?>" 
                class="movie-card" 
-               style="background-image: url('../includes/media/movies/<?= htmlspecialchars($movie['imagePath'], ENT_QUOTES, 'UTF-8'); ?>');">
+               style="background-image: url('../../includes/media/movies/<?= htmlspecialchars($movie['imagePath'], ENT_QUOTES, 'UTF-8'); ?>');">
                 <div class="movie-overlay">
                     <div class="movie-title"><?= htmlspecialchars($movie['title'], ENT_QUOTES, 'UTF-8'); ?></div>
                     <div class="movie-info">
@@ -142,7 +142,7 @@ try {
                         <p>
                         <?php 
                                 // Define base path for the flag image using language
-                                $flagBasePath = "../includes/media/flags/" . strtolower($movie['language']) . "_flag";
+                                $flagBasePath = "../../includes/media/flags/" . strtolower($movie['language']) . "_flag";
                                 $flagPath = null;
 
                                 //both .jpg and .png formats
@@ -167,8 +167,8 @@ try {
         <p>No movies available at the moment. Please check back later.</p>
     <?php endif; ?>
 </div>
-
-<?php require_once "../navbar_footer/cinema_footer.php"; ?>
+test
+<?php require_once "../../navbar_footer/cinema_footer.php"; ?>
 </body>
 </html>
 
