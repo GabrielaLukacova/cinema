@@ -9,7 +9,7 @@ class Movie {
 
     public function getAllMovies() {
         try {
-            $query = "SELECT movieID, title, genre, runtime, language, ageRating, description, imagePath FROM " . self::TABLE_NAME;
+            $query = "SELECT movieID, title, genre, runtime, language, ageRating, description, imagePath, movieTag FROM " . self::TABLE_NAME;
             $stmt = $this->db->prepare($query);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -25,19 +25,23 @@ class Movie {
 
     public function getMovieByID($movieID) {
         try {
-            $query = "SELECT movieID, title, genre, runtime, language, ageRating, description, imagePath FROM " . self::TABLE_NAME . " WHERE movieID = :movieID";
+            $query = "SELECT movieID, title, genre, runtime, language, ageRating, description, imagePath, movieTag
+                      FROM " . self::TABLE_NAME . " 
+                      WHERE movieID = :movieID";
             $stmt = $this->db->prepare($query);
             $stmt->bindValue(':movieID', $movieID, PDO::PARAM_INT);
             $stmt->execute();
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
             if ($result) {
-                return array_map(fn($val) => htmlspecialchars($val, ENT_QUOTES, 'UTF-8'), $result);
+                // Use array_map only on non-null values
+                return array_map(fn($val) => $val !== null ? htmlspecialchars($val, ENT_QUOTES, 'UTF-8') : '', $result);
             }
             return null;
         } catch (PDOException $e) {
             throw new Exception("Error fetching movie by ID: " . $e->getMessage());
         }
     }
+    
 
     public function getMoviesByTag(string $tag, int $limit = 8): array {
         try {
@@ -64,19 +68,16 @@ class Movie {
         }
     }
 
-    public function updateMovie($movieID, $title, $genre, $runtime, $language, $ageRating, $description, $movieTag) {
+    public function updateMovie($movieID, $title, $genre, $runtime, $language, $ageRating, $description, $movieTag, $imagePath) {
         try {
-            $query = "UPDATE " . self::TABLE_NAME . " SET 
-                        title = :title, 
-                        genre = :genre, 
-                        runtime = :runtime, 
-                        language = :language, 
-                        ageRating = :ageRating, 
-                        description = :description, 
-                        movieTag = :movieTag
-                      WHERE movieID = :movieID";
+            $query = "
+                UPDATE Movie
+                SET title = :title, genre = :genre, runtime = :runtime, language = :language, 
+                    ageRating = :ageRating, description = :description, 
+                    movieTag = :movieTag, imagePath = :imagePath
+                WHERE movieID = :movieID
+            ";
             $stmt = $this->db->prepare($query);
-            $stmt->bindValue(':movieID', $movieID, PDO::PARAM_INT);
             $stmt->bindValue(':title', $title, PDO::PARAM_STR);
             $stmt->bindValue(':genre', $genre, PDO::PARAM_STR);
             $stmt->bindValue(':runtime', $runtime, PDO::PARAM_INT);
@@ -84,11 +85,14 @@ class Movie {
             $stmt->bindValue(':ageRating', $ageRating, PDO::PARAM_STR);
             $stmt->bindValue(':description', $description, PDO::PARAM_STR);
             $stmt->bindValue(':movieTag', $movieTag, PDO::PARAM_STR);
+            $stmt->bindValue(':imagePath', $imagePath, PDO::PARAM_STR);
+            $stmt->bindValue(':movieID', $movieID, PDO::PARAM_INT);
             return $stmt->execute();
         } catch (PDOException $e) {
             throw new Exception("Error updating movie: " . $e->getMessage());
         }
     }
+    
 
     public function updateMovieWithImage($movieID, $title, $genre, $runtime, $language, $ageRating, $description, $imagePath, $movieTag) {
         try {

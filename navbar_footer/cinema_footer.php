@@ -21,12 +21,11 @@ try {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Footer</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="path-to-your-stylesheet.css">
 </head>
    
 <footer class="footer">
   <div class="logo">
-    <a href="home.php"><img src="../includes/media/logo/dream-screen-red.png" alt="Dream Screen Logo"></a>
+    <a href="home.php"><img src="../../includes/media/logo/dream-screen-red.png" alt="Dream Screen Logo"></a>
   </div>
   <div class="contact-info">
     <p><i class="fas fa-phone"></i><?php echo htmlspecialchars($cinema['phoneNumber']); ?></p>

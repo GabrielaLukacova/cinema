@@ -1,7 +1,7 @@
 <?php
-require_once "../includes/connection.php";
-require_once "../navbar_footer/cinema_navbar.php";
-require_once "../admin/movies/classes/movie.php"; 
+require_once "../../includes/connection.php";
+require_once "../../navbar_footer/cinema_navbar.php";
+require_once "../../admin/movies/classes/movie.php"; 
 ?>
 
 
@@ -12,7 +12,7 @@ require_once "../admin/movies/classes/movie.php";
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Homepage</title>
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../../css/style.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 
@@ -94,7 +94,7 @@ $moviesToShow = array_slice($movies, $startIndex, $moviesPerSection);
         <?php foreach ($movies as $movie): ?>
             <a href="../movies/movie_single.php?movieID=<?= htmlspecialchars($movie['movieID'], ENT_QUOTES, 'UTF-8'); ?>" 
                class="hot-movie-card" 
-               style="background-image: url('../includes/media/movies/<?= htmlspecialchars($movie['imagePath'], ENT_QUOTES, 'UTF-8'); ?>');">
+               style="background-image: url('../../includes/media/movies/<?= htmlspecialchars($movie['imagePath'], ENT_QUOTES, 'UTF-8'); ?>');">
                 <div class="movie-overlay">
                     <div class="movie-title"><?= htmlspecialchars($movie['title'], ENT_QUOTES, 'UTF-8'); ?></div>
                     <div class="movie-info">
@@ -104,7 +104,7 @@ $moviesToShow = array_slice($movies, $startIndex, $moviesPerSection);
                         <p>
                         <?php 
                                 // Define base path for the flag image using language
-                                $flagBasePath = "../includes/media/flags/" . strtolower($movie['language']) . "_flag";
+                                $flagBasePath = "../../includes/media/flags/" . strtolower($movie['language']) . "_flag";
                                 $flagPath = null;
 
                                 //both .jpg and .png formats
@@ -230,12 +230,12 @@ function displayMovieCalendar($db, $selectedDate) {
         foreach ($movies as $movieID => $movie) { // Ensure $movieID is correctly set
             echo "<div class='movie-calendar-item'>";
             echo "<div class='movie-calendar-info-container'>";
-            echo "<img class='movie-calendar-image' src='../includes/media/movies/" . htmlspecialchars($movie['imagePath']) . "' alt='" . htmlspecialchars($movie['title']) . "' />";
+            echo "<img class='movie-calendar-image' src='../../includes/media/movies/" . htmlspecialchars($movie['imagePath']) . "' alt='" . htmlspecialchars($movie['title']) . "' />";
             echo "<div class='movie-calendar-info'>";
             echo "<h4 class='movie-calendar-title'>" . htmlspecialchars($movie['title']) . "</h4>";
             echo "<p class='movie-calendar-details'>" . htmlspecialchars($movie['genre']) . " | " . htmlspecialchars($movie['runtime']) . " min | " . htmlspecialchars($movie['ageRating']) . "+";
     
-            $flagPath = "../includes/media/flags/" . strtolower($movie['language']) . "_flag";
+            $flagPath = "../../includes/media/flags/" . strtolower($movie['language']) . "_flag";
             if (file_exists($flagPath . ".jpg") || file_exists($flagPath . ".png")) {
                 $flagExt = file_exists($flagPath . ".jpg") ? "jpg" : "png";
                 echo "<img src='" . htmlspecialchars("$flagPath.$flagExt") . "' alt='" . htmlspecialchars($movie['language']) . " Flag' width='20' height='15'>";
@@ -319,57 +319,6 @@ $cinema = $query->fetch(PDO::FETCH_ASSOC);
     </div> 
 
 
-
-
-    <?php 
-
-// Fetch Cinema Opening Hours
-$query = $db->prepare("
-    SELECT oh.dayOfWeek, oh.openingTime, oh.closingTime 
-    FROM OpeningHours oh
-    LEFT JOIN Cinema c ON c.cinemaID = oh.cinemaID
-    WHERE c.cinemaID = 1
-    ORDER BY FIELD(oh.dayOfWeek, 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday')
-");
-$query->execute();
-$openingHours = $query->fetchAll(PDO::FETCH_ASSOC);
-?>
-
-
-<section>
-  <div class="opening-hours-container">
-    <div class="opening-hours"></div>
-    <div class="opening-hours-text">
-      <h2>Opening Hours</h2>
-      <?php if (!empty($openingHours)): ?>
-        <?php foreach ($openingHours as $hour): ?>
-          <div class="day">
-            <span><?php echo htmlspecialchars($hour['dayOfWeek']); ?></span>
-            <span>
-              <?php 
-                echo htmlspecialchars(date("H:i", strtotime($hour['openingTime']))) . 
-                ' - ' . 
-                htmlspecialchars(date("H:i", strtotime($hour['closingTime']))); 
-              ?>
-            </span>
-          </div>
-        <?php endforeach; ?>
-      <?php else: ?>
-        <p>No opening hours available.</p>
-      <?php endif; ?>
-    </div>
-  </div>
-</section>
-
-
-
-
-
-
-
-
-
-
     <!-- Location Section -->
     <section class="location-section">
         <h3>Where you can find us</h3>
@@ -396,13 +345,63 @@ $openingHours = $query->fetchAll(PDO::FETCH_ASSOC);
 </section>
 
 
+    <?php 
+// Fetch Cinema Opening Hours
+$query = $db->prepare("
+    SELECT oh.dayOfWeek, oh.openingTime, oh.closingTime 
+    FROM OpeningHours oh
+    LEFT JOIN Cinema c ON c.cinemaID = oh.cinemaID
+    WHERE c.cinemaID = 1
+    ORDER BY FIELD(oh.dayOfWeek, 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday')
+");
+$query->execute();
+$openingHours = $query->fetchAll(PDO::FETCH_ASSOC);
+?>
+
+
+<section>
+  <div class="opening-hours-container">
+    <div class="opening-hours">
+    <div class="opening-hours-text">
+      <h2>Opening Hours</h2>
+      <?php if (!empty($openingHours)): ?>
+        <?php foreach ($openingHours as $hour): ?>
+          <div class="day">
+            <span><?php echo htmlspecialchars($hour['dayOfWeek']); ?></span>
+            <span>
+              <?php 
+                echo htmlspecialchars(date("H:i", strtotime($hour['openingTime']))) . 
+                ' - ' . 
+                htmlspecialchars(date("H:i", strtotime($hour['closingTime']))); 
+              ?>
+            </span>
+          </div>
+        <?php endforeach; ?>
+      <?php else: ?>
+        <p>No opening hours available.</p>
+      <?php endif; ?>
+    </div>
+  </div></div>
+</section>
 
 
 
 
 
 
-<?php require_once "../navbar_footer/cinema_footer.php"; ?>
+
+
+
+
+
+
+
+
+
+
+
+
+<?php require_once "../../navbar_footer/cinema_footer.php"; ?>
 
 
 

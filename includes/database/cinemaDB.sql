@@ -68,7 +68,7 @@ CREATE TABLE ShowTime (
     showTimeID INT AUTO_INCREMENT PRIMARY KEY,
     date DATE NOT NULL,
     time TIME NOT NULL,
-    room VARCHAR(3) NOT NULL,
+    room ENUM('1', '2', '3', '4') NOT NULL,
     price DECIMAL NOT NULL,
     movieID INT,
     FOREIGN KEY (movieID) REFERENCES Movie(movieID) ON DELETE CASCADE
@@ -87,7 +87,9 @@ CREATE TABLE Seat (
     seatID INT AUTO_INCREMENT PRIMARY KEY,
     seatNumber INT NOT NULL,
     seatRow VARCHAR(1) NOT NULL,
-    isBooked BOOLEAN DEFAULT FALSE
+    isBooked BOOLEAN DEFAULT FALSE,
+    showTimeID INT NOT NULL,
+    FOREIGN KEY (showTimeID) REFERENCES ShowTime(showTimeID) ON DELETE CASCADE
 );
 
 CREATE TABLE Reserves (
@@ -164,7 +166,6 @@ VALUES
 INSERT INTO ShowTime (movieID, date, time, room, price)
 VALUES 
 
--- 2024-11-22
 (1, '2024-11-22', '14:00:00', '1', 120),
 (1, '2024-11-22', '17:00:00', '1', 120),
 (1, '2024-11-22', '18:00:00', '2', 120),
@@ -188,9 +189,11 @@ INSERT INTO Booking (paymentMethod, userID, showTimeID) VALUES
 ('cash', 2, 2),
 ('creditCard', 3, 3);
 
--- 10 rows (A to J) with 12 seats each
-INSERT INTO Seat (seatNumber, seatRow, isBooked)
-SELECT seatNumber, seatRow, FALSE
+
+
+-- Insert 10 rows (A to J) with 12 seats each for each ShowTime
+INSERT INTO Seat (seatNumber, seatRow, isBooked, showTimeID)
+SELECT seatNumber, seatRow, FALSE, st.showTimeID
 FROM (
     SELECT
         t1.number AS seatNumber,
@@ -199,7 +202,9 @@ FROM (
         (SELECT 1 AS number UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9 UNION ALL SELECT 10 UNION ALL SELECT 11 UNION ALL SELECT 12) AS t1
     CROSS JOIN
         (SELECT 1 AS seatRowNum UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9 UNION ALL SELECT 10) AS t2
-) AS seatGrid;
+) seatGrid
+CROSS JOIN ShowTime st;
+
 
 UPDATE Seat
 SET isBooked = TRUE

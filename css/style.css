@@ -458,8 +458,7 @@ input {
 
 /*---------------------LOCATION-------------------------*/
 .location-section {
-  padding: 60px 13%;
-  /* width: 80%; */
+  padding: 100px 13% 0px 13%;
   text-align: center;
   margin: auto;
 }
@@ -520,19 +519,23 @@ input {
   padding: 60px 13%; /* Padding for the entire section */
   display: flex;
   align-items: center;
+  /* margin-top: 100px; */
+  margin-bottom: 670px;
+
 }
 
 .opening-hours {
   position: absolute;
   top: 0;
-  left: 13%; /* Match the left padding of the container */
-  width: 74%; /* 100% - 2 * 13% padding */
-  height: auto; /* Let the image height adjust dynamically based on width */
+  left: 13%; 
+  width: 74%; 
   background-image: url('../includes/media/other/camera.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   z-index: 0; /* Place behind text */
+  height: 700px;
+
 }
 
 .opening-hours-text {
@@ -541,8 +544,9 @@ input {
   margin-left: auto;
   width: calc(33% + 10px); /* Align to the right and end 30px before the background image */
   line-height: 1.6;
-  padding-top: 60px;
+  padding-top: 130px;
   padding-right: 100px;
+  align-items: center;
 }
 
 .opening-hours-text h2 {
@@ -1393,4 +1397,10 @@ button.continue-btn {
 button.continue-btn:disabled {
   background-color: #ccc;
   cursor: not-allowed;
+}
+
+
+.seat-message{
+  color: #e74c3c;
+  font-weight: bold;
 }

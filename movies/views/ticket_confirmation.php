@@ -11,10 +11,14 @@ if (empty($_SESSION['selected_seats']) || empty($_SESSION['showTimeID'])) {
     die("Error: Missing booking details. Please go back and try again.");
 }
 
-$selectedSeats = $_SESSION['selected_seats'];
+$selectedSeats = $_SESSION['selected_seats'][$_SESSION['showTimeID']] ?? [];
 $showTimeID = $_SESSION['showTimeID'];
 
-// Fetch showtime details
+if (empty($selectedSeats)) {
+    die("Error: No seats selected for this showtime.");
+}
+
+// Fetch showtime and movie details
 $query = $db->prepare("
     SELECT st.date, st.time, st.price, m.title
     FROM ShowTime st
@@ -27,6 +31,17 @@ $showTime = $query->fetch(PDO::FETCH_ASSOC);
 if (!$showTime) {
     die("Error: Showtime not found.");
 }
+
+// Fetch seat details for the selected seats
+$placeholders = implode(',', array_fill(0, count($selectedSeats), '?'));
+$seatQuery = $db->prepare("
+    SELECT seatRow, seatNumber
+    FROM Seat
+    WHERE seatID IN ($placeholders)
+    AND showTimeID = ?
+");
+$seatQuery->execute([...$selectedSeats, $showTimeID]);
+$seatDetails = $seatQuery->fetchAll(PDO::FETCH_ASSOC);
 
 // Calculate total price
 $totalPrice = count($selectedSeats) * $showTime['price'];
@@ -52,7 +67,12 @@ $totalPrice = count($selectedSeats) * $showTime['price'];
                 <li><strong>Movie:</strong> <?= htmlspecialchars($showTime['title'], ENT_QUOTES, 'UTF-8'); ?></li>
                 <li><strong>Date:</strong> <?= htmlspecialchars($showTime['date'], ENT_QUOTES, 'UTF-8'); ?></li>
                 <li><strong>Time:</strong> <?= htmlspecialchars($showTime['time'], ENT_QUOTES, 'UTF-8'); ?></li>
-                <li><strong>Seats:</strong> <?= implode(", ", array_map(fn($seatID) => "Seat {$seatID}", $selectedSeats)); ?></li>
+                <li><strong>Seats:</strong> 
+                    <?= htmlspecialchars(implode(', ', array_map(
+                        fn($seat) => $seat['seatRow'] . $seat['seatNumber'],
+                        $seatDetails
+                    )), ENT_QUOTES, 'UTF-8'); ?>
+                </li>
                 <li class="confirmation-total"><strong>Total Price:</strong> DKK<?= number_format($totalPrice, 2); ?></li>
             </ul>
         </div>
@@ -65,3 +85,4 @@ $totalPrice = count($selectedSeats) * $showTime['price'];
     <?php require_once "../../navbar_footer/cinema_footer.php"; ?>
 </body>
 </html>
+

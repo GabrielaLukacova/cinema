@@ -59,24 +59,24 @@ $movieOfWeekCount = $movieHandler->countMoviesByTag('Movie of the Week');
                     <th>Actions</th>
                 </tr>
             </thead>
-            <tbody>
-                <?php if (!empty($movies)): ?>
-                    <?php foreach ($movies as $movie): ?>
-                        <tr>
-                            <td><?= htmlspecialchars($movie['movieID']); ?></td>
-                            <td><?= htmlspecialchars($movie['title']); ?></td>
-                            <td><?= htmlspecialchars($movie['genre']); ?></td>
-                            <td><?= htmlspecialchars($movie['runtime']); ?> min</td>
-                            <td><?= htmlspecialchars($movie['language']); ?></td>
-                            <td><?= htmlspecialchars($movie['ageRating']); ?></td>
-                            <td><?= htmlspecialchars($movie['description']); ?></td>
-                            <td>
-                                <img src="../../includes/media/movies/<?= htmlspecialchars($movie['imagePath']); ?>" 
-                                     alt="Movie Image" 
-                                     class="img-thumbnail" 
-                                     style="max-width: 100px;">
-                            </td>
-                            <td><?= htmlspecialchars($movie['movieTag']); ?></td>
+<tbody>
+    <?php if (!empty($movies)): ?>
+        <?php foreach ($movies as $movie): ?>
+            <tr>
+                <td><?= htmlspecialchars($movie['movieID']); ?></td>
+                <td><?= htmlspecialchars($movie['title']); ?></td>
+                <td><?= htmlspecialchars($movie['genre']); ?></td>
+                <td><?= htmlspecialchars($movie['runtime']); ?> min</td>
+                <td><?= htmlspecialchars($movie['language']); ?></td>
+                <td><?= htmlspecialchars($movie['ageRating']); ?></td>
+                <td><?= htmlspecialchars($movie['description']); ?></td>
+                <td>
+                    <img src="../../includes/media/movies/<?= htmlspecialchars($movie['imagePath']); ?>" 
+                         alt="Movie Image" 
+                         class="img-thumbnail" 
+                         style="max-width: 100px;">
+                </td>
+                <td><?= htmlspecialchars($movie['movieTag'] ?? 'None'); ?></td>
                             <td>
                                 <a href="edit_movie.php?movieID=<?= htmlspecialchars($movie['movieID']); ?>" 
                                    class="btn btn-warning btn-sm">Edit</a>
