@@ -1,4 +1,7 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 require_once "../../includes/connection.php";
 require_once "../../navbar_footer/cinema_navbar.php";
 require_once "../../admin/movies/classes/movie.php";

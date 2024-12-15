@@ -11,11 +11,9 @@ DROP TABLE IF EXISTS OpeningHours;
 DROP TABLE IF EXISTS Cinema;
 DROP TABLE IF EXISTS PostalCode;
 
-
-
 CREATE TABLE PostalCode (
     postalCode VARCHAR(4) NOT NULL PRIMARY KEY,
-    city VARCHAR(80) NOT NULL
+    city CHAR(80) NOT NULL
 );
 
 CREATE TABLE Cinema (
@@ -76,11 +74,10 @@ CREATE TABLE ShowTime (
 
 CREATE TABLE Booking (
     bookingID INT AUTO_INCREMENT PRIMARY KEY,
-    paymentMethod ENUM('CreditCard', 'Cash') NOT NULL,
     userID INT,
     showTimeID INT,
     FOREIGN KEY (userID) REFERENCES User(userID),
-    FOREIGN KEY (showTimeID) REFERENCES ShowTime(showTimeID)
+FOREIGN KEY (showTimeID) REFERENCES ShowTime(showTimeID) ON DELETE CASCADE
 );
 
 CREATE TABLE Seat (
@@ -111,7 +108,6 @@ CREATE TABLE News (
     imagePath VARCHAR(255),
     FOREIGN KEY (cinemaID) REFERENCES Cinema(cinemaID)
 );
-
 
 INSERT INTO PostalCode (postalCode, city) VALUES 
 ('6700', 'Esbjerg'),
@@ -145,15 +141,11 @@ VALUES
     ('The Best Movie Event of the Year', 'Event', 'Our annual movie event features screenings, celebrity panels, and much more! Be part of this unforgettable experience.', 1),
     ('Ticket Promotion: Buy One Get One Free', 'Promotion', 'Buy one movie ticket for "Action Heroes" and get another free! Limited-time offer only for this weekend.', 1);
 
-
-
-
 INSERT INTO User (firstName, lastName, email, phoneNumber, password, street, postalCode) 
 VALUES
 ('Milan', 'Dober', 'mil@outlook.com', '45 60 88 00', '123', 'Yellow 33', '6700'),
 ('Alice', 'Brown', 'hruska@email.com', '3456789012', '123', 'Pine St 303', '6740'),
 ('Jane', 'Smith', 'jane.smith@email.com', '2345678901', '123', 'Oak St 202', '6760');
-
 
 INSERT INTO Movie (title, genre, languageFlagPath, language, ageRating, runTime, movieTag, description)
 VALUES 
@@ -161,11 +153,8 @@ VALUES
 ('Mystery of the Woods', 'Thriller', '../media/flags/danish_flag.png', 'Danish', '12', 95, 'Hot New Movie', 'After a hidden relationship during their final year of school, Muslim teenager Saja secretly takes her best friends to meet Charlie and his private school mates for a night out at Australia’s most infamous party, Schoolies Week. With their Romeo and Juliet romance blossoming, Saja and Charlie wake to discover a double murder that jolts them to their core… then sends their tribes to war.'),
 ('Love & Laughter', 'Comedy', '../media/flags/english_flag.jpg', 'English', '18', 110, 'Movie of the Week', 'After a hidden relationship during their final year of school, Muslim teenager Saja secretly takes her best friends to meet Charlie and his private school mates for a night out at Australia’s most infamous party, Schoolies Week. With their Romeo and Juliet romance blossoming, Saja and Charlie wake to discover a double murder that jolts them to their core… then sends their tribes to war.');
 
-
-
 INSERT INTO ShowTime (movieID, date, time, room, price)
 VALUES 
-
 (1, '2024-11-22', '14:00:00', '1', 120),
 (1, '2024-11-22', '17:00:00', '1', 120),
 (1, '2024-11-22', '18:00:00', '2', 120),
@@ -182,29 +171,10 @@ VALUES
 (3, '2024-11-22', '19:00:00', '2', 120),
 (3, '2024-11-22', '20:00:00', '2', 120);
 
-
-
-INSERT INTO Booking (paymentMethod, userID, showTimeID) VALUES
-('cash', 1, 1),
-('cash', 2, 2),
-('creditCard', 3, 3);
-
-
-
--- Insert 10 rows (A to J) with 12 seats each for each ShowTime
-INSERT INTO Seat (seatNumber, seatRow, isBooked, showTimeID)
-SELECT seatNumber, seatRow, FALSE, st.showTimeID
-FROM (
-    SELECT
-        t1.number AS seatNumber,
-        CHAR(64 + t2.seatRowNum) AS seatRow
-    FROM 
-        (SELECT 1 AS number UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9 UNION ALL SELECT 10 UNION ALL SELECT 11 UNION ALL SELECT 12) AS t1
-    CROSS JOIN
-        (SELECT 1 AS seatRowNum UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9 UNION ALL SELECT 10) AS t2
-) seatGrid
-CROSS JOIN ShowTime st;
-
+INSERT INTO Booking (userID, showTimeID) VALUES
+(1, 1),
+(2, 2),
+(3, 3);
 
 UPDATE Seat
 SET isBooked = TRUE
@@ -212,8 +182,32 @@ WHERE (seatRow = 'A' AND seatNumber = 1)
    OR (seatRow = 'B' AND seatNumber = 5)  
    OR (seatRow = 'C' AND seatNumber = 8);
 
+-- Insert 10 rows (A to J) with 12 seats each for every ShowTime
+INSERT INTO Seat (seatNumber, seatRow, isBooked, showTimeID)
+SELECT seatNumber, seatRow, FALSE, st.showTimeID
+FROM (
+    SELECT
+        t1.number AS seatNumber,
+        CHAR(64 + t2.seatRowNum) AS seatRow
+    FROM 
+        (SELECT 1 AS number UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 
+         UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9 UNION ALL SELECT 10 
+         UNION ALL SELECT 11 UNION ALL SELECT 12) AS t1
+    CROSS JOIN
+        (SELECT 1 AS seatRowNum UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 
+         UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9 UNION ALL SELECT 10) AS t2
+) seatGrid
+CROSS JOIN ShowTime st
+WHERE NOT EXISTS (
+    SELECT 1 FROM Seat s WHERE s.showTimeID = st.showTimeID
+);
 
-INSERT INTO Reserves (bookingID, seatID, bookingDate, bookingTime) VALUES
-(1, 1, '2024-11-30', '15:00:00'),
-(2, 2, '2024-11-25', '16:00:00'),
-(3, 3, '2024-11-21', '15:00:00');
+
+-- Dispaly only hours and minutes (no seconds)
+SELECT bookingTime, DATE_FORMAT(bookingTime, '%H:%i') AS formattedTime
+FROM Reserves;
+
+-- Dispaly only hours and minutes (no seconds)
+SELECT dayOfWeek, TIME_FORMAT(openingTime, '%H:%i') AS openingTime, 
+       TIME_FORMAT(closingTime, '%H:%i') AS closingTime
+FROM OpeningHours;

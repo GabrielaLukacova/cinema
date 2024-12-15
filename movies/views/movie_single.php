@@ -1,34 +1,9 @@
 <?php
-// Start session if not already started
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-
-// Include necessary files
-require_once "../../includes/connection.php";
-require_once "../../navbar_footer/cinema_navbar.php";
-require_once "../../admin/movies/classes/movie.php";
-require_once "../actions/showtime_selection.php"; 
-
-if (isset($_GET['showTimeID'])) {
-    require_once "../actions/seat_selection.php"; // Fetches `$seats`
-}
-
-// Validate and retrieve `movieID`
-$movieID = isset($_GET['movieID']) ? (int)$_GET['movieID'] : 0;
-if ($movieID <= 0) die("<p>Error: Movie ID not specified or invalid.</p>");
-
-$movieHandler = new Movie($db);
-$movie = $movieHandler->getMovieByID($movieID);
-if (!$movie) die("<p>Error: Movie not found.</p>");
-
-// Fetch showtimes
-require_once "../actions/showtime_selection.php";
-$showtimes = $showtimes ?? [];
-
-
+require_once "../actions/movie_single_logic.php"; 
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -53,21 +28,30 @@ $showtimes = $showtimes ?? [];
         <p><?= htmlspecialchars($movie['description'], ENT_QUOTES, 'UTF-8'); ?></p>
     </div>
 
-    <!-- Showtimes Section -->
-    <div class="movie-calendar-single">
-    <h2>Pick a Date and Time</h2>
-    <?php if (!empty($showtimes)): ?>
-        <?php foreach ($showtimes as $showtime): ?>
-            <a href="seat_map.php?movieID=<?= htmlspecialchars($movieID, ENT_QUOTES, 'UTF-8'); ?>&showTimeID=<?= htmlspecialchars($showtime['showTimeID'], ENT_QUOTES, 'UTF-8'); ?>">
-    <button class="btn-primary"><?= htmlspecialchars($showtime['time'], ENT_QUOTES, 'UTF-8'); ?></button>
+    <h2>Pick a date and time</h2>
+    
+    <div class="date-selection">
+        <?php foreach ($availableDates as $date): ?>
+            <a href="?movieID=<?= htmlspecialchars($movieID, ENT_QUOTES, 'UTF-8'); ?>&date=<?= htmlspecialchars($date, ENT_QUOTES, 'UTF-8'); ?>" 
+               class="date-button <?= $date === $selectedDate ? 'active' : ''; ?>">
+                <?= htmlspecialchars($date, ENT_QUOTES, 'UTF-8'); ?>
             </a>
         <?php endforeach; ?>
+    </div>
+
+    <?php if (!empty($showtimes)): ?>
+        <div class="showtime-selection">
+            <?php foreach ($showtimes as $showtime): ?>
+                <a href="seat_map.php?movieID=<?= htmlspecialchars($movieID, ENT_QUOTES, 'UTF-8'); ?>&showTimeID=<?= htmlspecialchars($showtime['showTimeID'], ENT_QUOTES, 'UTF-8'); ?>">
+                    <button class="btn-primary"><?= htmlspecialchars($showtime['time'], ENT_QUOTES, 'UTF-8'); ?></button>
+                </a>
+            <?php endforeach; ?>
+        </div>
     <?php else: ?>
-        <p>No showtimes available for this movie.</p>
+        <p>No showtimes available for the selected date.</p>
     <?php endif; ?>
-</div>
-
-
+</body>
+</html>
 
 
 

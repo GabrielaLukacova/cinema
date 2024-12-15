@@ -4,51 +4,84 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Include database connection
-require_once "../../includes/connection.php";
-
-// Ensure user is logged in
-$userID = $_SESSION['user_id'] ?? null;
-if (!$userID) {
-    die("Error: User not logged in.");
-}
-
-// Fetch user's bookings
-$stmt = $db->prepare("
-    SELECT b.bookingID, m.title, st.date, st.time, st.room, s.seatNumber, s.seatRow
-    FROM Booking b
-    JOIN ShowTime st ON b.showTimeID = st.showTimeID
-    JOIN Movie m ON st.movieID = m.movieID
-    JOIN Reserves r ON b.bookingID = r.bookingID
-    JOIN Seat s ON r.seatID = s.seatID
-    WHERE b.userID = :userID
-    ORDER BY st.date, st.time
-");
-$stmt->execute([':userID' => $userID]);
-$tickets = $stmt->fetchAll(PDO::FETCH_ASSOC);
+// Include the logic file
+require_once "../actions/tickets.php";
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Tickets</title>
     <link rel="stylesheet" href="../../css/style.css">
+    <style>
+        .tickets-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin: 20px;
+        }
+        .ticket-card {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            width: 300px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .ticket-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        .ticket-info {
+            padding: 15px;
+        }
+        .ticket-info h3 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: #333;
+        }
+        .ticket-info p {
+            margin: 5px 0;
+            color: #666;
+        }
+        .ticket-info .ticket-total {
+            font-weight: bold;
+            color: #000;
+            margin-top: 10px;
+        }
+        .no-tickets {
+            text-align: center;
+            margin: 50px 0;
+            font-size: 1.2rem;
+            color: #555;
+        }
+    </style>
 </head>
 <body>
-    <h1>My Tickets</h1>
-    <?php if (!empty($tickets)): ?>
-        <?php foreach ($tickets as $ticket): ?>
-            <div class="ticket">
-                <p>Movie: <?= htmlspecialchars($ticket['title']); ?></p>
-                <p>Date: <?= htmlspecialchars($ticket['date']); ?></p>
-                <p>Time: <?= htmlspecialchars($ticket['time']); ?></p>
-                <p>Room: <?= htmlspecialchars($ticket['room']); ?></p>
-                <p>Seat: Row <?= htmlspecialchars($ticket['seatRow']); ?>, Seat <?= htmlspecialchars($ticket['seatNumber']); ?></p>
+    <div class="tickets-container">
+        <?php if (!empty($tickets)): ?>
+            <?php foreach ($tickets as $ticket): ?>
+                <div class="ticket-card">
+                    <img src="../../includes/media/movies/<?= htmlspecialchars($ticket['movieImage'], ENT_QUOTES, 'UTF-8'); ?>" alt="<?= htmlspecialchars($ticket['movieTitle'], ENT_QUOTES, 'UTF-8'); ?>">
+                    <div class="ticket-info">
+                        <h3><?= htmlspecialchars($ticket['movieTitle'], ENT_QUOTES, 'UTF-8'); ?></h3>
+                        <p><strong>Date:</strong> <?= htmlspecialchars($ticket['showDate'], ENT_QUOTES, 'UTF-8'); ?></p>
+                        <p><strong>Time:</strong> <?= htmlspecialchars($ticket['showTime'], ENT_QUOTES, 'UTF-8'); ?></p>
+                        <p><strong>Room:</strong> <?= htmlspecialchars($ticket['roomNumber'], ENT_QUOTES, 'UTF-8'); ?></p>
+                        <p><strong>Seats:</strong> <?= htmlspecialchars($ticket['seatDetails'], ENT_QUOTES, 'UTF-8'); ?></p>
+                        <p class="ticket-total">Total Price: DKK<?= number_format((float) $ticket['ticketPrice'], 2); ?></p>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <div class="no-tickets">
+                <p>You have not booked any tickets yet.</p>
             </div>
-        <?php endforeach; ?>
-    <?php else: ?>
-        <p>No tickets found.</p>
-    <?php endif; ?>
+        <?php endif; ?>
+    </div>
 </body>
 </html>
+

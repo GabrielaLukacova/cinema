@@ -3,7 +3,12 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Include database connection and Seat class
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['selected_seats'])) {
+    $_SESSION['selected_seats'] = $_POST['selected_seats'];
+    header("Location: ../login/login.php?redirect=ticket_confirmation.php");
+    exit();
+}
+
 require_once "../../includes/connection.php";
 require_once "../classes/seat.php";
 
@@ -11,12 +16,13 @@ require_once "../classes/seat.php";
 if (!isset($_GET['showTimeID']) || !is_numeric($_GET['showTimeID'])) {
     die("Error: ShowTimeID not set or invalid.");
 }
+
 $showTimeID = (int)$_GET['showTimeID'];
 $_SESSION['showTimeID'] = $showTimeID;
 
 // Fetch seat data for the given `showTimeID`
 $stmt = $db->prepare("
-    SELECT seatID, seatNumber, seatRow, isBooked, st.price AS seatPrice
+    SELECT s.seatID, s.seatNumber, s.seatRow, s.isBooked, st.price AS seatPrice
     FROM Seat s
     JOIN ShowTime st ON s.showTimeID = st.showTimeID
     WHERE s.showTimeID = :showTimeID
@@ -24,6 +30,11 @@ $stmt = $db->prepare("
 ");
 $stmt->execute([':showTimeID' => $showTimeID]);
 $seatsData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Debugging: Ensure `showTimeID` is correct and check `seatsData`
+if (empty($seatsData)) {
+    die("No seats found for this showtime. Debug: showTimeID = " . htmlspecialchars($showTimeID));
+}
 
 // Convert `seatsData` into an array of Seat objects
 $seats = array_map(fn($seatData) => new Seat(
@@ -77,4 +88,4 @@ foreach ($_SESSION['selected_seats'][$showTimeID] as $seatID) {
         }
     }
 }
-?>
+

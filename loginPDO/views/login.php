@@ -5,7 +5,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 require_once("../actions/functions.php");
 require_once("../../includes/connection.php");
-require_once "../../navbar_footer/cinema_navbar.php";
+// require_once "../../navbar_footer/cinema_navbar.php";
 
 
 $message = ""; 
