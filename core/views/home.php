@@ -20,6 +20,9 @@ require_once "../../admin/movies/classes/movie.php";
 
 
 <!-- HOME HERO -->
+ <!-- HOME HERO -->
+<!-- HOME HERO -->
+
 <?php 
 
 $query = $db->prepare("SELECT title, imagePath, genre, description, movieID, movieTag
@@ -27,12 +30,12 @@ $query = $db->prepare("SELECT title, imagePath, genre, description, movieID, mov
                        WHERE movieTag = 'Movie of the Week' LIMIT 1");
 $query->execute();
 $movieOfTheWeek = $query->fetch(PDO::FETCH_ASSOC);
-// echo 'Background image URL: ' . '../includes/media/movies/' . htmlspecialchars($movieOfTheWeek['imagePath']); 
-
 ?>
 
 
-<div class="movie_single_hero" style="background-image: url('../includes/media/movies/<?php echo htmlspecialchars($movieOfTheWeek['imagePath'] ?? 'default.jpg'); ?>');">
+
+<section>
+<div class="movie_single_hero" style="background-image: url('../../includes/media/movies/<?php echo htmlspecialchars($movieOfTheWeek['imagePath'] ?? 'default.jpg'); ?>');">
     <div class="home-hero">
         <p class="tag-name">Movie of the Week</p>
         <h3><?php echo htmlspecialchars($movieOfTheWeek['title']); ?></h3>
@@ -46,6 +49,7 @@ $movieOfTheWeek = $query->fetch(PDO::FETCH_ASSOC);
         <a href="movie_details.php?movieID=<?php echo $movieOfTheWeek['movieID']; ?>" class="btn btn-secondary">See More</a>
     </div>
 </div>
+</section>
 
 
 

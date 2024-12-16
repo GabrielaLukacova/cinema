@@ -80,18 +80,18 @@ $movieOfWeekCount = $movieHandler->countMoviesByTag('Movie of the Week');
                             <td>
                                 <a href="edit_movie.php?movieID=<?= htmlspecialchars($movie['movieID']); ?>" 
                                    class="btn btn-warning btn-sm">Edit</a>
-                                <!-- <a href="delete_movie.php?movieID=<?= htmlspecialchars($movie['movieID']); ?>" 
+                                <a href="delete_movie.php?movieID=<?= htmlspecialchars($movie['movieID']); ?>" 
                                    class="btn btn-danger btn-sm"
                                    onclick="return confirm('Are you sure you want to delete this movie?');">
                                     Delete
-                                </a> -->
-                                <a href="#" 
+                                </a>
+                                <!-- <a href="#" 
                                     class="btn btn-danger btn-sm" 
                                     data-bs-toggle="modal" 
                                     data-bs-target="#deleteModal" 
                                     data-movie-id="<?= htmlspecialchars($movie['movieID']); ?>">
                                     Delete
-                                </a>
+                                </a> -->
                             </td>
                         </tr>
                     <?php endforeach; ?>
