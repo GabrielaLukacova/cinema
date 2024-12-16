@@ -119,13 +119,13 @@ INSERT INTO Cinema (name, phoneNumber, email, street, postalCode, description) V
 
 INSERT INTO OpeningHours (cinemaID, dayOfWeek, openingTime, closingTime)
 VALUES
-(1, 'Monday', '14:00:00', '22:00:00'),
-(1, 'Tuesday', '14:00:00', '22:00:00'),
-(1, 'Wednesday', '14:00:00', '22:00:00'),
-(1, 'Thursday', '14:00:00', '22:00:00'),
-(1, 'Friday', '14:00:00', '22:00:00'),
-(1, 'Saturday', '10:00:00', '23:00:00'),
-(1, 'Sunday', '10:00:00', '23:00:00');
+(1, 'Monday', '14:00', '22:00'),
+(1, 'Tuesday', '14:00', '22:00'),
+(1, 'Wednesday', '14:00', '22:00'),
+(1, 'Thursday', '14:00', '22:00'),
+(1, 'Friday', '14:00', '22:00'),
+(1, 'Saturday', '10:00', '23:00'),
+(1, 'Sunday', '10:00', '23:00');
 
 INSERT INTO News (title, category, article, cinemaID)
 VALUES
@@ -155,21 +155,21 @@ VALUES
 
 INSERT INTO ShowTime (movieID, date, time, room, price)
 VALUES 
-(1, '2024-11-22', '14:00:00', '1', 120),
-(1, '2024-11-22', '17:00:00', '1', 120),
-(1, '2024-11-22', '18:00:00', '2', 120),
-(1, '2024-11-22', '19:00:00', '2', 120),
-(1, '2024-11-22', '20:00:00', '3', 120),
-(2, '2024-11-22', '14:00:00', '2', 120),
-(2, '2024-11-22', '17:00:00', '2', 120),
-(2, '2024-11-22', '18:00:00', '2', 120),
-(2, '2024-11-22', '19:00:00', '2', 120),
-(2, '2024-11-22', '20:00:00', '2', 120),
-(3, '2024-11-22', '14:00:00', '2', 120),
-(3, '2024-11-22', '17:00:00', '2', 120),
-(3, '2024-11-22', '18:00:00', '2', 120),
-(3, '2024-11-22', '19:00:00', '2', 120),
-(3, '2024-11-22', '20:00:00', '2', 120);
+(1, '2024-11-22', '14:00', '1', 120),
+(1, '2024-11-22', '17:00', '1', 120),
+(1, '2024-11-22', '18:00', '2', 120),
+(1, '2024-11-22', '19:00', '2', 120),
+(1, '2024-11-22', '20:00', '3', 120),
+(2, '2024-11-22', '14:00', '2', 120),
+(2, '2024-11-22', '17:00', '2', 120),
+(2, '2024-11-22', '18:00', '2', 120),
+(2, '2024-11-22', '19:00', '2', 120),
+(2, '2024-11-22', '20:00', '2', 120),
+(3, '2024-11-22', '14:00', '2', 120),
+(3, '2024-11-22', '17:00', '2', 120),
+(3, '2024-11-22', '18:00', '2', 120),
+(3, '2024-11-22', '19:00', '2', 120),
+(3, '2024-11-22', '20:00', '2', 120);
 
 INSERT INTO Booking (userID, showTimeID) VALUES
 (1, 1),
@@ -182,32 +182,3 @@ WHERE (seatRow = 'A' AND seatNumber = 1)
    OR (seatRow = 'B' AND seatNumber = 5)  
    OR (seatRow = 'C' AND seatNumber = 8);
 
--- Insert 10 rows (A to J) with 12 seats each for every ShowTime
-INSERT INTO Seat (seatNumber, seatRow, isBooked, showTimeID)
-SELECT seatNumber, seatRow, FALSE, st.showTimeID
-FROM (
-    SELECT
-        t1.number AS seatNumber,
-        CHAR(64 + t2.seatRowNum) AS seatRow
-    FROM 
-        (SELECT 1 AS number UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 
-         UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9 UNION ALL SELECT 10 
-         UNION ALL SELECT 11 UNION ALL SELECT 12) AS t1
-    CROSS JOIN
-        (SELECT 1 AS seatRowNum UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5 
-         UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9 UNION ALL SELECT 10) AS t2
-) seatGrid
-CROSS JOIN ShowTime st
-WHERE NOT EXISTS (
-    SELECT 1 FROM Seat s WHERE s.showTimeID = st.showTimeID
-);
-
-
--- Dispaly only hours and minutes (no seconds)
-SELECT bookingTime, DATE_FORMAT(bookingTime, '%H:%i') AS formattedTime
-FROM Reserves;
-
--- Dispaly only hours and minutes (no seconds)
-SELECT dayOfWeek, TIME_FORMAT(openingTime, '%H:%i') AS openingTime, 
-       TIME_FORMAT(closingTime, '%H:%i') AS closingTime
-FROM OpeningHours;

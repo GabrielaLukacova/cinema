@@ -2,11 +2,9 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start(); // Start session only if it hasn't started yet.
 }
+
 require_once '../classes/user.php';
-// include '../navbar_footer/cinema_navbar.php';
-include '../templates/user_sidebar.php';
-
-
+require_once '../templates/user_sidebar.php';
 
 if (!isset($_SESSION['user_id'])) {
     header('Location: ../../login.php');
@@ -28,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user->updateUserProfile($userID, $data);
 
     if (!empty($_FILES['userPicture']['name'])) {
-        $uploadDir = '../uploads/user_images/';
+        $uploadDir = '../../includes/media/users/';
         $fileName = basename($_FILES['userPicture']['name']);
         $filePath = $uploadDir . $fileName;
         $fileType = mime_content_type($_FILES['userPicture']['tmp_name']);
@@ -48,21 +46,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    header('Location: user_profile.php');
+    header('Location: user_data.php');
     exit();
 }
 
 $userData = $user->getUserProfile($userID);
+
+// Check if $userData is valid
+if (!$userData || !is_array($userData)) {
+    $userData = [
+        'firstName' => 'Guest',
+        'lastName' => '',
+        'phoneNumber' => '',
+        'street' => '',
+        'postalCode' => '',
+        'userPicture' => '../../includes/media/other/user_default.png',
+    ];
+}
+
 $userData = array_map(fn($value) => htmlspecialchars($value, ENT_QUOTES, 'UTF-8'), $userData);
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/style.css">
-    <title>Edit User Data</title>
+    <link rel="stylesheet" href="../../css/style.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <title>Edit user data</title>
 </head>
 <body>
 

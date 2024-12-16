@@ -1,5 +1,5 @@
 <?php
-require_once '../includes/connection.php';
+require_once '../../includes/connection.php';
 
 class User {
     private $db;
@@ -21,6 +21,16 @@ class User {
     }
 
     public function updateUserProfile($userID, $data) {
+        // Validate postalCode exists
+        $checkPostalCodeStmt = $this->db->prepare('SELECT city FROM PostalCode WHERE postalCode = :postalCode');
+        $checkPostalCodeStmt->execute(['postalCode' => $data['postalCode']]);
+        $city = $checkPostalCodeStmt->fetchColumn();
+    
+        if (!$city) {
+            throw new Exception('Invalid postal code.');
+        }
+    
+        // Proceed with update
         $stmt = $this->db->prepare('
             UPDATE User SET
                 firstName = :firstName,
@@ -39,6 +49,7 @@ class User {
             'userID' => $userID
         ]);
     }
+    
     public function updateUserPicture($userID, $imagePath) {
         try {
             // Ensure $this->db is valid

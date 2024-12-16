@@ -97,8 +97,8 @@ try {
             unset($_SESSION['selected_seats'][$showTimeID]);
 
             // Redirect to tickets page
-            header("Location: tickets.php");
-            exit();
+            // header("Location: tickets.php");
+            // exit();
         } catch (Exception $e) {
             $db->rollBack();
             die("Error processing booking: " . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8'));
@@ -145,7 +145,7 @@ try {
         </form>
 
         <div class="confirmation-footer">
-            <a href="tickets.php">View My Tickets</a>
+            <a href="../../user_profile/views/tickets.php">View My Tickets</a>
         </div>
     </div>
 

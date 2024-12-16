@@ -145,7 +145,12 @@ $movies = $queryMovies->fetchAll(PDO::FETCH_ASSOC);
     </div>
     <div class="form-group">
         <label for="room">Room</label>
-        <input type="text" id="room" name="room" class="form-control" required>
+        <select type="text" name="room" id="room" class="form-control" required>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+        </select>
     </div>
     <div class="form-group">
         <label for="room">Price</label>
@@ -157,6 +162,7 @@ $movies = $queryMovies->fetchAll(PDO::FETCH_ASSOC);
 </form>
 
 
+        
     <?php
     // Handle form submission for adding new showtime
     if (isset($_POST['submit'])) {

@@ -249,8 +249,14 @@ function displayMovieCalendar($db, $selectedDate) {
             // Generate showtime buttons
             echo "<div class='movie-calendar-showtimes-container'>";
             foreach ($movie['showtimes'] as $showtime) {
-                echo "<a href='../../movies/views/seat_map.php?movieID=" . htmlspecialchars($movieID, ENT_QUOTES, 'UTF-8') . "&showTimeID=" . htmlspecialchars($showtime['showTimeID'], ENT_QUOTES, 'UTF-8') . "' class='showtime-button btn-primary'>" . htmlspecialchars($showtime['time'], ENT_QUOTES, 'UTF-8') . "</a>";
+                // Format the time to show only hours and minutes
+                $formattedTime = date('H:i', strtotime($showtime['time']));
+                
+                echo "<a href='../../movies/views/seat_map.php?movieID=" . htmlspecialchars($movieID, ENT_QUOTES, 'UTF-8') . "&showTimeID=" . htmlspecialchars($showtime['showTimeID'], ENT_QUOTES, 'UTF-8') . "' class='showtime-button btn-primary'>" . htmlspecialchars($formattedTime, ENT_QUOTES, 'UTF-8') . "</a>";
             }
+
+            echo "</div>";
+            
             echo "</div>";
             echo "</a>";
         }

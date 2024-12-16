@@ -170,7 +170,6 @@ try {
         <p>No movies available at the moment. Please check back later.</p>
     <?php endif; ?>
 </div>
-test
 <?php require_once "../../navbar_footer/cinema_footer.php"; ?>
 </body>
 </html>

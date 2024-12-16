@@ -4,7 +4,6 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Include database connection
 require_once "../../includes/connection.php";
 
 // Validate and retrieve `movieID`
@@ -23,9 +22,4 @@ $query = $db->prepare("
 ");
 $query->execute([':movieID' => $movieID]);
 $showtimes = $query->fetchAll(PDO::FETCH_ASSOC);
-
-
-
-
-// Return the `showtimes` array to the main file that includes this.
 ?>

@@ -4,16 +4,19 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Include the logic file
-require_once "../actions/tickets.php";
+require_once "../actions/ticket_logic.php";
+require_once '../templates/user_sidebar.php';
+require_once '../../navbar_footer/cinema_navbar.php';
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Tickets</title>
+    <title>My tickets</title>
     <link rel="stylesheet" href="../../css/style.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
         .tickets-container {
             display: flex;

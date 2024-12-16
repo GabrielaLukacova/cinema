@@ -88,4 +88,3 @@ foreach ($_SESSION['selected_seats'][$showTimeID] as $seatID) {
         }
     }
 }
-

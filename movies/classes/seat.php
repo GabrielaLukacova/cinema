@@ -1,36 +1,33 @@
 <?php
-class Seat {
-    public $id;
-    public $number;
-    public $row;
-    public $isBooked;
-    public $showTimeID;
-    public $price;
 
-    public function __construct($id, $number, $row, $isBooked, $showTimeID, $price) {
-        $this->id = (int) $id;
-        $this->number = (int) $number;
+class Seat {
+    public int $id;
+    public int $number;
+    public string $row;
+    public bool $isBooked;
+    public int $showTimeID;
+    public float $price;
+
+    public function __construct(int $id, int $number, string $row, bool $isBooked, int $showTimeID, float $price) {
+        $this->id = $id;
+        $this->number = $number;
         $this->row = htmlspecialchars($row, ENT_QUOTES, 'UTF-8');
-        $this->isBooked = (bool) $isBooked;
-        $this->showTimeID = (int) $showTimeID;
-        $this->price = (float) $price;
+        $this->isBooked = $isBooked;
+        $this->showTimeID = $showTimeID;
+        $this->price = $price;
     }
 
-    /**
-     * Renders a seat as an HTML button element.
-     */
-    public function renderSeat($isSelected) {
-        $status = $this->isBooked ? 'booked' : ($isSelected ? 'selected' : 'available');
+    public function renderSeat(bool $isSelected): string {
+        $class = $this->isBooked ? 'seat-booked' : ($isSelected ? 'seat-selected' : 'seat-available');
         return "
             <button 
                 type='submit' 
                 name='toggle_seat' 
-                value='" . htmlspecialchars($this->id, ENT_QUOTES, 'UTF-8') . "' 
-                class='seat $status' 
+                value='{$this->id}' 
+                class='seat $class' 
                 " . ($this->isBooked ? 'disabled' : '') . ">
-                " . htmlspecialchars($this->row . $this->number, ENT_QUOTES, 'UTF-8') . "
-            </button>
-        ";
+                {$this->row}{$this->number}
+            </button>";
     }
 }
 ?>

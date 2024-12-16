@@ -1,45 +1,48 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin navbar/title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="../css/style.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-</head> -->
-
-
-
 <?php
-require_once 'classes/user.php';
-?>
+// Ensure session is started
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<link rel="stylesheet" href="../../css/style.css">
+// Redirect if user is not logged in
+if (!isset($_SESSION['user_id'])) {
+    header('Location: ../../loginPDO/login.php');
+    exit();
+}
 
+require_once '../classes/user.php';
 
-<?php
+// Initialize user and current page
 $userID = $_SESSION['user_id'];
 $user = new User();
+$currentPage = basename($_SERVER['PHP_SELF']);
 
-// Fetch and sanitize user data
+// Fetch user data
 $userData = $user->getUserProfile($userID);
-$userData = array_map(fn($value) => htmlspecialchars($value, ENT_QUOTES, 'UTF-8'), $userData);
 
+// Set default values for missing fields
+if (!$userData) {
+    $userData = [
+        'userPicture' => '../../includes/media/other/user_default.png',
+        'firstName' => 'Guest',
+        'lastName' => 'User',
+    ];
+}
 
-$currentPage = basename($_SERVER['PHP_SELF']); // Get the current page
+// Apply htmlspecialchars only on non-null values
+$userData = array_map(
+    fn($value) => $value !== null ? htmlspecialchars($value, ENT_QUOTES, 'UTF-8') : '',
+    $userData
+);
 
-
-
-if (!empty($_FILES['userPicture']['name'])) {
-    $uploadDir = '../includes/media/users/';
+// Handle profile picture upload
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_FILES['userPicture']['name'])) {
+    $uploadDir = '../../includes/media/users/';
     $fileName = basename($_FILES['userPicture']['name']);
     $filePath = $uploadDir . $fileName;
     $fileType = mime_content_type($_FILES['userPicture']['tmp_name']);
 
+    // Validate file type and upload
     if (in_array($fileType, ['image/jpeg', 'image/png'])) {
         if (!is_dir($uploadDir)) {
             mkdir($uploadDir, 0755, true);
@@ -47,37 +50,37 @@ if (!empty($_FILES['userPicture']['name'])) {
 
         if (move_uploaded_file($_FILES['userPicture']['tmp_name'], $filePath)) {
             $user->updateUserPicture($userID, htmlspecialchars($filePath, ENT_QUOTES, 'UTF-8'));
+            $userData['userPicture'] = htmlspecialchars($filePath, ENT_QUOTES, 'UTF-8');
         } else {
-            die('Failed to upload file.');
+            echo '<div class="alert alert-danger">Failed to upload file.</div>';
         }
     } else {
-        die('Invalid file type. Only JPEG and PNG are allowed.');
+        echo '<div class="alert alert-danger">Invalid file type. Only JPEG and PNG are allowed.</div>';
     }
 }
 ?>
 
+<!-- Sidebar HTML -->
+<ul class="user-account-sidebar">
+    <li class="user-nav-item">
+        <a href="../views/tickets.php" class="user-account-sidebar-link <?= $currentPage === 'tickets.php' ? 'active' : ''; ?>">
+            <span class="material-icons">local_activity</span> My tickets
+        </a>
+    </li>
+    <li class="user-nav-item">
+        <a href="../views/user_data.php" class="user-account-sidebar-link <?= $currentPage === 'user_data.php' ? 'active' : ''; ?>">
+            <span class="material-icons">face</span> Personal data
+        </a>
+    </li>
+    <li class="user-nav-item">
+        <a href="../../loginPDO/actions/logout.php" class="user-account-sidebar-link">
+            <span class="material-icons">logout</span> Log out
+        </a>
+    </li>
+</ul>
 
-    <ul class="user-account-sidebar">
-        <li class="user-nav-item">
-            <a href="views/tickets.php" class="user-account-sidebar-link <?= $currentPage == 'views/tickets.php' ? 'active' : ''; ?>">
-                <span class="material-icons">local_activity</span> My tickets
-            </a>
-        </li>
-        <li class="user-nav-item">
-            <a href="views/user_data.php" class="user-account-sidebar-link <?= $currentPage == '../views/user_data.php' ? 'active' : ''; ?>">
-                <span class="material-icons">face</span> Personal data
-            </a>
-        </li>
-        <li class="user-nav-item">
-            <a href="../../loginPDO/logout.php" class="user-account-sidebar-link <?= $currentPage == '../loginPDO/logout.php' ? 'active' : ''; ?>">
-                <span class="material-icons">logout</span> Log out
-            </a>
-        </li>
-    </ul>
-
+<!-- User Profile Section -->
 <section class="user-account-profile">
-    <img src="<?= htmlspecialchars($userData['userPicture'] ?? '../../includes/media/other/user_default.png'); ?>" alt="Profile Picture" class="user-account-avatar">
-    <h2 class="user-account-name">
-        <?= htmlspecialchars(($userData['firstName'] ?? '') . ' ' . ($userData['lastName'] ?? '')); ?>
-    </h2>
+    <img src="<?= $userData['userPicture'] ?>" alt="Profile Picture" class="user-account-avatar">
+    <h2 class="user-account-name"><?= $userData['firstName'] . ' ' . $userData['lastName']; ?></h2>
 </section>
