@@ -5,6 +5,8 @@ if (session_status() === PHP_SESSION_NONE) {
 
 require_once '../classes/user.php';
 require_once '../templates/user_sidebar.php';
+require_once '../../navbar_footer/cinema_navbar.php';
+
 
 if (!isset($_SESSION['user_id'])) {
     header('Location: ../../login.php');

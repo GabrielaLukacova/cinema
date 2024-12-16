@@ -18,7 +18,7 @@
                 <ul class="nav flex-column mt-4">
                     <?php $currentPage = basename($_SERVER['PHP_SELF']); ?>
                     <li class="nav-item">
-                        <a href="../dashboard.php" class="nav-link <?php echo $currentPage == 'dashboard.php' ? 'active' : ''; ?>">
+                        <a href="../dashboard/views/dashboard.php" class="nav-link <?php echo $currentPage == 'dashboard.php' ? 'active' : ''; ?>">
                             <span class="material-icons">dashboard</span> Dashboard
                         </a>
                     </li>
@@ -38,12 +38,12 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="../news/news.php" class="nav-link <?php echo $currentPage == 'news.php' ? 'active' : ''; ?>">
+                        <a href="../../news/news.php" class="nav-link <?php echo $currentPage == 'news.php' ? 'active' : ''; ?>">
                             <span class="material-icons">article</span> News
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="../admin_loginPDO/actions/logout.php" class="nav-link <?php echo $currentPage == 'logout.php' ? 'active' : ''; ?>">
+                        <a href="../../admin_loginPDO/actions/logout.php" class="nav-link <?php echo $currentPage == 'logout.php' ? 'active' : ''; ?>">
                             <span class="material-icons">logout</span> Log out
                         </a>
                     </li>

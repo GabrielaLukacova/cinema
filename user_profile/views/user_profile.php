@@ -2,7 +2,7 @@
 require_once '../actions/user_profile_logic.php';
 require_once "../../navbar_footer/cinema_navbar.php";
 require_once "../templates/user_sidebar.php";
-
+require_once "tickets.php";
 ?>
 <!DOCTYPE html>
 <html lang="en">

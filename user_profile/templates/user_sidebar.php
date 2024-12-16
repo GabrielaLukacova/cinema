@@ -79,6 +79,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_FILES['userPicture']['name
     </li>
 </ul>
 
+
+
+
 <!-- User Profile Section -->
 <section class="user-account-profile">
     <img src="<?= $userData['userPicture'] ?>" alt="Profile Picture" class="user-account-avatar">

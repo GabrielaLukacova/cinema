@@ -14,7 +14,6 @@ require_once "../components/admin_navbar.php";
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="../admin_style/admin_style.css?v=1.2">
 
-
     <?php
 // Fetching cinema details and opening hours from the database
 $query = $db->prepare("
@@ -56,6 +55,7 @@ while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
     }
 }
 ?>
+
 
 <body>
 <div class="table p-4 shadow rounded bg-white">

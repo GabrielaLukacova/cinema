@@ -4,9 +4,14 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+// Set the current page for the sidebar highlight
+$currentPage = basename($_SERVER['PHP_SELF']);
+
 require_once "../actions/ticket_logic.php";
 require_once '../templates/user_sidebar.php';
 require_once '../../navbar_footer/cinema_navbar.php';
+
+
 
 ?>
 <!DOCTYPE html>
@@ -17,51 +22,6 @@ require_once '../../navbar_footer/cinema_navbar.php';
     <title>My tickets</title>
     <link rel="stylesheet" href="../../css/style.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <style>
-        .tickets-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            justify-content: center;
-            margin: 20px;
-        }
-        .ticket-card {
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            width: 300px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-        }
-        .ticket-card img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-        }
-        .ticket-info {
-            padding: 15px;
-        }
-        .ticket-info h3 {
-            margin: 0;
-            font-size: 1.5rem;
-            color: #333;
-        }
-        .ticket-info p {
-            margin: 5px 0;
-            color: #666;
-        }
-        .ticket-info .ticket-total {
-            font-weight: bold;
-            color: #000;
-            margin-top: 10px;
-        }
-        .no-tickets {
-            text-align: center;
-            margin: 50px 0;
-            font-size: 1.2rem;
-            color: #555;
-        }
-    </style>
 </head>
 <body>
     <div class="tickets-container">

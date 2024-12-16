@@ -7,7 +7,7 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
     header("Location: admin_login.php");
     exit();
 }
-require_once "../components/admin_navbar.php"; 
+require_once "../../components/admin_navbar.php"; 
 ?>
 
 
@@ -20,8 +20,7 @@ require_once "../components/admin_navbar.php";
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="includes/admin_style.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="../../admin_style/admin_style.css">
 </head>
 <body>
 <h1>Welcome to the Admin Panel</h1>

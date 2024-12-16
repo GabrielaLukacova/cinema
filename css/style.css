@@ -998,7 +998,6 @@ padding:100px 13%;
 /*------------------------------NEWS PAGE-----------------------------*/
 /*------------------------------NEWS PAGE-----------------------------*/
 /*------------------------------NEWS PAGE-----------------------------*/
-/* Grid container for news cards */
 .news-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -1006,7 +1005,6 @@ padding:100px 13%;
   padding: 100px 13%;
 }
 
-/* Individual news card styling */
 .news-card {
   border: none;
   transform-origin: center;
@@ -1015,11 +1013,10 @@ padding:100px 13%;
   height: 100%;
   overflow: hidden;
   position: relative;
-  transition: transform 0.3s ease; /* Optional for smoothness */
+  transition: transform 0.3s ease; 
 
 }
 
-/* Ensure the image container handles the hover effect */
 .news-card .image-container {
   position: relative;
   overflow: hidden;
@@ -1027,7 +1024,6 @@ padding:100px 13%;
   height: 200px;
 }
 
-/* Scale effect on the image only */
 .news-card .image-container img {
   width: 100%;
   height: 100%;
@@ -1039,7 +1035,6 @@ padding:100px 13%;
   transform: scale(1.1);
 }
 
-/* Category text styling */
 .news-card .category {
   color: #CB4540;
   font-size: 1rem;
@@ -1047,18 +1042,55 @@ padding:100px 13%;
   margin-top: 10px;
 }
 
-/* Title text styling */
+
 .news-card .title {
   font-size: 1.2rem;
   font-weight: bold;
   margin-top: 5px;
+} 
+
+/*------------------------------NEWS SINGLE PAGE-----------------------------*/
+/*------------------------------NEWS SINGLE PAGE-----------------------------*/
+/*------------------------------NEWS SINGLE PAGE-----------------------------*/
+
+/* General container styling */
+.custom-news-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
 }
 
+/* Image styling */
+.custom-news-image {
+  width: 100%;
+  height: 500px;
+  object-fit: cover;
+  margin-bottom: 20px;
+}
 
-/*------------------------------NEWS SINGLE PAGE-----------------------------*/
-/*------------------------------NEWS SINGLE PAGE-----------------------------*/
-/*------------------------------NEWS SINGLE PAGE-----------------------------*/
+/* Title styling */
+.custom-news-title {
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
 
+/* Category styling */
+.custom-news-category {
+  text-align: center;
+  font-size: 16px;
+  color: #CB4540;
+  margin-bottom: 20px;
+}
+
+/* Article styling */
+.custom-news-article {
+  text-align: left;
+  font-size: 16px;
+  line-height: 1.6;
+}
 
 
 
@@ -1255,6 +1287,58 @@ input[type="text"]:focus, input[type="email"]:focus, input[type="file"]:focus {
 }
 
 
+/*------------------------------TICKET PAGE-----------------------------*/
+/*------------------------------TICKET PAGE-----------------------------*/
+/*------------------------------TICKET PAGE-----------------------------*/
+
+
+.tickets-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  margin: 20px;
+  margin-left: 400px;
+  /* padding: 100px 13%; */
+  padding-right:13%;
+
+}
+.ticket-card {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  width: 250px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+.ticket-card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+}
+.ticket-info {
+  padding: 15px;
+}
+.ticket-info h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #333;
+}
+.ticket-info p {
+  margin: 5px 0;
+  color: #666;
+}
+.ticket-info .ticket-total {
+  font-weight: bold;
+  color: #000;
+  margin-top: 10px;
+}
+.no-tickets {
+  text-align: center;
+  margin: 50px 0;
+  font-size: 1.2rem;
+  color: #555;
+}
 
 
 

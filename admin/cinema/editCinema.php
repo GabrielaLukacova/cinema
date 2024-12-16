@@ -51,6 +51,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // back to cinema page
     header("Location: cinema.php?status=updated");
     exit;
+
+
+    
 }
 ?>
 <!DOCTYPE html>
