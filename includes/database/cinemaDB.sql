@@ -109,6 +109,16 @@ CREATE TABLE News (
     FOREIGN KEY (cinemaID) REFERENCES Cinema(cinemaID)
 );
 
+
+DELIMITER //
+CREATE TRIGGER delete_movie_cleanup
+AFTER DELETE ON Movie
+FOR EACH ROW
+BEGIN
+    DELETE FROM Reserves WHERE movieID = OLD.movieID;
+END //
+DELIMITER ;
+
 INSERT INTO PostalCode (postalCode, city) VALUES 
 ('6700', 'Esbjerg'),
 ('6740', 'Esbjerg'),
@@ -132,14 +142,6 @@ VALUES
     ('Movie Review: The Great Adventure', 'Review', 'The Great Adventure is a cinematic masterpiece with breathtaking visuals and an emotional storyline. Critics and audiences have given it stellar reviews.', 1),
     ('Interview with Director James', 'Interview', 'We sat down with James, the director of "The Great Adventure," to talk about his creative process and what inspired the movie.', 1),
     ('The Grand Premiere Event', 'Event', 'The Grand Premiere of "The Great Adventure" was a star-studded event that brought together celebrities, critics, and fans alike.', 1),
-    ('Special Promotion: Movie Tickets', 'Promotion', 'Get 50% off movie tickets for "The Great Adventure" this weekend! Don’t miss out on this limited-time offer.', 1),
-    ('Upcoming Movie Release: Hero', 'Review', 'Hero Journey is set to be a box-office hit. Its unique blend of action and heartwarming moments will leave audiences cheering.', 1),
-    ('Interview with Actor John Doe', 'Interview', 'John Doe shares his experiences working on the set of Hero Journey and his thoughts on the evolving film industry.', 1),
-    ('Exclusive Event: Movie Marathon', 'Event', 'Join us for a movie marathon featuring all the best adventure films, including The Great Adventure and Hero Journey.', 1),
-    ('"Action Heroes" Movie Review', 'Review', 'Action Heroes is an adrenaline-pumping thrill ride that keeps you on the edge of your seat from start to finish.', 1),
-    ('Behind the Scenes: Making of "Action Heroes"', 'Interview', 'A deep dive into the making of "Action Heroes" with the crew, stunt coordinators, and actors.', 1),
-    ('The Best Movie Event of the Year', 'Event', 'Our annual movie event features screenings, celebrity panels, and much more! Be part of this unforgettable experience.', 1),
-    ('Ticket Promotion: Buy One Get One Free', 'Promotion', 'Buy one movie ticket for "Action Heroes" and get another free! Limited-time offer only for this weekend.', 1);
 
 INSERT INTO User (firstName, lastName, email, phoneNumber, password, street, postalCode) 
 VALUES
@@ -162,14 +164,7 @@ VALUES
 (1, '2024-11-22', '20:00', '3', 120),
 (2, '2024-11-22', '14:00', '2', 120),
 (2, '2024-11-22', '17:00', '2', 120),
-(2, '2024-11-22', '18:00', '2', 120),
-(2, '2024-11-22', '19:00', '2', 120),
-(2, '2024-11-22', '20:00', '2', 120),
-(3, '2024-11-22', '14:00', '2', 120),
-(3, '2024-11-22', '17:00', '2', 120),
-(3, '2024-11-22', '18:00', '2', 120),
-(3, '2024-11-22', '19:00', '2', 120),
-(3, '2024-11-22', '20:00', '2', 120);
+
 
 INSERT INTO Booking (userID, showTimeID) VALUES
 (1, 1),

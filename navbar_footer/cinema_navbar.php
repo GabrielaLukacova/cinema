@@ -19,7 +19,7 @@ require_once(__DIR__ . "/../loginPDO/actions/session.php");
         </div>
         <ul class="nav-links">
             <li><a href="../../movies/views/all_movies.php">Movies</a></li>
-            <li><a href="../../news/all_news.php">News</a></li>
+            <li><a href="../../news/views/all_news.php">News</a></li>
             <li>
             <?php if (logged_in()): ?>
                 <!-- If logged in, show the profile page -->
