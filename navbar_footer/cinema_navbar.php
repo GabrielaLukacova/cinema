@@ -23,7 +23,7 @@ require_once(__DIR__ . "/../loginPDO/actions/session.php");
             <li>
             <?php if (logged_in()): ?>
                 <!-- If logged in, show the profile page -->
-                <a href="../user_profile/views/user_profile.php">My profile</a>
+                <a href="../user_profile/views/tickets.php">My profile</a>
             <?php else: ?>
                 <!-- If not logged in, redirect to login -->
                 <a href="../../loginPDO/views/login.php">Login</a>

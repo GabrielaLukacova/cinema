@@ -3,14 +3,17 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['selected_seats'])) {
-    $_SESSION['selected_seats'] = $_POST['selected_seats'];
-    header("Location: ../login/login.php?redirect=ticket_confirmation.php");
-    exit();
-}
-
 require_once "../../includes/connection.php";
 require_once "../classes/seat.php";
+require_once "../views/seat_map.php";
+
+
+// Redirect to login if user is not logged in
+if (!isset($_SESSION['user_id']) && basename($_SERVER['PHP_SELF']) !== 'login.php') {
+    $redirectUrl = "../../movies/views/seat_map.php?showTimeID=" . urlencode($_GET['showTimeID']);
+    header("Location: ../../loginPDO/views/login.php?redirect=" . urlencode($redirectUrl));
+    exit();
+}
 
 // Validate and retrieve `showTimeID`
 if (!isset($_GET['showTimeID']) || !is_numeric($_GET['showTimeID'])) {
@@ -31,52 +34,44 @@ $stmt = $db->prepare("
 $stmt->execute([':showTimeID' => $showTimeID]);
 $seatsData = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Debugging: Ensure `showTimeID` is correct and check `seatsData`
 if (empty($seatsData)) {
-    die("No seats found for this showtime. Debug: showTimeID = " . htmlspecialchars($showTimeID));
+    die("No seats found for this showtime.");
 }
 
-// Convert `seatsData` into an array of Seat objects
+// Convert seat data into objects
 $seats = array_map(fn($seatData) => new Seat(
     $seatData['seatID'],
     $seatData['seatNumber'],
     $seatData['seatRow'],
-    $seatData['isBooked'],
+    (bool)$seatData['isBooked'],
     $showTimeID,
-    $seatData['seatPrice']
+    (float)$seatData['seatPrice']
 ), $seatsData);
 
-// Initialize session data for selected seats by showtime
-if (!isset($_SESSION['selected_seats'])) {
-    $_SESSION['selected_seats'] = [];
-}
-
-// Ensure `$_SESSION['selected_seats'][$showTimeID]` is always an array
-if (!isset($_SESSION['selected_seats'][$showTimeID]) || !is_array($_SESSION['selected_seats'][$showTimeID])) {
+// Initialize selected seats in the session
+if (!isset($_SESSION['selected_seats'][$showTimeID])) {
     $_SESSION['selected_seats'][$showTimeID] = [];
 }
 
 // Handle seat selection form submission
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['toggle_seat']) && is_numeric($_POST['toggle_seat'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['toggle_seat'])) {
     $seatID = (int)$_POST['toggle_seat'];
 
-    // Ensure seatID is valid before processing
+    // Check if the seatID is valid
     if (in_array($seatID, array_column($seatsData, 'seatID'))) {
-        // Check if the seat is already selected
         if (in_array($seatID, $_SESSION['selected_seats'][$showTimeID])) {
-            // Remove the seat
+            // Remove seat
             $_SESSION['selected_seats'][$showTimeID] = array_diff($_SESSION['selected_seats'][$showTimeID], [$seatID]);
         } elseif (count($_SESSION['selected_seats'][$showTimeID]) < 5) {
-            // Add the seat if within the limit
+            // Add seat if under limit
             $_SESSION['selected_seats'][$showTimeID][] = $seatID;
         } else {
-            // Set an error message for exceeding the limit
-            $error = "You can only select up to 5 seats for this showtime.";
+            $error = "You can only select up to 5 seats.";
         }
     }
 }
 
-// Calculate the total price for the current showtime
+// Calculate total price and prepare selected seat details
 $totalPrice = 0;
 $selectedSeatDetails = [];
 foreach ($_SESSION['selected_seats'][$showTimeID] as $seatID) {
@@ -88,3 +83,6 @@ foreach ($_SESSION['selected_seats'][$showTimeID] as $seatID) {
         }
     }
 }
+
+// Pass data for rendering the seat map
+$selectedSeats = $_SESSION['selected_seats'][$showTimeID];

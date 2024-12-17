@@ -67,7 +67,7 @@ CREATE TABLE ShowTime (
     date DATE NOT NULL,
     time TIME NOT NULL,
     room ENUM('1', '2', '3', '4') NOT NULL,
-    price DECIMAL NOT NULL,
+    price DECIMAL,
     movieID INT,
     FOREIGN KEY (movieID) REFERENCES Movie(movieID) ON DELETE CASCADE
 );
@@ -109,15 +109,11 @@ CREATE TABLE News (
     FOREIGN KEY (cinemaID) REFERENCES Cinema(cinemaID)
 );
 
-
-DELIMITER //
-CREATE TRIGGER delete_movie_cleanup
-AFTER DELETE ON Movie
-FOR EACH ROW
-BEGIN
-    DELETE FROM Reserves WHERE movieID = OLD.movieID;
-END //
-DELIMITER ;
+CREATE OR REPLACE VIEW cinema_opening_hours AS
+SELECT oh.dayOfWeek, oh.openingTime, oh.closingTime, c.cinemaID
+FROM OpeningHours oh
+LEFT JOIN Cinema c ON c.cinemaID = oh.cinemaID
+ORDER BY FIELD(oh.dayOfWeek, 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday');
 
 INSERT INTO PostalCode (postalCode, city) VALUES 
 ('6700', 'Esbjerg'),
@@ -141,7 +137,7 @@ INSERT INTO News (title, category, article, cinemaID)
 VALUES
     ('Movie Review: The Great Adventure', 'Review', 'The Great Adventure is a cinematic masterpiece with breathtaking visuals and an emotional storyline. Critics and audiences have given it stellar reviews.', 1),
     ('Interview with Director James', 'Interview', 'We sat down with James, the director of "The Great Adventure," to talk about his creative process and what inspired the movie.', 1),
-    ('The Grand Premiere Event', 'Event', 'The Grand Premiere of "The Great Adventure" was a star-studded event that brought together celebrities, critics, and fans alike.', 1),
+    ('The Grand Premiere Event', 'Event', 'The Grand Premiere of "The Great Adventure" was a star-studded event that brought together celebrities, critics, and fans alike.', 1);
 
 INSERT INTO User (firstName, lastName, email, phoneNumber, password, street, postalCode) 
 VALUES
@@ -163,17 +159,22 @@ VALUES
 (1, '2024-11-22', '19:00', '2', 120),
 (1, '2024-11-22', '20:00', '3', 120),
 (2, '2024-11-22', '14:00', '2', 120),
-(2, '2024-11-22', '17:00', '2', 120),
+(2, '2024-11-22', '17:00', '2', 120);
 
 
 INSERT INTO Booking (userID, showTimeID) VALUES
 (1, 1),
-(2, 2),
-(3, 3);
+(1, 2),
+(1, 3);
+
+INSERT INTO Seat (seatNumber, seatRow, isBooked, showTimeID)
+VALUES
+(1, 'A', FALSE, 1),
+(5, 'B', FALSE, 1),
+(8, 'C', FALSE, 1);
 
 UPDATE Seat
 SET isBooked = TRUE
 WHERE (seatRow = 'A' AND seatNumber = 1) 
    OR (seatRow = 'B' AND seatNumber = 5)  
    OR (seatRow = 'C' AND seatNumber = 8);
-

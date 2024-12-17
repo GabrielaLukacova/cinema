@@ -75,7 +75,7 @@ try {
 }
 
 // Pagination logic
-$moviesPerSection = 5; // Show exactly 5 movies at a time
+$moviesPerSection = 5; // Show 5 movies at a time
 $totalMovies = count($movies);
 $totalSections = ceil($totalMovies / $moviesPerSection);
 
@@ -357,44 +357,41 @@ $cinema = $query->fetch(PDO::FETCH_ASSOC);
 
 
     <?php 
-// Fetch Cinema Opening Hours
+// Fetch Cinema Opening Hours from the view
 $query = $db->prepare("
-    SELECT oh.dayOfWeek, oh.openingTime, oh.closingTime 
-    FROM OpeningHours oh
-    LEFT JOIN Cinema c ON c.cinemaID = oh.cinemaID
-    WHERE c.cinemaID = 1
-    ORDER BY FIELD(oh.dayOfWeek, 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday')
+    SELECT dayOfWeek, openingTime, closingTime 
+    FROM cinema_opening_hours
+    WHERE cinemaID = 1
 ");
 $query->execute();
 $openingHours = $query->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
-
 <section>
   <div class="opening-hours-container">
     <div class="opening-hours">
-    <div class="opening-hours-text">
-      <h2>Opening Hours</h2>
-      <?php if (!empty($openingHours)): ?>
-        <?php foreach ($openingHours as $hour): ?>
-          <div class="day">
-            <span><?php echo htmlspecialchars($hour['dayOfWeek']); ?></span>
-            <span>
-              <?php 
-                echo htmlspecialchars(date("H:i", strtotime($hour['openingTime']))) . 
-                ' - ' . 
-                htmlspecialchars(date("H:i", strtotime($hour['closingTime']))); 
-              ?>
-            </span>
-          </div>
-        <?php endforeach; ?>
-      <?php else: ?>
-        <p>No opening hours available.</p>
-      <?php endif; ?>
+      <div class="opening-hours-text">
+        <h2>Opening Hours</h2>
+        <?php if (!empty($openingHours)): ?>
+          <?php foreach ($openingHours as $hour): ?>
+            <div class="day">
+              <span><?php echo htmlspecialchars($hour['dayOfWeek']); ?></span>
+              <span>
+                <?php 
+                  echo htmlspecialchars(date("H:i", strtotime($hour['openingTime']))) . 
+                  ' - ' . 
+                  htmlspecialchars(date("H:i", strtotime($hour['closingTime']))); 
+                ?>
+              </span>
+            </div>
+          <?php endforeach; ?>
+        <?php else: ?>
+          <p>No opening hours available.</p>
+        <?php endif; ?>
+      </div>
     </div>
-  </div></div>
+  </div>
 </section>
-
 
 
 

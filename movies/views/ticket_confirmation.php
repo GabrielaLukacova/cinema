@@ -11,6 +11,10 @@ if (!isset($_SESSION['user_id']) && basename($_SERVER['PHP_SELF']) !== 'login.ph
 
 require_once "../../includes/connection.php";
 require_once "../../navbar_footer/cinema_navbar.php";
+require_once "../actions/ticket_confirmation_logic.php";
+
+
+
 
 // Validate required session data
 if (empty($_SESSION['selected_seats']) || empty($_SESSION['showTimeID'])) {
@@ -120,8 +124,8 @@ try {
 <body>
     <div class="confirmation-container">
         <div class="confirmation-header">
-            <h1>Booking Confirmation</h1>
-            <p>Please review your booking details and confirm.</p>
+            <h1>Booking confirmation</h1>
+            <p>You have bookd your tickets. Please pay for the tickets before the movie in the cinema.</p>
         </div>
 
         <div class="confirmation-details">
@@ -140,9 +144,9 @@ try {
             </ul>
         </div>
 
-        <form method="post">
+        <!-- <form method="post">
             <button type="submit" class="btn btn-primary">Confirm Booking</button>
-        </form>
+        </form> -->
 
         <div class="confirmation-footer">
             <a href="../../user_profile/views/tickets.php">View My Tickets</a>

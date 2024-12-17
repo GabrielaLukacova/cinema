@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
                 $_SESSION['email'] = $found_user['email'];
 
                 // Redirect to the intended page or default to the user profile.
-                $redirect = !empty($_GET['redirect']) ? $_GET['redirect'] : '../../user_profile/views/user_profile.php';
+                $redirect = !empty($_GET['redirect']) ? $_GET['redirect'] : '../../user_profile/views/tickets.php';
                 header("Location: " . htmlspecialchars($redirect, ENT_QUOTES, 'UTF-8'));
                 exit();
             } else {
