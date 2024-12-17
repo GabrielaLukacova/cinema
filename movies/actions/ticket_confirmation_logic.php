@@ -16,43 +16,48 @@ if (empty($_SESSION['selected_seats']) || empty($_SESSION['showTimeID'])) {
     die("Error: Missing booking details. Please go back and select seats.");
 }
 
-$selectedSeats = $_SESSION['selected_seats'][$_SESSION['showTimeID']] ?? [];
 $showTimeID = $_SESSION['showTimeID'];
+$selectedSeats = $_SESSION['selected_seats'][$showTimeID] ?? [];
 
+// Validate selected seats
 if (empty($selectedSeats)) {
     die("Error: No seats selected.");
 }
 
-// Fetch movie and showtime details
-$query = $db->prepare("
-    SELECT st.date, st.time, st.price, st.room, m.title
-    FROM ShowTime st
-    JOIN Movie m ON st.movieID = m.movieID
-    WHERE st.showTimeID = :showTimeID
-");
-$query->execute([':showTimeID' => $showTimeID]);
-$showTime = $query->fetch(PDO::FETCH_ASSOC);
+try {
+    // Fetch movie and showtime details
+    $query = $db->prepare("
+        SELECT st.date, st.time, st.price, st.room, m.title
+        FROM ShowTime st
+        JOIN Movie m ON st.movieID = m.movieID
+        WHERE st.showTimeID = :showTimeID
+    ");
+    $query->execute([':showTimeID' => $showTimeID]);
+    $showTime = $query->fetch(PDO::FETCH_ASSOC);
 
-if (!$showTime) {
-    die("Error: Showtime not found.");
+    if (!$showTime) {
+        die("Error: Showtime not found.");
+    }
+
+    // Fetch seat details
+    $placeholders = implode(',', array_fill(0, count($selectedSeats), '?'));
+    $seatQuery = $db->prepare("
+        SELECT seatRow, seatNumber
+        FROM Seat
+        WHERE seatID IN ($placeholders) AND showTimeID = ?
+    ");
+    $seatQuery->execute([...$selectedSeats, $showTimeID]);
+    $seatDetails = $seatQuery->fetchAll(PDO::FETCH_ASSOC);
+
+    if (!$seatDetails) {
+        die("Error: Selected seats not found.");
+    }
+
+    // Calculate total price
+    $totalPrice = count($selectedSeats) * $showTime['price'];
+
+} catch (Exception $e) {
+    die("Error: " . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8'));
 }
-
-// Fetch seat details
-$placeholders = implode(',', array_fill(0, count($selectedSeats), '?'));
-$seatQuery = $db->prepare("
-    SELECT seatRow, seatNumber
-    FROM Seat
-    WHERE seatID IN ($placeholders) AND showTimeID = ?
-");
-$seatQuery->execute([...$selectedSeats, $showTimeID]);
-$seatDetails = $seatQuery->fetchAll(PDO::FETCH_ASSOC);
-
-if (!$seatDetails) {
-    die("Error: Selected seats not found.");
-}
-
-// Calculate total price
-$totalPrice = count($selectedSeats) * $showTime['price'];
-?>
 
  

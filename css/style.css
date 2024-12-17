@@ -238,13 +238,19 @@ button, .btn-primary, .btn-secondary {
 
 
 
-.login-create-container {
+/* .login-create-container {
   position: relative;
   width: 800px;
   height: 500px;
   display: flex;
   justify-content: space-between;
-  background-color: #f0f0f0;
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #1f1f1f;
+  border-radius: 8px;
+  margin: 200px auto 100px auto;
 }
 
 .login-box-cinema, .create-box-cinema {
@@ -293,7 +299,7 @@ input {
   text-align: center;
   margin-top: 20px;
 }
-
+ */
 
 
 
@@ -870,6 +876,11 @@ padding:100px 13%;
 }
 
 
+
+
+/* .form-label{
+  color: #000;
+} */
 
 
 
@@ -1488,4 +1499,85 @@ button.continue-btn:disabled {
 .seat-message{
   color: #e74c3c;
   font-weight: bold;
+}
+
+
+
+
+/* ------------- CREATE ACCOUNT --------------- */
+
+.new-user-container {
+  max-width: 800px;
+  margin: 50px auto;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #1f1f1f;
+  border-radius: 8px;
+  margin-top: 150px;
+
+}
+
+.new-user-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Form Styling */
+.new-user-details ul {
+  list-style-type: none;
+  padding: 50px;
+
+}
+
+.new-user-details ul li {
+  margin-bottom: 15px;
+}
+
+.new-user-details label {
+  display: block;
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+.new-user-details input {
+  width: 97%;
+  padding: 10px;
+  font-size: 16px;
+  border-bottom: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #1f1f1f;
+  color: white;
+}
+
+.new-user-details input:focus {
+  outline: none;
+  border-color:  #cb4540;
+}
+
+/* Footer Styling */
+.new-user-footer {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.new-user-footer button {
+  padding: 10px 20px;
+  background-color: #cb4540;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  width: 100%;
+}
+
+.new-user-footer button:hover {
+  background-color: #b03b35;
+}
+
+.create_account_call_to_action{
+  justify-content: center;  
+  align-items: center; 
+  text-align: center; 
+  gap: 10px;   
 }
