@@ -1,6 +1,6 @@
 <?php
-include '../../includes/connection.php';
-include 'classes/Movie.php';
+include '../../../includes/connection.php';
+include '../classes/Movie.php';
 
 $movieHandler = new Movie($db);
 
@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         // Handle file upload
         if (isset($_FILES['movieImage']) && $_FILES['movieImage']['error'] === UPLOAD_ERR_OK) {
-            $uploadDir = '../../includes/media/movies/';
+            $uploadDir = '../../../includes/media/movies/';
             $fileName = basename($_FILES['movieImage']['name']);
             $targetFilePath = $uploadDir . $fileName;
 
@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Store the relative path in the database
             $imagePath = $fileName;
         } else {
-            $imagePath = null; // Or set a default image path
+            $imagePath = null; // Default to null if no image uploaded
         }
 
         // Prepare data for the movie
@@ -40,6 +40,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'description' => $_POST['description'] ?? null,
             'imagePath' => $imagePath,
             'movieTag' => $_POST['movieTag'] ?? 'None',
+            'price' => $_POST['price'] ?? 100, // Default to 100 if not provided
+            'date' => $_POST['date'] ?? date('Y-m-d'), // Default to today's date if not provided
         ];
 
         // Check the selected tag for limits
@@ -47,37 +49,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($movieTag === 'Hot New Movie') {
             $hotNewCount = $movieHandler->countMoviesByTag('Hot New Movie');
-
             if ($hotNewCount >= 8) {
+                // Replace the first movie with the tag
                 $firstMovie = $movieHandler->getFirstMovieByTag('Hot New Movie');
-                echo "<script>
-                    if (confirm('The limit of 8 movies for Hot New Movie is reached. Do you want to replace \"{$firstMovie['title']}\"?')) {
-                        window.location.href = 'replace_movie.php?movieID={$firstMovie['movieID']}&newTag=Hot New Movie';
-                    } else {
-                        window.history.back();
-                    }
-                </script>";
-                exit;
+                $movieHandler->updateMovieWithImage(
+                    $firstMovie['movieID'],
+                    $firstMovie['title'],
+                    $firstMovie['genre'],
+                    $firstMovie['runtime'],
+                    $firstMovie['language'],
+                    $firstMovie['ageRating'],
+                    $firstMovie['description'],
+                    $firstMovie['imagePath'],
+                    'None'
+                );
             }
         } elseif ($movieTag === 'Movie of the Week') {
             $movieOfWeekCount = $movieHandler->countMoviesByTag('Movie of the Week');
-
             if ($movieOfWeekCount >= 1) {
+                // Replace the movie with the tag
                 $firstMovie = $movieHandler->getFirstMovieByTag('Movie of the Week');
-                echo "<script>
-                    if (confirm('The Movie of the Week tag is already assigned to \"{$firstMovie['title']}\". Do you want to replace it?')) {
-                        window.location.href = 'replace_movie.php?movieID={$firstMovie['movieID']}&newTag=Movie of the Week';
-                    } else {
-                        window.history.back();
-                    }
-                </script>";
-                exit;
+                $movieHandler->updateMovieWithImage(
+                    $firstMovie['movieID'],
+                    $firstMovie['title'],
+                    $firstMovie['genre'],
+                    $firstMovie['runtime'],
+                    $firstMovie['language'],
+                    $firstMovie['ageRating'],
+                    $firstMovie['description'],
+                    $firstMovie['imagePath'],
+                    'None'
+                );
             }
         }
 
         // Add movie to the database
         if ($movieHandler->addMovie($data)) {
-            header("Location: movie_list.php?success=Movie added successfully!");
+            header("Location: ../views/movie_list.php?success=Movie added successfully!");
             exit();
         } else {
             throw new Exception("Failed to add movie.");

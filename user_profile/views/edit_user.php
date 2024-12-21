@@ -71,6 +71,12 @@ if (!$userData) {
                         </div>
 
                         <div class="form-group">
+                            <label for="city">City:</label>
+                            <input type="text" id="city" name="city" 
+                                   value="<?= htmlspecialchars($userData['city'], ENT_QUOTES, 'UTF-8'); ?>">
+                        </div>
+
+                        <div class="form-group">
                             <label for="postalCode">Postal Code:</label>
                             <input type="text" id="postalCode" name="postalCode" 
                                    value="<?= htmlspecialchars($userData['postalCode'], ENT_QUOTES, 'UTF-8'); ?>" required>

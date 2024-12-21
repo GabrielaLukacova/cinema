@@ -59,5 +59,4 @@ try {
 } catch (Exception $e) {
     die("Error: " . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8'));
 }
-
- 
+?>

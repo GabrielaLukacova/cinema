@@ -1,5 +1,5 @@
 <?php
-require_once("../../includes/connection.php");
+require_once("../../../includes/connection.php");
 
 if (isset($_POST['submit'])) {
     $title = $_POST['title'];
@@ -9,7 +9,7 @@ if (isset($_POST['submit'])) {
 
     // image upload
     if (isset($_FILES['newsImage']) && $_FILES['newsImage']['error'] === UPLOAD_ERR_OK) {
-        $targetDir = "../../includes/media/news/";
+        $targetDir = "../../../includes/media/news/";
         $fileName = basename($_FILES['newsImage']['name']);
         $targetFilePath = $targetDir . $fileName;
 
@@ -37,7 +37,7 @@ if (isset($_POST['submit'])) {
     ]);
 
     if ($executeResult) {
-        header("Location: news.php?status=added");
+        header("Location: ../views/news_list.php?status=added");
         exit;
     } else {
         echo "<div class='alert alert-danger'>Error adding news: ";
@@ -45,7 +45,7 @@ if (isset($_POST['submit'])) {
         echo "</div>";
     }
 } else {
-    header("Location: news.php?status=0");
+    header("Location: ../views/news_list.php?status=0");
     exit;
 }
 ?>

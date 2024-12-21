@@ -1,49 +1,54 @@
-<!-- <?php
-// Start session if not already started
+<?php
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Include the database connection
 require_once "../../includes/connection.php";
 
-// Check if user is logged in
+// Validate user login
 if (empty($_SESSION['user_id'])) {
-    header("Location: ../../login.php");
-    exit();
+    die("Error: You must be logged in to view your tickets.");
 }
 
-$userID = $_SESSION['user_id'];
+$userID = $_SESSION['user_id']; 
+
+// Debug the user ID
+// echo "Logged-in User ID: $userID<br>";
+
+$query = $db->prepare("
+    SELECT 
+        b.bookingID,
+        m.title AS movieTitle,
+        m.imagePath AS movieImage,
+        st.date AS showDate,
+        st.time AS showTime,
+        st.room AS roomNumber,
+        st.price AS ticketPrice,
+        GROUP_CONCAT(CONCAT(s.seatRow, s.seatNumber) ORDER BY s.seatRow, s.seatNumber SEPARATOR ', ') AS seatDetails
+    FROM Booking b
+    LEFT JOIN ShowTime st ON b.showTimeID = st.showTimeID
+    LEFT JOIN Movie m ON st.movieID = m.movieID
+    LEFT JOIN Reserves r ON b.bookingID = r.bookingID
+    LEFT JOIN Seat s ON r.seatID = s.seatID
+    WHERE b.userID = :userID
+    GROUP BY b.bookingID, st.date, st.time, st.room, m.title, m.imagePath
+    ORDER BY st.date DESC, st.time DESC;
+");
 
 try {
-    // Prepare and execute the query securely
-    $query = $db->prepare("
-        SELECT 
-            movieTitle,
-            movieImage,
-            showDate,
-            showTime,
-            roomNumber,
-            ticketPrice,
-            seatDetails
-        FROM UserTickets
-        WHERE userID = :userID
-        ORDER BY showDate DESC, showTime DESC
-    ");
-    
-    $query->bindParam(':userID', $userID, PDO::PARAM_INT);
-    $query->execute();
-
-    // Fetch all tickets
+    $query->execute([':userID' => $userID]);
     $tickets = $query->fetchAll(PDO::FETCH_ASSOC);
 
-    // If no tickets are found, set to an empty array
-    if (!$tickets) {
-        $tickets = [];
-    }
-} catch (PDOException $e) {
-    // Log the error and set tickets to an empty array
-    error_log("Database error: " . $e->getMessage());
+    // Debugging output
+    echo "<pre>User ID: $userID\n";
+    print_r($tickets);
+    echo "</pre>";
+} catch (Exception $e) {
+    die("Query Error: " . $e->getMessage());
+}
+
+// Ensure $tickets is an array, even if no tickets are found
+if (!$tickets) {
     $tickets = [];
 }
-?> -->
+?>

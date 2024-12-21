@@ -54,7 +54,11 @@ $movieOfTheWeek = $query->fetch(PDO::FETCH_ASSOC);
 
 
 
-
+<li class="user-nav-item">
+        <a href="../../loginPDO/actions/logout.php" class="user-account-sidebar-link">
+            <span class="material-icons">logout</span> Log out
+        </a>
+    </li>
 
 
 

@@ -1,6 +1,5 @@
 <?php
-require_once("../../includes/connection.php");
-include '../includes/admin_navbar.php'; 
+require_once("../../../includes/connection.php");
 
 if (isset($_GET['showTimeID'])) {
     $showTimeID = $_GET['showTimeID'];
@@ -10,10 +9,10 @@ if (isset($_GET['showTimeID'])) {
     $query->execute();
 
     // Redirect back to the movie calendar page with a success status
-    header("Location: movie_calendar.php?status=deleted&showTimeID=$showTimeID");
+    header("Location: ../views/movie_calendar_view.php?status=deleted&showTimeID=$showTimeID");
     exit;
 } else {
     // Redirect back with an error status if no showTimeID was provided
-    header("Location: movie_calendar.php?status=0");
+    header("Location: ../views/movie_calendar_view.php?status=0");
     exit;
 }

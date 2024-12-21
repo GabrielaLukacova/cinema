@@ -21,6 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'firstName' => htmlspecialchars(trim($_POST['firstName'] ?? ''), ENT_QUOTES, 'UTF-8'),
         'lastName' => htmlspecialchars(trim($_POST['lastName'] ?? ''), ENT_QUOTES, 'UTF-8'),
         'phoneNumber' => htmlspecialchars(trim($_POST['phoneNumber'] ?? ''), ENT_QUOTES, 'UTF-8'),
+        'email' => htmlspecialchars(trim($_POST['email'] ?? ''), ENT_QUOTES, 'UTF-8'),
         'street' => htmlspecialchars(trim($_POST['street'] ?? ''), ENT_QUOTES, 'UTF-8'),
         'postalCode' => htmlspecialchars(trim($_POST['postalCode'] ?? ''), ENT_QUOTES, 'UTF-8'),
     ];
@@ -60,13 +61,15 @@ if (!$userData || !is_array($userData)) {
         'firstName' => 'Guest',
         'lastName' => '',
         'phoneNumber' => '',
+        'email' => '',
         'street' => '',
         'postalCode' => '',
         'userPicture' => '../../includes/media/other/user_default.png',
     ];
 }
 
-$userData = array_map(fn($value) => htmlspecialchars($value, ENT_QUOTES, 'UTF-8'), $userData);
+$userData = array_map(fn($value) => htmlspecialchars($value ?? '', ENT_QUOTES, 'UTF-8'), $userData);
+
 ?>
 
 
@@ -96,6 +99,12 @@ $userData = array_map(fn($value) => htmlspecialchars($value, ENT_QUOTES, 'UTF-8'
                 <p><?= $userData['lastName'] ?? 'Not provided'; ?></p>
             </div>
 
+            <!-- Email -->
+            <div class="form-group">
+                <label>Email:</label>
+                <p><?= $userData['email'] ?? 'Not provided'; ?></p>
+            </div>
+
             <!-- Phone Number -->
             <div class="form-group">
                 <label>Phone number:</label>
@@ -120,8 +129,6 @@ $userData = array_map(fn($value) => htmlspecialchars($value, ENT_QUOTES, 'UTF-8'
                 <p><?= $userData['city'] ?? 'Not provided'; ?></p>
             </div>
         </div>
-
-
 
         <!-- Edit Button -->
         <div class="form-actions">

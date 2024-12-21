@@ -1387,7 +1387,7 @@ input[type="text"]:focus, input[type="email"]:focus, input[type="file"]:focus {
 .confirmation-footer a {
   text-decoration: none;
   color: white;
-  background: #28a745;
+  background: #cb4540;
   padding: 10px 20px;
   border-radius: 5px;
 }
@@ -1429,12 +1429,12 @@ input[type="text"]:focus, input[type="email"]:focus, input[type="file"]:focus {
 }
 
 .seat {
-  width: 40px;
+  width: 80px;
   height: 40px;
   text-align: center;
   line-height: 40px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 8px;
   font-weight: bold;
 }
 
@@ -1448,7 +1448,7 @@ input[type="text"]:focus, input[type="email"]:focus, input[type="file"]:focus {
 }
 
 .seat.selected {
-  background-color: #28a745;
+  background-color: #cb4540;
 }
 
 .overview {
@@ -1481,7 +1481,7 @@ button.continue-btn {
   display: block;
   width: 100%;
   padding: 10px;
-  background-color: #28a745;
+  background-color: #cb4540;
   color: #fff;
   border: none;
   border-radius: 5px;

@@ -1,5 +1,6 @@
 <?php
-require_once "../actions/ticket_confirmation_logic.php"; 
+require_once "../actions/ticket_confirmation_logic.php";
+
 ?>
 
 <!DOCTYPE html>
@@ -34,7 +35,7 @@ require_once "../actions/ticket_confirmation_logic.php";
         </div>
 
         <div class="confirmation-footer">
-            <a href="../../user_profile/views/tickets.php">View My Tickets</a>
+            <a href="../../user_profile/views/tickets.php" class="btn btn-primary">View My Tickets</a>
         </div>
     </div>
 

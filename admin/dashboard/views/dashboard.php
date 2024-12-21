@@ -4,10 +4,11 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 // Restrict access to logged-in admins
 if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
-    header("Location: admin_login.php");
+    header("Location: ../../admin_loginPDO/views/login.php");
     exit();
 }
-require_once "../../components/admin_navbar.php"; 
+ 
+require_once "../../components/views/admin_navbar.php"; 
 ?>
 
 

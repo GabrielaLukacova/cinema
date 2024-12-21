@@ -56,6 +56,20 @@ class Movie {
         }
     }
 
+    public function getMovieByTag(string $tag): ?array
+{
+    $query = $this->db->prepare("
+        SELECT * 
+        FROM Movie 
+        WHERE movieTag = :tag
+        LIMIT 1
+    ");
+    $query->execute([':tag' => $tag]);
+    $movie = $query->fetch(PDO::FETCH_ASSOC);
+
+    return $movie ?: null; // Return the movie or null if no movie is found
+}
+
 
     public function addMovie($data) {
         try {

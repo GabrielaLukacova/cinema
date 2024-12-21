@@ -1,6 +1,4 @@
 <?php
-// user_profile_logic.php
-
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }

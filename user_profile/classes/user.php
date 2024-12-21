@@ -9,7 +9,12 @@ class User {
         $this->db = $db;
     }
 
+    // Get user profile 
     public function getUserProfile($userID) {
+        if (!$userID) {
+            throw new Exception('Invalid user ID.');
+        }
+
         $stmt = $this->db->prepare('
             SELECT u.*, p.city
             FROM User u
@@ -19,6 +24,8 @@ class User {
         $stmt->execute(['userID' => $userID]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+
+
 
     public function updateUserProfile($userID, $data) {
         // Validate postalCode exists
@@ -35,6 +42,7 @@ class User {
             UPDATE User SET
                 firstName = :firstName,
                 lastName = :lastName,
+                email = :email,
                 phoneNumber = :phoneNumber,
                 street = :street,
                 postalCode = :postalCode
@@ -43,6 +51,7 @@ class User {
         $stmt->execute([
             'firstName' => htmlspecialchars($data['firstName']),
             'lastName' => htmlspecialchars($data['lastName']),
+            'email' => htmlspecialchars($data['email']),
             'phoneNumber' => htmlspecialchars($data['phoneNumber']),
             'street' => htmlspecialchars($data['street']),
             'postalCode' => htmlspecialchars($data['postalCode']),

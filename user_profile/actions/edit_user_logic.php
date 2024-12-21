@@ -28,19 +28,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'email' => htmlspecialchars(trim($_POST['email']), ENT_QUOTES, 'UTF-8'),
         'phoneNumber' => htmlspecialchars(trim($_POST['phoneNumber']), ENT_QUOTES, 'UTF-8'),
         'street' => htmlspecialchars(trim($_POST['street']), ENT_QUOTES, 'UTF-8'),
+        'city' => htmlspecialchars(trim($_POST['city']), ENT_QUOTES, 'UTF-8'),
         'postalCode' => htmlspecialchars(trim($_POST['postalCode']), ENT_QUOTES, 'UTF-8'),
     ];
 
-    // Validate postal code exists in PostalCode table
-    $postalCodeCheckStmt = $db->prepare('SELECT city FROM PostalCode WHERE postalCode = :postalCode');
-    $postalCodeCheckStmt->execute(['postalCode' => $data['postalCode']]);
-    if (!$postalCodeCheckStmt->fetchColumn()) {
-        die('Invalid postal code. Please provide a valid one.');
-    }
-
+//Validate postal code exists in PostalCode table
+$postalCode = $data['postalCode'];
+$postalCodeCheckStmt = $db->prepare('SELECT city FROM PostalCode WHERE postalCode = :postalCode');
+$postalCodeCheckStmt->execute(['postalCode' => $postalCode]);
+if (!$postalCodeCheckStmt->fetchColumn()) {
+    die('Invalid postal code. Please provide a valid one.');
+}
     // Handle profile picture upload
     if (isset($_FILES['userPicture']) && $_FILES['userPicture']['error'] === UPLOAD_ERR_OK) {
-        $uploadDir = '../../uploads/profile_pictures/';
+        $uploadDir = '../../includes/media/users/';
         $fileName = basename($_FILES['userPicture']['name']);
         $filePath = $uploadDir . $fileName;
         $fileType = mime_content_type($_FILES['userPicture']['tmp_name']);
@@ -50,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 mkdir($uploadDir, 0755, true);
             }
             if (move_uploaded_file($_FILES['userPicture']['tmp_name'], $filePath)) {
-                $data['userPicture'] = $filePath; // Add file path to the update data
+                $data['userPicture'] = $filePath;
             } else {
                 die('Failed to upload profile picture.');
             }
@@ -58,12 +59,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             die('Invalid file type. Only JPEG and PNG are allowed.');
         }
     }
-
     // Update user profile
     $user->updateUserProfile($userID, $data);
 
     // Redirect back to user profile page
-    header('Location: user_data.php');
+    header('Location: ../views/user_data.php');
     exit();
 }
 ?>

@@ -1,6 +1,5 @@
 <?php 
-require_once("../../includes/connection.php"); 
-include '../includes/admin_navbar.php'; 
+require_once("../../../includes/connection.php"); 
 
 if (isset($_GET['newsID'])) {
     $newsID = $_GET['newsID'];
@@ -9,7 +8,7 @@ if (isset($_GET['newsID'])) {
     $query->bindParam(':newsID', $newsID, PDO::PARAM_INT);
     $query->execute();
 
-    header("Location: news.php?status=deleted&newsID=$newsID");
+    header("Location: ../views/news_list.php?status=deleted&newsID=$newsID");
 } else {
-    header("Location: news.php?status=0");
+    header("Location: ../views/news_list.php?status=0");
 }
