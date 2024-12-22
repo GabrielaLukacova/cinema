@@ -16,8 +16,8 @@ require_once "../../navbar_footer/cinema_navbar.php";
 <body>
 <!-- Hero Section -->
 <div class="movie_single_hero" style="background-image: url('../../includes/media/movies/<?= htmlspecialchars($movie['imagePath'], ENT_QUOTES, 'UTF-8'); ?>');">
-    <div class="movie_single_overlay">
-        <h3><?= htmlspecialchars($movie['title'], ENT_QUOTES, 'UTF-8'); ?></h3>
+    <div class="overlay">
+        <h3><?= htmlspecialchars($movie['title'], ENT_QUOTES, 'UTF-8'); ?></h3> <br>
         <p class="movie_single_genre"><?= htmlspecialchars($movie['genre'], ENT_QUOTES, 'UTF-8'); ?></p>
     </div>
 </div>

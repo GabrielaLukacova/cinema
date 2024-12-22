@@ -23,7 +23,7 @@ $userData = array_map(fn($value) => htmlspecialchars($value, ENT_QUOTES, 'UTF-8'
 
 // Handle profile picture upload
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_FILES['userPicture']['name'])) {
-    $uploadDir = '../includes/media/users/';
+    $uploadDir = '../../includes/media/users/';
     $fileName = basename($_FILES['userPicture']['name']);
     $filePath = $uploadDir . $fileName;
     $fileType = mime_content_type($_FILES['userPicture']['tmp_name']);
@@ -36,6 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_FILES['userPicture']['name
 
         if (move_uploaded_file($_FILES['userPicture']['tmp_name'], $filePath)) {
             $user->updateUserPicture($userID, htmlspecialchars($filePath, ENT_QUOTES, 'UTF-8'));
+            $userData['userPicture'] = htmlspecialchars($filePath, ENT_QUOTES, 'UTF-8'); // Update in memory
         } else {
             $uploadError = 'Failed to upload file.';
         }
@@ -43,4 +44,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_FILES['userPicture']['name
         $uploadError = 'Invalid file type. Only JPEG and PNG are allowed.';
     }
 }
+
+// Set default profile picture if none exists
+$profilePicture = $userData['userPicture'] ?? '../../includes/media/defaults/default_profile.png';
+$profilePicture = file_exists($profilePicture) ? $profilePicture : '../../includes/media/defaults/default_profile.png';
 ?>

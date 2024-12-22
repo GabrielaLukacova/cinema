@@ -20,23 +20,15 @@
 </ul>
 
 <!-- User Profile Section -->
-
-
-    <section class="user-account-profile">
+<section class="user-account-profile">
     <?php
-// Set default image if user picture is empty
-$profilePicture = !empty($userData['userPicture']) ? $userData['userPicture'] : '../../includes/media/other/user_default.png';
-?>
-<img src="<?= $profilePicture ?>" alt="Profile Picture" class="user-account-avatar">
-<h2 class="user-account-name"><?= $userData['firstName'] . ' ' . $userData['lastName']; ?></h2>
+    // Set profile picture or fallback to default
+    $profilePicture = !empty($userData['userPicture']) ? $userData['userPicture'] : '../../includes/media/other/user_default.png';
+    ?>
+    <img src="<?= $profilePicture ?>" alt="" class="user-account-avatar">
+    <h2 class="user-account-name"><?= $userData['firstName'] . ' ' . $userData['lastName']; ?></h2>
 
-<?php if (!empty($errorMessage)): ?>
-    <div class="alert alert-danger"><?= htmlspecialchars($errorMessage, ENT_QUOTES, 'UTF-8'); ?></div>
-<?php endif; ?>
-    <!-- Profile Picture Upload Form -->
-    <!-- <form action="" method="post" enctype="multipart/form-data">
-        <label for="userPicture">Change Profile Picture:</label>
-        <input type="file" name="userPicture" id="userPicture" accept="image/jpeg, image/png">
-        <button type="submit" class="btn btn-primary">Upload</button>
-    </form> -->
+    <?php if (!empty($errorMessage)): ?>
+        <div class="alert alert-danger"><?= htmlspecialchars($errorMessage, ENT_QUOTES, 'UTF-8'); ?></div>
+    <?php endif; ?>
 </section>

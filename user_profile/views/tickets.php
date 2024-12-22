@@ -85,5 +85,9 @@ require_once '../../navbar_footer/cinema_navbar.php';
             </div>
         <?php endif; ?>
     </div>
+
+<?php
+require_once '../../navbar_footer/cinema_footer.php';
+?>
 </body>
 </html>

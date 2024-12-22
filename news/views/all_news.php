@@ -15,6 +15,7 @@ require_once "../actions/news_logic.php";
 
 <div class="hero">
     <img src="../../includes/media/other/news_hero.jpg" alt="">
+    <div class="overlay"></div>
     <h1>Dream Screen's News Hub - Fresh Updates & More!</h1>
 </div>
 

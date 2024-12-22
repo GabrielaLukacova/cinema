@@ -45,7 +45,8 @@ class User {
                 email = :email,
                 phoneNumber = :phoneNumber,
                 street = :street,
-                postalCode = :postalCode
+                postalCode = :postalCode,
+                userPicture = :userPicture
             WHERE userID = :userID
         ');
         $stmt->execute([
@@ -55,9 +56,11 @@ class User {
             'phoneNumber' => htmlspecialchars($data['phoneNumber']),
             'street' => htmlspecialchars($data['street']),
             'postalCode' => htmlspecialchars($data['postalCode']),
+            'userPicture' => htmlspecialchars($data['userPicture']),
             'userID' => $userID
         ]);
     }
+    
     
     public function updateUserPicture($userID, $imagePath) {
         try {

@@ -19,19 +19,13 @@ $currentPage = basename($_SERVER['PHP_SELF']);
 
 // Fetch user data
 $userData = $user->getUserProfile($userID);
-
-// Set default values for missing fields
 if (!$userData) {
-    $userData = [
-        'userPicture' => '../../includes/media/other/user_default.png',
-        'firstName' => 'Guest',
-        'lastName' => 'User',
-    ];
+    die('Error: User not found.');
 }
 
-// Apply htmlspecialchars to prevent XSS attacks
+// Sanitize user data
 $userData = array_map(
-    fn($value) => $value !== null ? htmlspecialchars($value, ENT_QUOTES, 'UTF-8') : '',
+    fn($value) => htmlspecialchars($value, ENT_QUOTES, 'UTF-8'),
     $userData
 );
 
@@ -53,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['userPicture'])) {
         if (move_uploaded_file($_FILES['userPicture']['tmp_name'], $filePath)) {
             $filePathSanitized = htmlspecialchars($filePath, ENT_QUOTES, 'UTF-8');
             $user->updateUserPicture($userID, $filePathSanitized);
-            $userData['userPicture'] = $filePathSanitized;
+            $userData['userPicture'] = $filePathSanitized; // Update in memory
         } else {
             $errorMessage = 'Failed to upload the file.';
         }

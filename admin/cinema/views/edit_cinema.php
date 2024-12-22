@@ -41,6 +41,10 @@ require_once "../../components/views/admin_navbar.php";
             <input type="text" id="postalCode" name="postalCode" class="form-control" value="<?= htmlspecialchars($cinema['postalCode']); ?>" required>
         </div>
         <div class="form-group mb-3">
+            <label for="city">City</label>
+            <input type="text" id="city" name="city" class="form-control" value="<?= htmlspecialchars($cinema['city']); ?>" required>
+        </div>
+        <div class="form-group mb-3">
             <label for="description">Description</label>
             <textarea id="description" name="description" class="form-control" required><?= htmlspecialchars($cinema['description']); ?></textarea>
         </div>

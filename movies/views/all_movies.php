@@ -30,8 +30,11 @@ try {
 <body>
 <div class="hero">
     <img src="../../includes/media/other/all_movies_hero.jpg" alt="All Movies Hero Image">
-    <h1>Dream Screen Now Playing</h1>
+    <div class="overlay"></div>   
+<h1>Dream Screen Now Playing</h1>
+
 </div>
+
 
 <div class="movies-container">
     <?php if (!empty($movies)): ?>
@@ -72,7 +75,8 @@ try {
     <?php else: ?>
         <p>No movies available at the moment. Please check back later.</p>
     <?php endif; ?>
-</div>
+</div><div class="popcorn-bg">
+
 <?php require_once "../../navbar_footer/cinema_footer.php"; ?>
 </body>
 </html>

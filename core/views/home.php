@@ -217,65 +217,75 @@ function displayMovieCalendar($db, $selectedDate) {
     $today = new DateTime();
 
     echo '<div class="calendar-buttons">';
-    // Buttons for today, tomorrow, and the next days
+    $today = new DateTime();
+    
     for ($i = 0; $i < 7; $i++) {
         $date = clone $today;
         $date->modify("+$i days");
         $formattedDate = $date->format('Y-m-d');
         $dayName = ($i === 0) ? "Today" : ($i === 1 ? "Tomorrow" : $date->format('j.n. l'));
-
-        // Highlight the selected date button
+    
         $buttonClass = ($formattedDate === $selectedDate) ? 'calendar-day btn-primary selected' : 'calendar-day btn-primary';
-        echo "<a href='?date=$formattedDate' class='$buttonClass'>" . htmlspecialchars($dayName, ENT_QUOTES, 'UTF-8') . "</a>";
+    
+        // Add anchor to ensure scrolling to the calendar section
+        echo "<a href='?date=$formattedDate#movie-calendar' class='$buttonClass'>" . htmlspecialchars($dayName, ENT_QUOTES, 'UTF-8') . "</a>";
     }
     echo '</div>';
+    
+    
 
-    // Movies for the selected date
-    $movies = getMoviesForDate($db, $selectedDate);
+// Movies for the selected date
+$movies = getMoviesForDate($db, $selectedDate);
 
-    if (empty($movies)) {
-        echo "<p class='no-movies'>No movies scheduled for this day.</p>";
-    } else {
-        echo '<div class="movie-calendar-container">';
-        foreach ($movies as $movieID => $movie) {
-            echo "<a href='../../movies/views/movie_single.php?movieID=" . htmlspecialchars($movieID, ENT_QUOTES, 'UTF-8') . "' class='movie-calendar-item'>";
-            echo "<div class='movie-calendar-info-container'>";
-            echo "<img class='movie-calendar-image' src='../../includes/media/movies/" . htmlspecialchars($movie['imagePath'], ENT_QUOTES, 'UTF-8') . "' alt='" . htmlspecialchars($movie['title'], ENT_QUOTES, 'UTF-8') . "' />";
-            echo "<div class='movie-calendar-info'>";
-            echo "<h4 class='movie-calendar-title'>" . htmlspecialchars($movie['title'], ENT_QUOTES, 'UTF-8') . "</h4>";
-            echo "<p class='movie-calendar-details'>" . htmlspecialchars($movie['genre'], ENT_QUOTES, 'UTF-8') . " | " . htmlspecialchars($movie['runtime'], ENT_QUOTES, 'UTF-8') . " min | " . htmlspecialchars($movie['ageRating'], ENT_QUOTES, 'UTF-8') . "+";
+if (empty($movies)) {
+    echo "<p class='no-movies'>No movies scheduled for this day.</p>";
+} else {
+    echo '<div class="movie-calendar-container">';
+    foreach ($movies as $movieID => $movie) {
+        // Movie Container
+        echo "<div class='movie-calendar-item'>";
 
-            $flagPath = "../../includes/media/flags/" . strtolower($movie['language']) . "_flag";
-            if (file_exists($flagPath . ".jpg") || file_exists($flagPath . ".png")) {
-                $flagExt = file_exists($flagPath . ".jpg") ? "jpg" : "png";
-                echo "<img src='" . htmlspecialchars("$flagPath.$flagExt", ENT_QUOTES, 'UTF-8') . "' alt='" . htmlspecialchars($movie['language'], ENT_QUOTES, 'UTF-8') . " Flag' width='20' height='15'>";
-            }
-            echo "</p>";
-            echo "</div>"; 
-            echo "</div>"; 
+        echo "<div class='movie-calendar-info-container'>";
 
-            // Generate showtime buttons
-            echo "<div class='movie-calendar-showtimes-container'>";
-            foreach ($movie['showtimes'] as $showtime) {
-                // Format the time to show only hours and minutes
-                $formattedTime = date('H:i', strtotime($showtime['time']));
-                
-                echo "<a href='../../movies/views/seat_map.php?movieID=" . htmlspecialchars($movieID, ENT_QUOTES, 'UTF-8') . "&showTimeID=" . htmlspecialchars($showtime['showTimeID'], ENT_QUOTES, 'UTF-8') . "' class='showtime-button btn-primary'>" . htmlspecialchars($formattedTime, ENT_QUOTES, 'UTF-8') . "</a>";
-            }
+        echo "<img class='movie-calendar-image' src='../../includes/media/movies/" . htmlspecialchars($movie['imagePath'], ENT_QUOTES, 'UTF-8') . "' alt='" . htmlspecialchars($movie['title'], ENT_QUOTES, 'UTF-8') . "' />";
 
-            echo "</div>";
-            
-            echo "</div>";
-            echo "</a>";
+        // Movie Details
+        echo "<div class='movie-calendar-info'>";
+        echo "<h4 class='movie-calendar-title'>" . htmlspecialchars($movie['title'], ENT_QUOTES, 'UTF-8') . "</h4>";
+        echo "<p class='movie-calendar-details'>";
+        echo htmlspecialchars($movie['genre'], ENT_QUOTES, 'UTF-8') . " | " . htmlspecialchars($movie['runtime'], ENT_QUOTES, 'UTF-8') . " min | " . htmlspecialchars($movie['ageRating'], ENT_QUOTES, 'UTF-8') . "+";
+
+        // Language Flag
+        $flagPath = "../../includes/media/flags/" . strtolower($movie['language']) . "_flag";
+        $flagExt = file_exists($flagPath . ".jpg") ? "jpg" : (file_exists($flagPath . ".png") ? "png" : null);
+        if ($flagExt) {
+            echo " <img src='" . htmlspecialchars("$flagPath.$flagExt", ENT_QUOTES, 'UTF-8') . "' alt='" . htmlspecialchars($movie['language'], ENT_QUOTES, 'UTF-8') . " Flag' width='20' height='15'>";
         }
-        echo '</div>';
+        echo "</p>";
+        echo "</div>"; 
+
+        // Showtime btns
+        echo "<div class='movie-calendar-showtimes-container'>";
+        foreach ($movie['showtimes'] as $showtime) {
+            $formattedTime = date('H:i', strtotime($showtime['time']));
+            echo "<a href='../../movies/views/seat_map.php?movieID=" . htmlspecialchars($movieID, ENT_QUOTES, 'UTF-8') . "&showTimeID=" . htmlspecialchars($showtime['showTimeID'], ENT_QUOTES, 'UTF-8') . "' class='showtime-button btn-primary'>" . htmlspecialchars($formattedTime, ENT_QUOTES, 'UTF-8') . "</a>";
+        }
+        echo "</div>"; 
+
+        echo "</div>"; 
+        echo "</div>";
     }
+    echo '</div>'; 
+}
+
+
 }
 ?>
 
 <div class="movie-calendar">
     <?php displayMovieCalendar($db, $selectedDate); ?>
 </div>
+
 
 
 

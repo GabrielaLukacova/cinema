@@ -96,5 +96,9 @@ if (!$userData) {
             </div>
         </div>
     </div>
+
+<?php
+require_once '../../navbar_footer/cinema_footer.php';
+?>
 </body>
 </html>

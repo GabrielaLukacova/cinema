@@ -25,7 +25,7 @@ try {
    
 <footer class="footer">
   <div class="logo">
-    <a href="home.php"><img src="../../includes/media/logo/dream-screen-red.png" alt="Dream Screen Logo"></a>
+    <a href="../../core/views/home.php"><img src="../../includes/media/logo/dream-screen-red.png" alt="Dream Screen Logo"></a>
   </div>
   <div class="contact-info">
     <p><i class="fas fa-phone"></i><?php echo htmlspecialchars($cinema['phoneNumber']); ?></p>

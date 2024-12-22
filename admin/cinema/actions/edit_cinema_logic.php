@@ -9,8 +9,13 @@ if (!$cinemaID || !is_numeric($cinemaID)) {
 }
 
 try {
-    // Fetch cinema details
-    $query = $db->prepare("SELECT * FROM Cinema WHERE cinemaID = :cinemaID");
+    // Fetch cinema details and associated city
+    $query = $db->prepare("
+        SELECT c.*, pc.city 
+        FROM Cinema c
+        LEFT JOIN PostalCode pc ON c.postalCode = pc.postalCode
+        WHERE c.cinemaID = :cinemaID
+    ");
     $query->execute([':cinemaID' => $cinemaID]);
     $cinema = $query->fetch(PDO::FETCH_ASSOC);
 
@@ -36,10 +41,30 @@ try {
         $email = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) ? trim($_POST['email']) : null;
         $street = trim($_POST['street']);
         $postalCode = trim($_POST['postalCode']);
+        $city = trim($_POST['city']); // Allow city input directly
         $description = trim($_POST['description']);
 
         if (!$email) {
             throw new Exception("Invalid email address.");
+        }
+
+        if (!preg_match('/^\d{4}$/', $postalCode)) {
+            throw new Exception("Postal code must be a 4-digit numeric value.");
+        }
+
+        // Check if the postal code already exists
+        $postalQuery = $db->prepare("SELECT city FROM PostalCode WHERE postalCode = :postalCode");
+        $postalQuery->execute([':postalCode' => $postalCode]);
+        $postalResult = $postalQuery->fetch(PDO::FETCH_ASSOC);
+
+        if (!$postalResult) {
+            // If postal code doesn't exist, insert it with the provided city
+            $insertPostalQuery = $db->prepare("INSERT INTO PostalCode (postalCode, city) VALUES (:postalCode, :city)");
+            $insertPostalQuery->execute([':postalCode' => $postalCode, ':city' => $city]);
+        } else {
+            // Update the city for the existing postal code
+            $updatePostalQuery = $db->prepare("UPDATE PostalCode SET city = :city WHERE postalCode = :postalCode");
+            $updatePostalQuery->execute([':city' => $city, ':postalCode' => $postalCode]);
         }
 
         // Update Cinema details
