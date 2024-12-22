@@ -32,8 +32,7 @@ require_once "../actions/movie_list_logic.php";
     <?php endif; ?>
 
     <!-- Movies Table -->
-    <div class="table-responsive shadow rounded">
-        <table class="table table-bordered table-hover">
+        <table class="table p-4 shadow rounded bg-white">
             <thead class="table-dark">
                 <tr>
                     <th>ID</th>
@@ -84,7 +83,6 @@ require_once "../actions/movie_list_logic.php";
                 <?php endif; ?>
             </tbody>
         </table>
-    </div>
 
     <!-- Add New Movie Form -->
     <h3 class="mt-5" id="addMovieForm">Add new movie</h3>

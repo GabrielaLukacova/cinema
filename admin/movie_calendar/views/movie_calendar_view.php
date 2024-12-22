@@ -21,7 +21,7 @@ require_once "../../components/views/admin_navbar.php";
         <a href="#addShowtimeForm" class="btn btn-success btn-lg">+ New showtime</a>
     </div>
 
-    <h2 class="text-center mb-5">Movie calendar</h2>
+    <h2 class="text-center mb-5">🗓️ Movie calendar</h2>
 
     <!-- Movie Showtimes Table -->
     <table class="table p-4 shadow rounded bg-white">

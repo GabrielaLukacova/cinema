@@ -29,9 +29,8 @@ require_once "../actions/news_logic.php";
     <?php endif; ?>
 
     <!-- news table -->
-    <h2 class="text-center mb-5">Manage news</h2>
-    <div class="table-responsive shadow-lg rounded">
-        <table class="table table-bordered table-hover">
+    <h2 class="text-center mb-5"> 📰 Manage news</h2>
+        <table class="table p-4 shadow rounded bg-white">
             <thead>
                 <tr>
                     <th>News ID</th>
@@ -64,7 +63,6 @@ require_once "../actions/news_logic.php";
                 <?php endforeach; ?>
             </tbody>
         </table>
-    </div>
 
     <!-- Add News Form -->
     <h3 id="addNewsForm" class="mt-5">Add new news</h3>

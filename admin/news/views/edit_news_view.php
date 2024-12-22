@@ -9,7 +9,7 @@ require_once "../../components/views/admin_navbar.php";
     <meta charset="UTF-8">
     <title>Edit News</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../../admin_style/style.css">
+    <link rel="stylesheet" href="../../admin_style/admin_style.css">
 </head>
 <body>
 <div class="container my-4">

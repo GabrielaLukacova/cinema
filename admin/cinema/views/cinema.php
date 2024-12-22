@@ -6,7 +6,7 @@ require_once "../actions/cinema_logic.php";
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Manage Cinema</title>
+    <title>Manage cinema</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="../../admin_style/admin_style.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -14,14 +14,14 @@ require_once "../actions/cinema_logic.php";
 <body>
 <div class="container my-4">
     <div class="shadow rounded bg-white p-4">
-        <h2 class="text-center mb-4">Cinema Details</h2>
+        <h2 class="text-center mb-4">🎞️ Cinema details</h2>
         <?php if ($cinema): ?>
             <div class="mb-3">
                 <h5>Name:</h5>
                 <p><?= htmlspecialchars($cinema['name']); ?></p>
             </div>
             <div class="mb-3">
-                <h5>Phone Number:</h5>
+                <h5>Phone number:</h5>
                 <p><?= htmlspecialchars($cinema['phoneNumber']); ?></p>
             </div>
             <div class="mb-3">
@@ -33,7 +33,7 @@ require_once "../actions/cinema_logic.php";
                 <p><?= htmlspecialchars($cinema['street']); ?></p>
             </div>
             <div class="mb-3">
-                <h5>Postal Code:</h5>
+                <h5>Postal code:</h5>
                 <p><?= htmlspecialchars($cinema['postalCode']); ?></p>
             </div>
             <div class="mb-3">
@@ -47,7 +47,7 @@ require_once "../actions/cinema_logic.php";
             
             <!-- Display Opening Hours -->
             <div class="mb-3">
-                <h5>Opening Hours:</h5>
+                <h5>Opening hours:</h5>
                 <ul>
                     <?php foreach ($openingHours as $hours): ?>
                         <li>

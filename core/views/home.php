@@ -36,6 +36,7 @@ $movieOfTheWeek = $query->fetch(PDO::FETCH_ASSOC);
 
 <section>
 <div class="movie_single_hero" style="background-image: url('../../includes/media/movies/<?php echo htmlspecialchars($movieOfTheWeek['imagePath'] ?? 'default.jpg'); ?>');">
+    <div class="overlay"></div>
     <div class="home-hero">
         <p class="tag-name">Movie of the Week</p>
         <h3><?php echo htmlspecialchars($movieOfTheWeek['title']); ?></h3>
@@ -51,14 +52,6 @@ $movieOfTheWeek = $query->fetch(PDO::FETCH_ASSOC);
 </div>
 </section>
 
-
-
-
-<li class="user-nav-item">
-        <a href="../../loginPDO/actions/logout.php" class="user-account-sidebar-link">
-            <span class="material-icons">logout</span> Log out
-        </a>
-    </li>
 
 
 
