@@ -18,7 +18,6 @@
         </a>
     </li>
 </ul>
-
 <!-- User Profile Section -->
 <section class="user-account-profile">
     <?php

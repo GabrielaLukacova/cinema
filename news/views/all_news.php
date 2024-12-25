@@ -30,3 +30,6 @@ require_once "../actions/news_logic.php";
         </div>
     <?php endforeach; ?>
 </div>
+<?php
+require_once '../../navbar_footer/cinema_footer.php';
+?>

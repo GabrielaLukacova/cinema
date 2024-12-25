@@ -24,10 +24,10 @@ if (!$userData) {
 }
 
 // Sanitize user data
-$userData = array_map(
-    fn($value) => htmlspecialchars($value, ENT_QUOTES, 'UTF-8'),
-    $userData
-);
+// $userData = array_map(
+//     fn($value) => htmlspecialchars($value, ENT_QUOTES, 'UTF-8'),
+//     $userData
+// );
 
 // Handle profile picture upload
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['userPicture'])) {
@@ -45,9 +45,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['userPicture'])) {
 
         // Move the uploaded file
         if (move_uploaded_file($_FILES['userPicture']['tmp_name'], $filePath)) {
-            $filePathSanitized = htmlspecialchars($filePath, ENT_QUOTES, 'UTF-8');
+            $filePathSanitized = htmlspecialchars($fileName, ENT_QUOTES, 'UTF-8'); // Store only the filename
             $user->updateUserPicture($userID, $filePathSanitized);
-            $userData['userPicture'] = $filePathSanitized; // Update in memory
+
+            // Update the userData array with the new profile picture
+            $userData['userPicture'] = $filePathSanitized;
         } else {
             $errorMessage = 'Failed to upload the file.';
         }
@@ -55,4 +57,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['userPicture'])) {
         $errorMessage = 'Invalid file type. Only JPEG and PNG files are allowed.';
     }
 }
+
+// Ensure the profile picture is displayed only if it exists in the database
+$uploadDir = '../../includes/media/users/';
+$profilePicture = !empty($userData['userPicture']) ? $uploadDir . $userData['userPicture'] : '../../includes/media/other/user_default.png';
 ?>

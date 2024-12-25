@@ -78,7 +78,7 @@ require_once "../../components/views/admin_navbar.php";
         </div>
         <div class="form-group">
             <label for="date">Show date</label>
-            <input type="date" id="date" name="date" class="form-control" required>
+            <input type="date" id="date" name="date" class="form-control">
         </div>
         <div class="form-group">
             <label for="time">Show time</label>

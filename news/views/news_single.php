@@ -31,3 +31,6 @@ if (!$news) {
 </div>
 </body>
 </html>
+<?php
+require_once '../../navbar_footer/cinema_footer.php';
+?>

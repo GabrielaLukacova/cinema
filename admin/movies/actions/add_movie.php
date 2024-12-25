@@ -40,8 +40,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'description' => $_POST['description'] ?? null,
             'imagePath' => $imagePath,
             'movieTag' => $_POST['movieTag'] ?? 'None',
-            'price' => $_POST['price'] ?? 100, // Default to 100 if not provided
-            'date' => $_POST['date'] ?? date('Y-m-d'), // Default to today's date if not provided
         ];
 
         // Check the selected tag for limits

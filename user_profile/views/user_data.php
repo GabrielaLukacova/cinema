@@ -137,9 +137,8 @@ $userData = array_map(fn($value) => htmlspecialchars($value ?? '', ENT_QUOTES, '
         </div>
     </div>
 </div>
-
+</body>
+</html>
 <?php
 require_once '../../navbar_footer/cinema_footer.php';
 ?>
-</body>
-</html>

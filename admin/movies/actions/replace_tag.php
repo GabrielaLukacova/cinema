@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 try {
     $movieHandler = new Movie($db);
 
-    // Validate and sanitize inputs
+    // Validate inputs
     $firstMovieID = filter_input(INPUT_POST, 'firstMovieID', FILTER_VALIDATE_INT);
     $newMovieID = filter_input(INPUT_POST, 'newMovieID', FILTER_VALIDATE_INT);
     $movieTag = filter_input(INPUT_POST, 'movieTag', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -19,10 +19,12 @@ try {
         throw new Exception("Invalid input. Missing required parameters.");
     }
 
-    // Fetch and validate the current and new movies
+    // Fetch the movies
     $firstMovie = $movieHandler->getMovieByID($firstMovieID);
-    if (!$firstMovie) {
-        throw new Exception("Movie with ID $firstMovieID not found.");
+    $newMovie = $movieHandler->getMovieByID($newMovieID);
+
+    if (!$firstMovie || !$newMovie) {
+        throw new Exception("One or both movies not found.");
     }
 
     $newMovie = $movieHandler->getMovieByID($newMovieID);
@@ -30,43 +32,38 @@ try {
         throw new Exception("Movie with ID $newMovieID not found.");
     }
 
-    // Update the tag of the first movie to "None"
-    if (!$movieHandler->updateMovie(
-        $firstMovieID,
-        $firstMovie['title'],
-        $firstMovie['genre'],
-        $firstMovie['runtime'],
-        $firstMovie['language'],
-        $firstMovie['ageRating'],
-        $firstMovie['description'],
-        "None",
-        $firstMovie['imagePath']
-    )) {
-        throw new Exception("Failed to remove the tag from the current movie.");
-    }
+   // Remove the tag from the current movie
+   $movieHandler->updateMovieWithImage(
+    $firstMovieID,
+    $firstMovie['title'],
+    $firstMovie['genre'],
+    $firstMovie['runtime'],
+    $firstMovie['language'],
+    $firstMovie['ageRating'],
+    $firstMovie['description'],
+    $firstMovie['imagePath'],
+    "None"
+);
 
-    // Assign the new tag to the new movie
-    if (!$movieHandler->updateMovie(
-        $newMovieID,
-        $newMovie['title'],
-        $newMovie['genre'],
-        $newMovie['runtime'],
-        $newMovie['language'],
-        $newMovie['ageRating'],
-        $newMovie['description'],
-        $movieTag,
-        $newMovie['imagePath']
-    )) {
-        throw new Exception("Failed to assign the new tag to the selected movie.");
-    }
+// Assign the tag to the new movie
+$movieHandler->updateMovieWithImage(
+    $newMovieID,
+    $newMovie['title'],
+    $newMovie['genre'],
+    $newMovie['runtime'],
+    $newMovie['language'],
+    $newMovie['ageRating'],
+    $newMovie['description'],
+    $newMovie['imagePath'],
+    $movieTag
+);
 
-    // Redirect with a success message
-    header("Location: ../views/movie_list.php?status=Movie tag replaced successfully.");
-    exit();
+// Redirect with success
+header("Location: ../views/movie_list.php?status=Movie tag replaced successfully.");
+exit();
 } catch (Exception $e) {
-    // Log the error and redirect with a failure message
-    error_log("Error in replace_tag.php: " . $e->getMessage());
-    header("Location: ../views/movie_list.php?status=Error replacing movie tag: " . urlencode($e->getMessage()));
-    exit();
+error_log("Error in replace_tag.php: " . $e->getMessage());
+header("Location: ../views/movie_list.php?status=Error replacing tag: " . urlencode($e->getMessage()));
+exit();
 }
 ?>

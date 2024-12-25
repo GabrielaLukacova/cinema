@@ -1,5 +1,7 @@
 <?php
 require_once "../actions/newuser_logic.php"; 
+require_once "../../navbar_footer/cinema_navbar.php";
+
 ?>
 
 <!DOCTYPE html>
@@ -66,3 +68,6 @@ require_once "../actions/newuser_logic.php";
     </div>
 </body>
 </html>
+<?php
+require_once '../../navbar_footer/cinema_footer.php';
+?>

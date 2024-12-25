@@ -64,7 +64,7 @@ CREATE TABLE Movie (
 
 CREATE TABLE ShowTime (
     showTimeID INT AUTO_INCREMENT PRIMARY KEY,
-    date DATE NOT NULL,
+    date DATE,
     time TIME NOT NULL,
     room ENUM('1', '2', '3', '4') NOT NULL,
     price DECIMAL,
@@ -198,10 +198,6 @@ VALUES
 (1, '2024-11-22', '14:00', '1', 120),
 (2, '2024-11-22', '17:00', '2', 120);
 
--- howtime with NULL date to test the trigger
-INSERT INTO ShowTime (movieID, date, time, room, price)
-VALUES (1, NULL, '14:00:00', 1, 150);
-
 -- showtime with NULL price and an empty date to test the trigger
 INSERT INTO ShowTime (movieID, date, time, room, price)
 VALUES (1, '2024-12-17', '14:00:00', 1, NULL);
@@ -223,24 +219,3 @@ SET isBooked = TRUE
 WHERE (seatRow = 'A' AND seatNumber = 1) 
    OR (seatRow = 'B' AND seatNumber = 5)  
    OR (seatRow = 'C' AND seatNumber = 8);
-
-
-SELECT 
-    m.title AS movieTitle,
-    m.imagePath AS movieImage,
-    st.date AS showDate,
-    st.time AS showTime,
-    st.room AS roomNumber,
-    st.price AS ticketPrice,
-    IFNULL(
-        GROUP_CONCAT(CONCAT(s.seatRow, s.seatNumber) ORDER BY s.seatRow, s.seatNumber SEPARATOR ', '),
-        'No seats reserved'
-    ) AS seatDetails
-FROM Booking b
-JOIN ShowTime st ON b.showTimeID = st.showTimeID
-JOIN Movie m ON st.movieID = m.movieID
-LEFT JOIN Reserves r ON b.bookingID = r.bookingID
-LEFT JOIN Seat s ON r.seatID = s.seatID
-WHERE b.userID = 4
-GROUP BY b.bookingID
-ORDER BY st.date DESC, st.time DESC;

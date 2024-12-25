@@ -48,10 +48,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Check if the tag is restricted and if the limit is exceeded
         if ($movieTag === "Movie of the Week") {
             $currentTaggedMovie = $movieHandler->getFirstMovieByTag("Movie of the Week");
-
-            // Redirect to confirm replacement if another movie already has this tag
+        
             if ($currentTaggedMovie && $currentTaggedMovie['movieID'] !== $movieID) {
-                header("Location: replace_tag_view.php?firstMovieID={$currentTaggedMovie['movieID']}&movieTag={$movieTag}&newMovieID={$movieID}");
+                // Redirect to confirmation view for replacing the tag
+                header("Location: ../views/replace_tag_view.php?firstMovieID={$currentTaggedMovie['movieID']}&movieTag=Movie of the Week&newMovieID={$movieID}");
+                exit();
+            }
+        } elseif ($movieTag === "Hot New Movie") {
+            $hotNewCount = $movieHandler->countMoviesByTag("Hot New Movie");
+        
+            if ($hotNewCount >= 8) {
+                $firstHotNewMovie = $movieHandler->getFirstMovieByTag("Hot New Movie");
+                // Redirect to confirmation view for replacing the tag
+                header("Location: ../views/replace_tag_view.php?firstMovieID={$firstHotNewMovie['movieID']}&movieTag=Hot New Movie&newMovieID={$movieID}");
                 exit();
             }
         }

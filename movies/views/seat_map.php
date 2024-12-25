@@ -1,11 +1,7 @@
 <?php
 require_once "../actions/seat_selection.php";
-// require_once '../../navbar_footer/cinema_navbar.php';
+require_once '../../navbar_footer/cinema_navbar.php';
 
-// Generate a CSRF token if not already set
-if (empty($_SESSION['csrf_token'])) {
-    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-}
 ?>
 
 <!DOCTYPE html>
@@ -24,20 +20,35 @@ if (empty($_SESSION['csrf_token'])) {
                 <div class="seat-map-container">
                     <div class="screen">Screen</div>
                     <form method="POST" action="">
-                        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>">
                         <div class="seat-map">
                             <?php foreach ($seats as $seat): ?>
                                 <button 
                                     type="submit" 
                                     name="toggle_seat" 
                                     value="<?= htmlspecialchars($seat->id, ENT_QUOTES, 'UTF-8') ?>"
-                                    class="seat <?= $seat->isBooked ? 'booked' : (in_array($seat->id, $selectedSeats) ? 'selected' : 'available') ?>"
+                                    class="seat <?= $seat->isBooked ? 'seat-booked' : (in_array($seat->id, $selectedSeats) ? 'seat-selected' : 'seat-available') ?>"
                                     <?= $seat->isBooked ? 'disabled' : '' ?>>
                                     <?= htmlspecialchars($seat->row . $seat->number, ENT_QUOTES, 'UTF-8') ?>
                                 </button>
                             <?php endforeach; ?>
                         </div>
                     </form>
+
+
+                <div class="seat-legend">
+                    <div>
+                        <div class="seat available"></div>
+                        <span>Available</span>
+                    </div>
+                    <div>
+                        <div class="seat selected"></div>
+                        <span>Selected</span>
+                    </div>
+                    <div>
+                        <div class="seat booked"></div>
+                        <span>Booked</span>
+                    </div>
+                </div>
                 </div>
 
                 <!-- Dynamic Ticket Overview -->
@@ -51,14 +62,17 @@ if (empty($_SESSION['csrf_token'])) {
                         </ul>
                         <div class="total">Total Price: DKK<?= number_format($totalPrice, 2) ?></div>
 
-                        <!-- Proceed to confirmation -->
-                        <form method="POST" action="../actions/confirm_seat_booking.php">
-                            <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>">
+                        <!-- Proceed to Confirmation -->
+                        <form method="POST" action="ticket_confirmation.php">
                             <input type="hidden" name="selected_seats" value="<?= htmlspecialchars(json_encode($selectedSeats), ENT_QUOTES, 'UTF-8') ?>">
-                            <input type="hidden" name="showTimeID" value="<?= htmlspecialchars($showTimeID, ENT_QUOTES, 'UTF-8') ?>">
                             <button type="submit" class="continue-btn" <?= empty($selectedSeats) ? 'disabled' : '' ?>>Continue</button>
                         </form>
+                                            <?php if (!empty($error)): ?>
+                        <div class="seat-message"><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></div>
+                    <?php endif; ?>
                     </div>
+
+
                 </div>
             </div>
         <?php else: ?>
@@ -69,3 +83,5 @@ if (empty($_SESSION['csrf_token'])) {
     </div>
 </body>
 </html>
+
+<?php require_once '../../navbar_footer/cinema_footer.php'; ?>

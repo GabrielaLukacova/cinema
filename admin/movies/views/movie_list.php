@@ -56,7 +56,7 @@ require_once "../actions/movie_list_logic.php";
                             <td><?= htmlspecialchars($movie['genre']); ?></td>
                             <td><?= htmlspecialchars($movie['runtime']); ?> min</td>
                             <td><?= htmlspecialchars($movie['language']); ?></td>
-                            <td><?= htmlspecialchars($movie['ageRating']); ?></td>
+                            <td><?= htmlspecialchars($movie['ageRating']); ?>+</td>
                             <td><?= htmlspecialchars($movie['description']); ?></td>
                             <td>
                                 <img src="../../../includes/media/movies/<?= htmlspecialchars($movie['imagePath']); ?>" 

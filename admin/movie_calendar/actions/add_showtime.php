@@ -6,14 +6,14 @@ if (isset($_POST['submit'])) {
     try {
         // Sanitize and validate inputs
         $movieID = $_POST['movieID'] ?? null;
-        $date = $_POST['date'] ?? null;
+        $date = !empty($_POST['date']) ? $_POST['date'] : null; // Omit if empty
         $time = $_POST['time'] ?? null;
         $room = $_POST['room'] ?? null;
         $price = $_POST['price'] ?? null;
 
         // Validate required fields
-        if (!$movieID || !$date || !$time || !$room) {
-            throw new Exception("Missing required fields: movieID, date, time, or room.");
+        if (!$movieID || !$time || !$room) {
+            throw new Exception("Missing required fields: movieID, time, or room.");
         }
 
         // Handle price default if not provided
@@ -21,16 +21,21 @@ if (isset($_POST['submit'])) {
 
         // Insert showtime data into the database
         $insertQuery = $db->prepare("
-            INSERT INTO ShowTime (movieID, date, time, room, price) 
-            VALUES (:movieID, :date, :time, :room, :price)
-        ");
-        $executeResult = $insertQuery->execute([
-            ':movieID' => $movieID,
-            ':date' => $date,
-            ':time' => $time,
-            ':room' => $room,
-            ':price' => $price
-        ]);
+        INSERT INTO ShowTime (movieID, " . ($date ? "date, " : "") . "time, room, price) 
+        VALUES (:movieID, " . ($date ? ":date, " : "") . ":time, :room, :price)
+    ");
+    $params = [
+        ':movieID' => $movieID,
+        ':time' => $time,
+        ':room' => $room,
+        ':price' => $price
+    ];
+    
+    if ($date) {
+        $params[':date'] = $date; // Add date to parameters if provided
+    }
+    
+        $executeResult = $insertQuery->execute($params);
 
         if ($executeResult) {
             // Get the newly inserted showTimeID
@@ -63,7 +68,8 @@ if (isset($_POST['submit'])) {
         // Redirect back with error status
         $errorMessage = "Error: " . $e->getMessage();
         header("Location: ../views/movie_calendar_view.php?status=error&message=" . urlencode($errorMessage));
-        exit;
+        exit();
     }
 }
+
 ?>

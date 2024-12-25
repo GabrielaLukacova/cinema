@@ -74,3 +74,45 @@ try {
 </div>
 </body>
 </html>
+
+
+
+<?php
+require_once "../../../includes/connection.php";
+require_once "../classes/Movie.php";
+
+$movieHandler = new Movie($db);
+
+$firstMovieID = filter_input(INPUT_GET, 'firstMovieID', FILTER_VALIDATE_INT);
+$newMovieID = filter_input(INPUT_GET, 'newMovieID', FILTER_VALIDATE_INT);
+$movieTag = filter_input(INPUT_GET, 'movieTag', FILTER_SANITIZE_SPECIAL_CHARS);
+
+if (!$firstMovieID || !$newMovieID || !$movieTag) {
+    die("Error: Missing or invalid parameters.");
+}
+
+$firstMovie = $movieHandler->getMovieByID($firstMovieID);
+$newMovie = $movieHandler->getMovieByID($newMovieID);
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Replace Movie Tag</title>
+</head>
+<body>
+    <h1>Replace Movie Tag</h1>
+    <p>You are attempting to assign the tag "<strong><?= htmlspecialchars($movieTag, ENT_QUOTES, 'UTF-8') ?></strong>" to the movie "<strong><?= htmlspecialchars($newMovie['title'], ENT_QUOTES, 'UTF-8') ?></strong>".</p>
+    <p>This tag is currently assigned to "<strong><?= htmlspecialchars($firstMovie['title'], ENT_QUOTES, 'UTF-8') ?></strong>".</p>
+    <p>Do you want to replace the tag?</p>
+
+    <form method="POST" action="../actions/replace_tag.php">
+        <input type="hidden" name="firstMovieID" value="<?= htmlspecialchars($firstMovieID, ENT_QUOTES, 'UTF-8') ?>">
+        <input type="hidden" name="newMovieID" value="<?= htmlspecialchars($newMovieID, ENT_QUOTES, 'UTF-8') ?>">
+        <input type="hidden" name="movieTag" value="<?= htmlspecialchars($movieTag, ENT_QUOTES, 'UTF-8') ?>">
+        <button type="submit">Yes, Replace</button>
+        <a href="../views/movie_list.php">Cancel</a>
+    </form>
+</body>
+</html>

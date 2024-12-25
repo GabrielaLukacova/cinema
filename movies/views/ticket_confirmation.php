@@ -1,5 +1,6 @@
 <?php
 require_once "../actions/ticket_confirmation_logic.php";
+require_once '../../navbar_footer/cinema_navbar.php';
 
 ?>
 
