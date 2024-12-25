@@ -29,26 +29,6 @@ if (!isset($_SESSION['user_id'])) {
 } else {
     echo '<p>Welcome, ' . htmlspecialchars($_SESSION['email']) . '</p>';
 }
-
-
-//Dispaly only hours and minutes (no seconds)
-try {
-    // Fetch a showtime time and format
-    $showTimeQuery = $db->prepare("
-        SELECT DATE_FORMAT(time, '%H:%i') AS formattedTime 
-        FROM ShowTime
-    ");
-    $showTimeQuery->execute();
-    $showTimes = $showTimeQuery->fetchAll(PDO::FETCH_ASSOC);
-
-    // Example output 
-    foreach ($showTimes as $showTime) {
-        // Log or echo the raw time data to check
-        echo "<p>Raw Time: " . htmlspecialchars($showTime['formattedTime'], ENT_QUOTES, 'UTF-8') . "</p>";
-    }
-} catch (PDOException $e) {
-    echo "Error: " . $e->getMessage();
-}
 ?>
 
 
