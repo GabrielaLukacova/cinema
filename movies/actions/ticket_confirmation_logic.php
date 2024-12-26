@@ -5,24 +5,13 @@ if (session_status() === PHP_SESSION_NONE) {
 
 require_once "../../includes/connection.php";
 
-// Validate user login
-if (!isset($_SESSION['user_id'])) {
-    header("Location: ../../loginPDO/views/login.php?redirect=" . urlencode($_SERVER['REQUEST_URI']));
-    exit();
-}
-
-// Validate session data
-if (empty($_SESSION['selected_seats']) || empty($_SESSION['showTimeID'])) {
+// Ensure session arrays are initialized and check data validity
+if (!isset($_SESSION['selected_seats']) || !isset($_SESSION['showTimeID']) || !isset($_SESSION['user_id'])) {
     die("Error: Missing booking details. Please go back and select seats.");
 }
 
 $showTimeID = $_SESSION['showTimeID'];
-$selectedSeats = $_SESSION['selected_seats'][$showTimeID] ?? [];
-
-// Validate selected seats
-if (empty($selectedSeats)) {
-    die("Error: No seats selected.");
-}
+$userID = $_SESSION['user_id'];
 
 try {
     // Fetch movie and showtime details
@@ -39,24 +28,32 @@ try {
         die("Error: Showtime not found.");
     }
 
-    // Fetch seat details
-    $placeholders = implode(',', array_fill(0, count($selectedSeats), '?'));
+    // Fetch booked seats for the selected showtime and user
     $seatQuery = $db->prepare("
-        SELECT seatRow, seatNumber
-        FROM Seat
-        WHERE seatID IN ($placeholders) AND showTimeID = ?
+        SELECT s.seatNumber, s.seatRow
+        FROM Seat s
+        JOIN Booking b ON s.showTimeID = b.showTimeID
+        WHERE s.isBooked = 1 AND s.showTimeID = :showTimeID AND b.userID = :userID
+        ORDER BY s.seatRow, s.seatNumber ASC
     ");
-    $seatQuery->execute([...$selectedSeats, $showTimeID]);
+    $seatQuery->execute([
+        ':showTimeID' => $showTimeID,
+        ':userID' => $userID,
+    ]);
     $seatDetails = $seatQuery->fetchAll(PDO::FETCH_ASSOC);
 
     if (!$seatDetails) {
-        die("Error: Selected seats not found.");
+        die("Error: Booked seats not found for confirmation.");
     }
 
     // Calculate total price
-    $totalPrice = count($selectedSeats) * $showTime['price'];
+    $totalPrice = count($seatDetails) * $showTime['price'];
 
 } catch (Exception $e) {
     die("Error: " . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8'));
 }
+
+// Log data for debugging
+error_log('Selected Seats: ' . print_r($seatDetails, true));
+error_log('ShowTime ID: ' . $_SESSION['showTimeID']);
 ?>

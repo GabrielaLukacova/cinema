@@ -23,8 +23,8 @@ if (!$news) {
 <div class="custom-news-container">
     <img src="../../includes/media/news/<?php echo htmlspecialchars($news['imagePath'] ?? 'default.jpg'); ?>" 
          alt="News Image" class="custom-news-image">
-    <div class="custom-news-title"><?php echo htmlspecialchars($news['title']); ?></div>
     <div class="custom-news-category"><?php echo htmlspecialchars($news['category']); ?></div>
+    <div class="custom-news-title"><?php echo htmlspecialchars($news['title']); ?></div>
     <div class="custom-news-article">
         <?php echo nl2br(htmlspecialchars($news['article'])); ?>
     </div>

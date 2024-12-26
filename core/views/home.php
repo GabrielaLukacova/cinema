@@ -29,18 +29,21 @@ require_once "../actions/cinema_details_logic.php";
 
 
 <section>
-    <div class="movie_single_hero" 
-         style="background-image: url('../../includes/media/movies/<?= htmlspecialchars($movieOfTheWeek['imagePath'], ENT_QUOTES, 'UTF-8'); ?>');">
-        <div class="overlay"></div>
-        <div class="home-hero">
-            <p class="tag-name">Movie of the Week</p>
-            <h3><?= htmlspecialchars($movieOfTheWeek['title'], ENT_QUOTES, 'UTF-8'); ?></h3>
-            <p class="genre"><?= htmlspecialchars($movieOfTheWeek['genre'], ENT_QUOTES, 'UTF-8'); ?></p>
-            <p class="description"><?= htmlspecialchars($shortDescription, ENT_QUOTES, 'UTF-8'); ?></p>
-            <a href="movie_details.php?movieID=<?= htmlspecialchars($movieOfTheWeek['movieID'], ENT_QUOTES, 'UTF-8'); ?>" 
-               class="btn btn-secondary">See More</a>
+    <a href="../../movies/views/movie_single.php?movieID=<?= htmlspecialchars($movieOfTheWeek['movieID'], ENT_QUOTES, 'UTF-8'); ?>" 
+       class="movie-link">
+        <div class="movie_single_hero" 
+             style="background-image: url('../../includes/media/movies/<?= htmlspecialchars($movieOfTheWeek['imagePath'], ENT_QUOTES, 'UTF-8'); ?>');">
+            <div class="overlay"></div> <div class="overlay-home-left">
+            <div class="home-hero">
+                <p class="tag-name">Movie of the week</p>
+                <h3><?= htmlspecialchars($movieOfTheWeek['title'], ENT_QUOTES, 'UTF-8'); ?></h3>
+                <p class="genre"><?= htmlspecialchars($movieOfTheWeek['genre'], ENT_QUOTES, 'UTF-8'); ?></p>
+                <p class="description"><?= htmlspecialchars($shortDescription, ENT_QUOTES, 'UTF-8'); ?></p>
+                <a href="../../movies/views/movie_single.php?movieID=<?= htmlspecialchars($movieOfTheWeek['movieID'], ENT_QUOTES, 'UTF-8'); ?>" 
+                   class="btn btn-secondary">See more</a>
+            </div>
         </div>
-    </div>
+    </a></div>
 </section>
 
 

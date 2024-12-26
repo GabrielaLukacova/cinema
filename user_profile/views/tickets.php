@@ -7,10 +7,8 @@ if (session_status() === PHP_SESSION_NONE) {
 require_once "../actions/ticket_logic.php";
 require_once '../templates/user_sidebar.php';
 require_once '../../navbar_footer/cinema_navbar.php';
-require_once "../../movies/actions/ticket_confirmation_logic.php";
-
-
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -31,13 +29,9 @@ require_once "../../movies/actions/ticket_confirmation_logic.php";
                         <p><strong>Date:</strong> <?= htmlspecialchars($ticket['showDate'], ENT_QUOTES, 'UTF-8'); ?></p>
                         <p><strong>Time:</strong> <?= htmlspecialchars($ticket['showTime'], ENT_QUOTES, 'UTF-8'); ?></p>
                         <p><strong>Room:</strong> <?= htmlspecialchars($ticket['roomNumber'], ENT_QUOTES, 'UTF-8'); ?></p>
-                        <p><strong>Seats:</strong> 
-                    <?= htmlspecialchars(implode(', ', array_map(
-                        fn($seat) => $seat['seatRow'] . $seat['seatNumber'],
-                        $seatDetails
-                    )), ENT_QUOTES, 'UTF-8'); ?>
-                        </p>
-                        <p class="ticket-total">Total Price: DKK<?= number_format((float)$ticket['ticketPrice'], 2); ?></p>
+                        <!-- <p><strong>Seats:</strong> <?= htmlspecialchars($ticket['seatDetails'], ENT_QUOTES, 'UTF-8'); ?></p>
+                        <p class="ticket-total"><strong>Total Price:</strong> DKK<?= number_format((float)$ticket['totalPrice'], 2); ?></p> -->
+
                     </div>
                 </div>
             <?php endforeach; ?>

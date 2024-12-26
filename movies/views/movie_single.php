@@ -17,12 +17,13 @@ require_once "../../navbar_footer/cinema_navbar.php";
 <!-- Hero Section -->
 <div class="movie_single_hero" style="background-image: url('../../includes/media/movies/<?= htmlspecialchars($movie['imagePath'], ENT_QUOTES, 'UTF-8'); ?>');">
     <div class="overlay">
+    <div class="overlay-movie-details">
         <h3><?= htmlspecialchars($movie['title'], ENT_QUOTES, 'UTF-8'); ?></h3> <br>
         <p class="movie_single_genre"><?= htmlspecialchars($movie['genre'], ENT_QUOTES, 'UTF-8'); ?></p>
     </div>
+    </div>
 </div>
 
-<!-- Movie Info Section -->
 <div class="movie_single_info_container">
     <div class="movie_single_info_box movie_single_left_box">
         <p>Language: <?= htmlspecialchars($movie['language'], ENT_QUOTES, 'UTF-8'); ?></p>
@@ -55,7 +56,7 @@ require_once "../../navbar_footer/cinema_navbar.php";
 </div>
     
 
-<?php if (!empty($showtimes)): ?>
+<!-- <?php if (!empty($showtimes)): ?>
     <div class="showtime-selection">
         <?php foreach ($showtimes as $showtime): ?>
             <?php
@@ -69,7 +70,7 @@ require_once "../../navbar_footer/cinema_navbar.php";
     </div>
 <?php else: ?>
     <p>No showtimes available for the selected date.</p>
-<?php endif; ?>
+<?php endif; ?> -->
 
 
 
@@ -101,18 +102,18 @@ require_once "../../navbar_footer/cinema_navbar.php";
                 <!-- Showtime buttons -->
                 <div class="movie-calendar-single-showtimes">
                     <?php if (!empty($showtimes)): ?>
-                        <?php foreach ($showtimes as $showtime): ?>
-                            <?php if ($showtime['date'] === $date): ?>
+                        <div class="showtime-selection">
+                            <?php foreach ($showtimes as $showtime): ?>
                                 <?php
                                 $formattedTime = date('H:i', strtotime($showtime['time']));
                                 ?>
                                 <a href="seat_map.php?movieID=<?= htmlspecialchars($movieID, ENT_QUOTES, 'UTF-8'); ?>&showTimeID=<?= htmlspecialchars($showtime['showTimeID'], ENT_QUOTES, 'UTF-8'); ?>">
                                     <button class="btn-primary"><?= htmlspecialchars($formattedTime, ENT_QUOTES, 'UTF-8'); ?></button>
                                 </a>
-                            <?php endif; ?>
-                        <?php endforeach; ?>
+                            <?php endforeach; ?>
+                        </div>
                     <?php else: ?>
-                        <p class="no-showtimes">No showtimes available</p>
+                        <p>No showtimes available for the selected date.</p>
                     <?php endif; ?>
                 </div>
             </div>
@@ -121,6 +122,10 @@ require_once "../../navbar_footer/cinema_navbar.php";
         <p>No available dates for this movie.</p>
     <?php endif; ?>
 </div>
+
+
+
+
 <?php if (!empty($showtimes)): ?>
     <div class="showtime-selection">
         <?php foreach ($showtimes as $showtime): ?>

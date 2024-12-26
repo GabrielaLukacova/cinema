@@ -74,6 +74,7 @@ button, .btn-primary, .btn-secondary {
   text-decoration: none;
   box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3); 
   color: #E0E0E0; 
+  cursor: pointer;
 
 }
 
@@ -126,7 +127,6 @@ button, .btn-primary, .btn-secondary {
 
 .overlay {
   background: linear-gradient(to bottom, rgba(54, 48, 47, 0) 0%, rgba(54, 48, 47, 1) 100%);
-  padding: 30px 60px; 
   display: flex;
   justify-content: space-between;
   width: 100%; 
@@ -139,6 +139,22 @@ button, .btn-primary, .btn-secondary {
   box-sizing: border-box; 
   overflow: hidden;
 }
+
+.overlay-home-left {
+  background: linear-gradient(to left, rgba(54, 48, 47, 0) 0%, rgba(54, 48, 47, 1) 100%);
+  padding: 30px 60px; 
+  display: flex;
+  justify-content: space-between;
+  width: 50%; 
+  bottom: 0; 
+  left: 0; 
+  position: absolute;
+  z-index: 0;
+  height: 100%; 
+  box-sizing: border-box; 
+  overflow: hidden;
+}
+
 
 
 /*----------------------NAVBAR----------------------*/
@@ -748,11 +764,20 @@ padding:100px 13%;
   position: relative;
   overflow: hidden; 
   display:flex;
+  cursor:pointer;
+}
+
+.overlay-movie-details{
+  padding-left:13%;
+}
+
+.movie-link {
+  display: block;
+  text-decoration: none; 
 }
   
 .movie_single_hero .overlay h3{
   text-align: left;
-  padding-left: 13%;
   font-size: 2em;
 
 }
@@ -762,7 +787,6 @@ padding:100px 13%;
     color: #CB4540;
     font-size: 1.3em;
     text-align: left;
-    padding-left: 13%;
   }
 
 .movie_single_info_container {
@@ -797,7 +821,7 @@ padding:100px 13%;
   /* justify-content: space-between; */
   padding: 0 12%; 
   box-sizing: border-box; 
-  z-index: 5;
+  z-index: 15;
 } 
 
 
@@ -805,9 +829,9 @@ padding:100px 13%;
   position: absolute;
   bottom: 80px;
   left: 0;
-  width: 25%;
-  z-index: 11;
-  padding-left: 13%;
+  width: 70%;
+  z-index: 15;
+  padding-left: 26%;
 } 
 
 .home-hero h3{
@@ -816,24 +840,24 @@ padding:100px 13%;
 }
 .home-hero .tag-name {
   font-weight: bold;
-  /* margin-bottom: 10px; */
+  margin-bottom: 10px;
   background-color: #1f1f1f;
   padding: 10px;
-  border-radius: 8px;
   width: auto;
   display: inline-block; 
 }
 
 .home-hero .genre {
   font-size: 20px;
-  /* margin-bottom: 10px; */
+  margin-bottom: 10px;
   color: #CB4540;
 
 }
 
 .home-hero .description {
-  /* margin-bottom: 20px; */
+  margin-bottom: 20px;
   line-height: 1.5;
+  
 } 
 
 
@@ -955,7 +979,8 @@ padding:100px 13%;
   width: 100%;
   height: 500px;
   object-fit: cover;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
+  margin-top:150px;
 }
 
 /* Title styling */
@@ -963,7 +988,7 @@ padding:100px 13%;
   text-align: center;
   font-size: 24px;
   font-weight: bold;
-  margin-bottom: 10px;
+  margin-bottom: 40px;
 }
 
 /* Category styling */
@@ -971,7 +996,7 @@ padding:100px 13%;
   text-align: center;
   font-size: 16px;
   color: #CB4540;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
 }
 
 /* Article styling */
@@ -979,6 +1004,9 @@ padding:100px 13%;
   text-align: left;
   font-size: 16px;
   line-height: 1.6;
+  margin-bottom: 100px;
+
+
 }
 
 
@@ -1117,6 +1145,7 @@ padding:100px 13%;
 .user-account-edit-btn {
   padding: 10px 40px;
   background-color: #e74c3c;
+  color:fff;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -1255,7 +1284,9 @@ input[type="text"]:focus, input[type="email"]:focus, input[type="file"]:focus {
 }
 .confirmation-footer {
   margin-top: 20px;
-  text-align: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 .confirmation-footer a {
   text-decoration: none;
@@ -1278,6 +1309,9 @@ input[type="text"]:focus, input[type="email"]:focus, input[type="file"]:focus {
 
 .seat-map-container {
   width: 65%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .overview-container {
@@ -1291,7 +1325,7 @@ input[type="text"]:focus, input[type="email"]:focus, input[type="file"]:focus {
   background-color: #000000;
   border-radius: 5px;
   font-weight: bold;
-  width: 80%;
+  width: 90%;
 }
 
 .seat-map {
@@ -1317,6 +1351,12 @@ input[type="text"]:focus, input[type="email"]:focus, input[type="file"]:focus {
   color:#000;
 }
 
+.seat-selected{
+  background-color: #cb4540;
+  color: #fff;
+}
+
+
 .seat.booked {
   background-color: #2d2c2c;
   color: #fff;
@@ -1326,12 +1366,19 @@ input[type="text"]:focus, input[type="email"]:focus, input[type="file"]:focus {
 .seat.available {
   background-color: #e0e0e0;
   color: #333;
+  cursor: not-allowed;
 }
+
 
 .seat.selected {
   background-color: #cb4540;
   color: #fff;
+  cursor: not-allowed;
 }
+
+
+
+
 
 .seat-legend {
   display: flex;
