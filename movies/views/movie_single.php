@@ -35,111 +35,64 @@ require_once "../../navbar_footer/cinema_navbar.php";
     </div>
 </div>
 
-    <h2>Pick a date and time</h2>
 
-    <div class="calendar-buttons">
-    <?php
-    $today = new DateTime();
-
-    for ($i = 0; $i < 7; $i++) {
-        $date = clone $today;
-        $date->modify("+$i days");
-        $formattedDate = $date->format('Y-m-d');
-        $dayName = ($i === 0) ? "Today" : ($i === 1 ? "Tomorrow" : $date->format('j.n. l'));
-
-        $buttonClass = ($formattedDate === $selectedDate) ? 'calendar-day btn-primary selected' : 'calendar-day btn-primary';
-
-        // Add anchor to ensure scrolling to the showtimes section
-        echo "<a href='?movieID=" . htmlspecialchars($movieID, ENT_QUOTES, 'UTF-8') . "&date=$formattedDate#showtime-calendar' class='$buttonClass'>" . htmlspecialchars($dayName, ENT_QUOTES, 'UTF-8') . "</a>";
-    }
-    ?>
-</div>
     
-
-<!-- <?php if (!empty($showtimes)): ?>
-    <div class="showtime-selection">
-        <?php foreach ($showtimes as $showtime): ?>
-            <?php
-            // Format the time to show only hours and minutes
-            $formattedTime = date('H:i', strtotime($showtime['time']));
-            ?>
-            <a href="seat_map.php?movieID=<?= htmlspecialchars($movieID, ENT_QUOTES, 'UTF-8'); ?>&showTimeID=<?= htmlspecialchars($showtime['showTimeID'], ENT_QUOTES, 'UTF-8'); ?>">
-                <button class="btn-primary"><?= htmlspecialchars($formattedTime, ENT_QUOTES, 'UTF-8'); ?></button>
-            </a>
-        <?php endforeach; ?>
-    </div>
-<?php else: ?>
-    <p>No showtimes available for the selected date.</p>
-<?php endif; ?> -->
-
-
-
-
-<div class="movie-calendar-single">
-    <?php if (!empty($availableDates)): ?>
-        <?php 
-        // Helper function to format the date
-        function formatDisplayDate($date, $today) {
-            $diff = (new DateTime($date))->diff($today)->days;
-            if ($diff === 0) {
-                return "Today";
-            } elseif ($diff === 1) {
-                return "Tomorrow";
-            } else {
-                return (new DateTime($date))->format('l, j.n.');
-            }
+    <div class="movie-calendar-single">
+    <h2>Pick a date and time</h2>
+    <?php
+    // Helper function to format the date for display
+    function formatDisplayDate($date, $today) {
+        $diff = (new DateTime($date))->diff($today)->days;
+        if ($diff === 0) {
+            return "Today";
+        } elseif ($diff === 1) {
+            return "Tomorrow";
+        } else {
+            return (new DateTime($date))->format('l, j.n.');
         }
+    }
 
-        $today = new DateTime();
-        foreach ($availableDates as $date):
-            $formattedDate = formatDisplayDate($date, $today);
-        ?>
-            <div class="movie-calendar-single-item">
-                <!-- Date section -->
-                <div class="movie-calendar-single-date">
-                    <?= htmlspecialchars($formattedDate, ENT_QUOTES, 'UTF-8'); ?>
-                </div>
-                <!-- Showtime buttons -->
-                <div class="movie-calendar-single-showtimes">
-                    <?php if (!empty($showtimes)): ?>
-                        <div class="showtime-selection">
-                            <?php foreach ($showtimes as $showtime): ?>
-                                <?php
-                                $formattedTime = date('H:i', strtotime($showtime['time']));
-                                ?>
-                                <a href="seat_map.php?movieID=<?= htmlspecialchars($movieID, ENT_QUOTES, 'UTF-8'); ?>&showTimeID=<?= htmlspecialchars($showtime['showTimeID'], ENT_QUOTES, 'UTF-8'); ?>">
-                                    <button class="btn-primary"><?= htmlspecialchars($formattedTime, ENT_QUOTES, 'UTF-8'); ?></button>
-                                </a>
-                            <?php endforeach; ?>
-                        </div>
-                    <?php else: ?>
-                        <p>No showtimes available for the selected date.</p>
-                    <?php endif; ?>
-                </div>
+    $today = new DateTime();
+    $futureDates = array_filter($availableDates, function ($date) use ($today) {
+        return new DateTime($date) >= $today; // Exclude past dates
+    });
+    $futureDates = array_slice($futureDates, 0, 7); // Limit to today + next 6 days
+
+    foreach ($futureDates as $date):
+        $formattedDate = formatDisplayDate($date, $today);
+
+        // Fetch showtimes for the current date
+        $showtimeQuery->execute([':movieID' => $movieID, ':date' => $date]);
+        $showtimesForDate = $showtimeQuery->fetchAll(PDO::FETCH_ASSOC);
+    ?>
+        <div class="movie-calendar-single-item">
+            <!-- Display the date -->
+            <div class="movie-calendar-single-date">
+                <?= htmlspecialchars($formattedDate, ENT_QUOTES, 'UTF-8'); ?>
             </div>
-        <?php endforeach; ?>
-    <?php else: ?>
-        <p>No available dates for this movie.</p>
-    <?php endif; ?>
+            <!-- Display the showtime buttons -->
+            <div class="movie-calendar-single-showtimes">
+                <?php if (!empty($showtimesForDate)): ?>
+                    <?php foreach ($showtimesForDate as $showtime): ?>
+                        <?php
+                        $formattedTime = date('H:i', strtotime($showtime['time']));
+                        ?>
+                        <a href="seat_map.php?movieID=<?= htmlspecialchars($movieID, ENT_QUOTES, 'UTF-8'); ?>&showTimeID=<?= htmlspecialchars($showtime['showTimeID'], ENT_QUOTES, 'UTF-8'); ?>">
+                            <button class="btn-primary"><?= htmlspecialchars($formattedTime, ENT_QUOTES, 'UTF-8'); ?></button>
+                        </a>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <span>No showtimes</span>
+                <?php endif; ?>
+            </div>
+        </div>
+    <?php endforeach; ?>
 </div>
 
 
 
 
-<?php if (!empty($showtimes)): ?>
-    <div class="showtime-selection">
-        <?php foreach ($showtimes as $showtime): ?>
-            <?php
-            $formattedTime = date('H:i', strtotime($showtime['time']));
-            ?>
-            <a href="seat_map.php?movieID=<?= htmlspecialchars($movieID, ENT_QUOTES, 'UTF-8'); ?>&showTimeID=<?= htmlspecialchars($showtime['showTimeID'], ENT_QUOTES, 'UTF-8'); ?>">
-                <button class="btn-primary"><?= htmlspecialchars($formattedTime, ENT_QUOTES, 'UTF-8'); ?></button>
-            </a>
-        <?php endforeach; ?>
-    </div>
-<?php else: ?>
-    <p>No showtimes available for the selected date.</p>
-<?php endif; ?>
+
 
 <?php require_once "../../navbar_footer/cinema_footer.php"; ?>
 

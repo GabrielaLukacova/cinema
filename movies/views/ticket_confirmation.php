@@ -11,7 +11,7 @@ error_log('Selected Seats: ' . print_r($_SESSION['selected_seats'], true));
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Booking Confirmation</title>
+    <title>Booking confirmation</title>
     <link rel="stylesheet" href="../../css/style.css">
 </head>
 <body>

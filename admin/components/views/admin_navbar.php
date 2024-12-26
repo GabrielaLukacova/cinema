@@ -50,7 +50,6 @@
                 </ul>
             </div>
         </nav>
-        <!-- Main content area -->
         <div class="content p-4" id="main-content">
         </div>
     </div>
